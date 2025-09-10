@@ -127,7 +127,7 @@
         "media_thumbs": "desktop",
         "lightbox_thumbnails": true,
         "thumb_ratio": "1",
-        "thumb_crop": "none",
+        "thumb_crop": "center",
         "border_color": "#ffffff",
         "bg_color": "#ffffff",
         "enable_media_grouping": true,
