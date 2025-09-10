@@ -106,7 +106,7 @@
         "h1 {font-weight: 700; font-size: 3.2rem; letter-spacing: -0.02em; color: #181c32; margin-top: 20px; margin-right: 40px; /* optional für Abstand nach unten */ line-height: 1.15;}"
       ],
       "settings": {
-        "stick_on_scroll": false,
+        "stick_on_scroll": true,
         "select_first_variant": true,
         "sticky_atc_panel": true,
         "sticky_atc_position": "end",
