@@ -107,7 +107,7 @@
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 990px) {
   .product-main .product-media {
     position: sticky;
     top: var(--header-end-padded, 70px);
@@ -141,4 +141,23 @@
 
 .product-info-card > .product-info__block:last-child {
   margin-bottom: 0;
+}
+
+@media (max-width: 989px) {
+  .product-info__sticky {
+    position: static;
+    top: auto;
+  }
+}
+
+@media (min-width: 990px) {
+  .product-info__sticky {
+    top: var(--header-end-padded, 70px);
+  }
+
+  #galleryCard,
+  #infoCard {
+    position: sticky;
+    top: var(--header-end-padded, 70px);
+  }
 }
