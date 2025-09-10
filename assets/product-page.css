@@ -128,6 +128,13 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
+.product-media-card {
+  padding: 32px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
 .product-info-card > .product-info__block {
   margin: 0 0 22px;
 }
