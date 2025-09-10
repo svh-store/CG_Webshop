@@ -34,7 +34,6 @@
 {%- endif -%}
 
 <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
-<script src="{{ 'product-cards.js' | asset_url }}" defer="defer"></script>
 
 {%- liquid
   # constants
@@ -100,9 +99,9 @@
 {%- endif -%}
 
 <div class="container">
-  <div id="pdp-grid" class="product js-product pdp-grid" data-section="{{ section.id }}">
+  <div class="product js-product" data-section="{{ section.id }}">
     <div id="product-media" class="product-media product-media--{{ section.settings.media_layout }}">
-      <div class="product-media-card" id="galleryCard">
+      <div class="product-media-card">
         {%- if product.media.size > 0 -%}
           {% render 'media-gallery',
             product: product,
@@ -138,7 +137,7 @@
         <a class="product-options--anchor" id="product-info" rel="nofollow"></a>
       {%- endif -%}
 
-      <div class="product-info-card" id="infoCard">
+      <div class="product-info-card">
       {%- for block in section.blocks -%}
         {%- case block.type -%}
           {%- when '@app' -%}
