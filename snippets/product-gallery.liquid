@@ -1,0 +1,38 @@
+<script src="{{ 'product-gallery.js' | asset_url }}" defer="defer"></script>
+<div class="pg" data-gallery>
+  <div class="pg__media">
+    {%- for media in product.media -%}
+      {%- liquid
+        assign lazy = false
+        if forloop.index0 > 0
+          assign lazy = true
+        endif
+      -%}
+      <div class="pg__slide{% if forloop.first %} is-active{% endif %}" id="Slide-{{ section_id }}-{{ forloop.index0 }}" role="group">
+        {% render 'product-media',
+          media: media,
+          media_ratio: media_ratio,
+          media_crop: media_crop,
+          loop: loop,
+          lazy_load: lazy,
+          enable_zoom: enable_zoom,
+          zoom_level: zoom_level,
+          zoom_mode: zoom_mode
+        %}
+      </div>
+    {%- endfor -%}
+  </div>
+  <button type="button" class="gallery__control gallery__control--prev" data-prev aria-label="{{ 'accessibility.previous' | t }}">
+    {% render 'icon-chevron-left' %}
+  </button>
+  <button type="button" class="gallery__control gallery__control--next" data-next aria-label="{{ 'accessibility.next' | t }}">
+    {% render 'icon-chevron-right' %}
+  </button>
+  <div class="pg__thumbs" role="tablist" aria-label="{{ 'products.product.media' | t }}">
+    {%- for media in product.media -%}
+      <button class="pg__thumb" role="tab" aria-controls="Slide-{{ section_id }}-{{ forloop.index0 }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">
+        {{ media | image_url: width: 160 | image_tag: loading: 'lazy' }}
+      </button>
+    {%- endfor -%}
+  </div>
+</div>
