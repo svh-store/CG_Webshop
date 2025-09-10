@@ -91,8 +91,7 @@
 
   <div class="media-gallery__status visually-hidden" role="status"></div>
 
-  <div class="media-gallery__wrapper">
-    <div class="media-gallery__viewer relative">
+  <div class="media-gallery__viewer relative">
     <ul class="media-viewer flex" id="gallery-viewer" role="list" tabindex="0">
     {%- for media in product.media -%}
         {%- liquid
@@ -197,6 +196,18 @@
     {%- endif -%}
   </div>
 
+  {%- if first_3d_model -%}
+    <button type="button"
+            class="media-xr-button btn btn--secondary btn--icon-with-text font-normal w-full mt-2{% if section.settings.media_layout == 'stacked' %} md:hidden{% endif %}"
+            data-shopify-model3d-id="{{ first_3d_model.id }}"
+            data-shopify-title="{{ product.title | escape }}"
+            data-shopify-xr
+            data-shopify-xr-hidden>
+      {% render 'icon-3d-model' %}
+      {{ 'products.product.xr_button' | t }}
+    </button>
+  {%- endif -%}
+
   {%- if media_count > 1 and section.settings.media_thumbs != 'never' and featured_product == false -%}
     {%- unless section.settings.media_layout == 'stacked' and section.settings.media_thumbs == 'desktop' -%}
       <div class="media-gallery__thumbs{% if section.settings.media_thumbs == 'desktop' %} hidden md:block{% endif %}{% if section.settings.media_layout == 'stacked' %} md:hidden{% endif %} no-js-hidden">
@@ -269,19 +280,6 @@
         </ul>
       </div>
     {%- endunless -%}
-  {%- endif -%}
-  </div>
-
-  {%- if first_3d_model -%}
-    <button type="button"
-            class="media-xr-button btn btn--secondary btn--icon-with-text font-normal w-full mt-2{% if section.settings.media_layout == 'stacked' %} md:hidden{% endif %}"
-            data-shopify-model3d-id="{{ first_3d_model.id }}"
-            data-shopify-title="{{ product.title | escape }}"
-            data-shopify-xr
-            data-shopify-xr-hidden>
-      {% render 'icon-3d-model' %}
-      {{ 'products.product.xr_button' | t }}
-    </button>
   {%- endif -%}
 
   {%- if enable_zoom and lightbox_enabled and featured_product == false -%}
