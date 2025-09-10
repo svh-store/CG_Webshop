@@ -36,63 +36,25 @@
 .product-main + .shopify-section:not(.product-details)::before {
   background-color: transparent !important;
 }
-/* Gallery layout overrides */
+ab hier neu 
+
+
+
 @media (min-width: 769px) {
-  /* Limit gallery size to keep info above the fold */
+  /* Produkt‑Medien‑Spalte auf exakt 600px begrenzen */
   .product-main .product-media {
-    max-width: 500px;
-    flex: 0 0 500px;
+    max-width: 600px;
+    flex: 0 0 600px;
   }
-  .product-main .media-gallery__viewer {
-    height: 500px;
-    max-width: 500px;
-  }
+
+  /* Einzelne Slides des Media-Galerie-Sliders dürfen 600px nicht überschreiten */
   .product-main .media-gallery .media-viewer__item,
   .product-main .media-gallery .media-viewer__item > .media {
-    height: 100%;
-    max-width: 500px;
+    max-width: 600px;
   }
+}
 
-  /* Layout main image with vertical thumbs */
-  .media-gallery__main {
-    display: flex;
-    align-items: center;
-  }
-  .media-gallery__thumbs {
-    margin-top: 0;
-    margin-left: var(--media-gap);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  .media-gallery__thumbs .media-thumbs {
-    flex-direction: column;
-    overflow-y: auto;
-    height: 100%;
-  }
-  .media-gallery__thumbs .media-thumbs__item:not(:last-child) {
-    margin: 0 0 var(--media-gap) 0;
-  }
-
-  /* Thumbnail hover and active border */
-  .media-thumbs__btn {
-    border: 2px solid transparent;
-  }
-  .media-thumbs__btn:hover,
-  .media-thumbs__btn.is-active {
-    border-color: #f68b1f;
-  }
-
-  /* Navigation buttons shown on hover */
-  .media-ctrl__btn {
-    opacity: 0;
-    border-radius: 50%;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    background: #fff;
-    transition: opacity .3s;
-  }
-  .media-gallery__viewer:hover .media-ctrl__btn {
-    opacity: 1;
-  }
+.media-gallery__viewer relative {
+  height: 600px;
+  width: 600px;
 }
