@@ -154,29 +154,18 @@
   position: absolute;
   border: 1px solid rgba(var(--text-color)/0.15);
   border-radius: var(--btn-border-radius, 0);
-  background-color: #fff;
+  background-color: rgba(var(--bg-color));
   color: rgb(var(--text-color));
 }
 
 .media-ctrl__btn {
   z-index: 5;
   padding: calc(2 * var(--space-unit));
-main
 }
 .media-ctrl__btn::after {
   width: calc(44px + var(--media-gutter) * 2);
   height: calc(44px + var(--media-gutter) * 2);
 }
-codex/add-hover-navigation-for-main-product-image-1vtlqq
-.media-gallery__viewer:hover .media-ctrl__btn {
-  opacity: 1;
-  pointer-events: auto;
-}
-.media-ctrl__btn:hover {
-  transform: scale(1.05);
-}
-
-main
 .media-ctrl__btn[name=prev] {
   left: var(--media-gutter);
 }

@@ -133,16 +133,30 @@
     </ul>
 
     {%- if media_count > 1 -%}
-      <div class="media-ctrl{% unless section.settings.media_thumbs == 'always' %} media-ctrl--lg-down-static{% endunless %}{% if section.settings.media_layout == 'stacked' %} md:hidden{% endif %} no-js-hidden">
-        <button type="button" class="media-ctrl__btn tap-target vertical-center btn" name="prev" aria-controls="gallery-viewer" disabled>
-          <span class="visually-hidden">{{ 'products.product.media.previous' | t }}</span>
-          {% render 'icon-chevron-left' %}
-        </button>
-        <button type="button" class="media-ctrl__btn tap-target vertical-center btn" name="next" aria-controls="gallery-viewer">
-          <span class="visually-hidden">{{ 'products.product.media.next' | t }}</span>
-          {% render 'icon-chevron-right' %}
-        </button>
-      </div>
+      {%- if section.settings.media_arrows != 'never' or section.settings.show_slide_count -%}
+        <div class="media-ctrl{% unless section.settings.media_thumbs == 'always' %} media-ctrl--lg-down-static{% endunless %}{% if section.settings.media_layout == 'stacked' %} md:hidden{% endif %} no-js-hidden">
+          {% if section.settings.media_arrows != 'never' %}
+            <button type="button" class="media-ctrl__btn tap-target vertical-center btn{% if section.settings.media_arrows == 'desktop' %} visible-lg{% elsif section.settings.media_arrows == 'mobile' %} lg:hidden{% endif %}" name="prev" aria-controls="gallery-viewer" disabled>
+              <span class="visually-hidden">{{ 'products.product.media.previous' | t }}</span>
+              {% render 'icon-chevron-left' %}
+            </button>
+          {% endif %}
+          {% if section.settings.show_slide_count %}
+            <div class="media-ctrl__counter text-sm">
+              <span class="media-ctrl__current-item">1</span>
+              <span aria-hidden="true"> / </span>
+              <span class="visually-hidden">{{ 'products.product.media.of' | t }}</span>
+              <span class="media-ctrl__total-items">{{ media_count }}</span>
+            </div>
+          {% endif %}
+          {% if section.settings.media_arrows != 'never' %}
+            <button type="button" class="media-ctrl__btn tap-target vertical-center btn{% if section.settings.media_arrows == 'desktop' %} visible-lg{% elsif section.settings.media_arrows == 'mobile' %} lg:hidden{% endif %}" name="next" aria-controls="gallery-viewer">
+              <span class="visually-hidden">{{ 'products.product.media.next' | t }}</span>
+              {% render 'icon-chevron-right' %}
+            </button>
+          {% endif %}
+        </div>
+      {%- endif -%}
     {%- endif -%}
 
     {%- liquid
