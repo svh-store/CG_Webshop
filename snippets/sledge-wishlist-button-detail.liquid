@@ -1,0 +1,31 @@
+{% assign image = product.featured_image %}
+{% assign name = product.title %}
+{% capture url %}https://{{ shop.domain }}{{ product.url }}{% endcapture %}
+{% for var in product.variants %}
+  {% if product.selected_or_first_available_variant.id == var.id %}
+    {% if var.image and var.image.src %}
+      {% assign image = var.image.src %}
+    {% endif %}
+    {% if var.url %}
+      {% comment %} {%  assign url = var.url %} {% endcomment %}
+      {% capture url %}https://{{ shop.domain }}{{ var.url }}{% endcapture %}
+    {% endif %}
+    {% if var.name %}
+      {% assign name = var.name %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+ 
+<div
+  data-component="wishlist-button-detail"
+  data-product-id="{{product.id}}"
+  data-product-variant-id="{{product.selected_or_first_available_variant.id}}"
+  data-product-name="{{name | strip_html }}"
+  data-product-vendor="{{ product.vendor }}"
+  data-product-sku="{{ product.selected_or_first_available_variant.sku }}"
+  data-product-variant-name="{{product.selected_or_first_available_variant.name}}"
+  data-product-link="{{url}}"
+  data-product-image="https:{{image | image_url: width: 1024}}"
+  data-product-currency="{{shop.currency}}"
+  data-product-price="{{product.selected_or_first_available_variant.price | remove: '.' | remove: ',' | divided_by: 100.0 }}"
+></div>
