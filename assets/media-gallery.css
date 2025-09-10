@@ -186,7 +186,7 @@
   position: absolute;
   border: 1px solid rgba(var(--text-color)/0.15);
   border-radius: var(--btn-border-radius, 0);
-  background-color: rgba(var(--bg-color));
+  background-color: #fff;
   color: rgb(var(--text-color));
 }
 
@@ -194,9 +194,10 @@
   z-index: 5;
   padding: calc(2 * var(--space-unit));
   opacity: 0;
+  pointer-events: none;
   border-radius: 50%;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  transition: opacity 0.3s;
+  transition: opacity 0.3s, transform 0.2s;
 }
 .media-ctrl__btn::after {
   width: calc(44px + var(--media-gutter) * 2);
@@ -204,6 +205,10 @@
 }
 .media-gallery__viewer:hover .media-ctrl__btn {
   opacity: 1;
+  pointer-events: auto;
+}
+.media-ctrl__btn:hover {
+  transform: scale(1.05);
 }
 .media-ctrl__btn[name=prev] {
   left: 10px;
