@@ -100,9 +100,8 @@
 
 <div class="container">
   <div class="product js-product" data-section="{{ section.id }}">
-    <div class="pdp-grid" id="pdp-grid">
-      <div id="product-media" class="product-media product-media--{{ section.settings.media_layout }}">
-        <div class="product-media-card" id="galleryCard">
+    <div id="product-media" class="product-media product-media--{{ section.settings.media_layout }}">
+      <div class="product-media-card">
         {%- if product.media.size > 0 -%}
           {% render 'media-gallery',
             product: product,
@@ -122,11 +121,11 @@
             {{ 'image' | placeholder_svg_tag: 'media__placeholder' }}
           </div>
         {%- endif -%}
-        </div>
       </div>
+    </div>
 
-      <div class="product-info{% if section.settings.stick_on_scroll %} product-info--sticky{% endif %}"
-           {% if section.settings.stick_on_scroll %}data-sticky-height-elems="#product-media"{% endif %}>
+    <div class="product-info{% if section.settings.stick_on_scroll %} product-info--sticky{% endif %}"
+         {% if section.settings.stick_on_scroll %}data-sticky-height-elems="#product-media"{% endif %}>
       {%- if section.settings.stick_on_scroll -%}
       <script src="{{ 'sticky-scroll-direction.js' | asset_url }}" defer="defer"></script>
       <sticky-scroll-direction data-min-sticky-size="md">
@@ -138,7 +137,7 @@
         <a class="product-options--anchor" id="product-info" rel="nofollow"></a>
       {%- endif -%}
 
-      <div class="product-info-card" id="infoCard">
+      <div class="product-info-card">
       {%- for block in section.blocks -%}
         {%- case block.type -%}
           {%- when '@app' -%}
@@ -696,7 +695,6 @@
         </div>
       </sticky-scroll-direction>
       {%- endif -%}
-      </div>
     </div>
   </div>
 </div>
