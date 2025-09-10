@@ -36,6 +36,9 @@
 .product-main + .shopify-section:not(.product-details)::before {
   background-color: transparent !important;
 }
+ab hier neu 
+
+
 
 @media (min-width: 769px) {
   /* Produkt‑Medien‑Spalte auf exakt 600px begrenzen */
@@ -51,19 +54,7 @@
   }
 }
 
-/* Prevent internal scrolling of the main product image area */
-#product-media .media-viewer {
-  overflow-x: hidden;
-}
-
-/* Maintain a consistent gap between main image and thumbnails */
-#product-media .media-gallery__thumbs {
-  margin-top: 16px;
-}
-
-/* Ensure product images keep their aspect ratio */
-#product-media .media-viewer__item img {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
+.media-gallery__viewer relative {
+  height: 600px;
+  width: 600px;
 }
