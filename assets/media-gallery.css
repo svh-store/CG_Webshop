@@ -166,7 +166,8 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: opacity 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
 .hover-nav .media-ctrl__btn {
   opacity: 0;
@@ -174,17 +175,35 @@
   transform: translateY(-50%) scale(0.8);
 }
 .hover-nav:hover .media-ctrl__btn,
-.hover-nav:focus-within .media-ctrl__btn {
+.hover-nav:focus-within .media-ctrl__btn,
+.hover-nav[data-show] .media-ctrl__btn {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(-50%) scale(1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 @media (hover: none) {
   .hover-nav .media-ctrl__btn {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(-50%) scale(1);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-50%) scale(0.8);
   }
+}
+.hover-nav[data-touch-show] .media-ctrl__btn {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(-50%) scale(1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+.media-ctrl__btn:active {
+  transform: translateY(-50%) translateY(1px) scale(0.97);
+}
+.media-ctrl__btn[hidden] {
+  display: none !important;
+}
+.media-ctrl__btn:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 .media-ctrl__btn::after {
   width: calc(44px + var(--media-gutter) * 2);
