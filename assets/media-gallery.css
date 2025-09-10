@@ -31,36 +31,20 @@
   --media-gutter: calc(4 * var(--space-unit));
 }
 
-.pg { 
+.pg {
   --pg-media-max: clamp(420px, 52vw, 720px);
 }
 .pg__media {
   max-width: var(--pg-media-max);
   margin-inline: auto;
   position: relative;
-  overflow-y: visible;
-  overscroll-behavior: auto;
-}
-.pg__media,
-.pg__media .media-viewer,
-.pg__media .media-viewer__item,
-.pg__media .media,
-.pg__media .slider__slide {
-  height: auto !important;
-  overflow-y: visible !important;
-  overscroll-behavior: auto;
 }
 .pg__media .media-viewer__item,
 .pg__media img,
 .pg__media video,
-.pg__media model-viewer,
-.pg__media iframe,
-.pg__media .shopify-model-viewer-ui,
-.pg__media .product-image.img-fit--contain,
-.pg__media .zoom-image--contain {
-  display: block;
+.pg__media model-viewer {
   width: 100%;
-  height: auto !important;
+  height: auto;
   max-height: min(72vh, 820px);
   object-fit: contain;
 }
