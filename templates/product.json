@@ -109,7 +109,7 @@
         "stick_on_scroll": true,
         "select_first_variant": true,
         "sticky_atc_panel": true,
-        "sticky_atc_position": "end",
+        "sticky_atc_position": "sticky-atc-panel--center",
         "sticky_atc_mobile": true,
         "media_layout": "slider",
         "media_size": "large",
