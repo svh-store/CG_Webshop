@@ -119,9 +119,7 @@ if (!customElements.get('media-gallery')) {
       const handleControlClick = (evt) => {
         if (evt.detail) evt.currentTarget.blur();
         requestAnimationFrame(() => {
-          setTimeout(() => {
-            if (!this.isHovering) hide();
-          }, 0);
+          if (!this.isHovering) hide();
         });
       };
       [this.prevBtn, this.nextBtn].forEach((btn) => {
@@ -525,11 +523,11 @@ if (!customElements.get('media-gallery')) {
 
       this.thumbs.querySelectorAll('.media-thumbs__btn').forEach((el) => {
         el.classList.remove('is-active');
-        el.removeAttribute('aria-current');
+        el.setAttribute('aria-selected', 'false');
       });
 
       btn.classList.add('is-active');
-      btn.setAttribute('aria-current', 'true');
+      btn.setAttribute('aria-selected', 'true');
       this.checkThumbVisibilty(this.currentThumb);
     }
 
@@ -549,13 +547,12 @@ if (!customElements.get('media-gallery')) {
      * @param {Element} thumb - Thumb item element.
      */
     checkThumbVisibilty(thumb) {
-      const scrollPos = this.thumbs.scrollLeft;
-      const lastVisibleThumbOffset = this.thumbs.clientWidth + scrollPos;
-      const thumbOffset = thumb.offsetLeft;
-
-      if (thumbOffset + thumb.clientWidth > lastVisibleThumbOffset || thumbOffset < scrollPos) {
-        this.thumbs.scrollTo({ left: thumbOffset, behavior: 'smooth' });
-      }
+      if (!thumb) return;
+      const thumbRect = thumb.getBoundingClientRect();
+      const thumbsRect = this.thumbs.getBoundingClientRect();
+      const offset =
+        thumbRect.left + thumbRect.width / 2 - (thumbsRect.left + thumbsRect.width / 2);
+      this.thumbs.scrollTo({ left: this.thumbs.scrollLeft + offset, behavior: 'smooth' });
     }
 
     /**

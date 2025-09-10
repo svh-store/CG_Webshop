@@ -59,8 +59,9 @@
 -%}
 
 <media-gallery
-    class="media-gallery relative"
+    class="media-gallery relative pg"
     role="region"
+    data-gallery
     {% if featured_product %}
       data-is-featured="true"
     {% endif %}
@@ -91,7 +92,7 @@
 
   <div class="media-gallery__status visually-hidden" role="status"></div>
 
-  <div class="media-gallery__viewer relative hover-nav">
+  <div class="media-gallery__viewer pg__media relative hover-nav">
     <ul class="media-viewer flex" id="gallery-viewer" role="list" tabindex="0">
     {%- for media in product.media -%}
         {%- liquid
@@ -111,7 +112,7 @@
             assign lazy_load = false
           endif
         -%}
-        <li class="media-viewer__item{% if media.id == featured_media.id or select_first_image %} is-current-variant{% endif %}{% if section.settings.hide_variants and variant_images contains media.src %} media-viewer__item--variant{% endif %}{% if section.settings.media_layout == 'stacked' and media.id == featured_media.id %}{% if underline_active and section.settings.enable_media_grouping == false %} is-active{% endif %}{% endif %}{% if media_count == 1 %} media-viewer__item--single{% endif %}" data-media-id="{{ media.id }}" data-media-type="{{ media.media_type }}">
+        <li id="Slide-{{ media.id }}" class="media-viewer__item{% if media.id == featured_media.id or select_first_image %} is-current-variant{% endif %}{% if section.settings.hide_variants and variant_images contains media.src %} media-viewer__item--variant{% endif %}{% if section.settings.media_layout == 'stacked' and media.id == featured_media.id %}{% if underline_active and section.settings.enable_media_grouping == false %} is-active{% endif %}{% endif %}{% if media_count == 1 %} media-viewer__item--single{% endif %}" data-media-id="{{ media.id }}" data-media-type="{{ media.media_type }}">
           {%- if enable_zoom and lightbox_enabled and media.media_type == 'image' -%}
             <gallery-zoom-open class="gallery-zoom-open cursor-pointer w-full">
           {%- endif -%}
@@ -136,8 +137,7 @@
       {%- if section.settings.media_arrows != 'never' or section.settings.show_slide_count -%}
         <div class="media-ctrl{% unless section.settings.media_thumbs == 'always' %} media-ctrl--lg-down-static{% endunless %}{% if section.settings.media_layout == 'stacked' %} md:hidden{% endif %} no-js-hidden">
           {% if section.settings.media_arrows != 'never' %}
-            <button type="button" class="media-ctrl__btn tap-target vertical-center btn{% if section.settings.media_arrows == 'desktop' %} visible-lg{% elsif section.settings.media_arrows == 'mobile' %} lg:hidden{% endif %}" name="prev" aria-controls="gallery-viewer" disabled hidden>
-              <span class="visually-hidden">{{ 'products.product.media.previous' | t }}</span>
+            <button type="button" class="media-ctrl__btn tap-target vertical-center btn{% if section.settings.media_arrows == 'desktop' %} visible-lg{% elsif section.settings.media_arrows == 'mobile' %} lg:hidden{% endif %}" name="prev" aria-controls="gallery-viewer" aria-label="{{ 'products.product.media.previous' | t }}" disabled hidden>
               {% render 'icon-chevron-left' %}
             </button>
           {% endif %}
@@ -150,8 +150,7 @@
             </div>
           {% endif %}
           {% if section.settings.media_arrows != 'never' %}
-            <button type="button" class="media-ctrl__btn tap-target vertical-center btn{% if section.settings.media_arrows == 'desktop' %} visible-lg{% elsif section.settings.media_arrows == 'mobile' %} lg:hidden{% endif %}" name="next" aria-controls="gallery-viewer">
-              <span class="visually-hidden">{{ 'products.product.media.next' | t }}</span>
+            <button type="button" class="media-ctrl__btn tap-target vertical-center btn{% if section.settings.media_arrows == 'desktop' %} visible-lg{% elsif section.settings.media_arrows == 'mobile' %} lg:hidden{% endif %}" name="next" aria-controls="gallery-viewer" aria-label="{{ 'products.product.media.next' | t }}">
               {% render 'icon-chevron-right' %}
             </button>
           {% endif %}
@@ -224,8 +223,8 @@
 
   {%- if media_count > 1 and section.settings.media_thumbs != 'never' and featured_product == false -%}
     {%- unless section.settings.media_layout == 'stacked' and section.settings.media_thumbs == 'desktop' -%}
-      <div class="media-gallery__thumbs{% if section.settings.media_thumbs == 'desktop' %} hidden md:block{% endif %}{% if section.settings.media_layout == 'stacked' %} md:hidden{% endif %} no-js-hidden">
-        <ul class="media-thumbs relative flex" role="list">
+      <div class="media-gallery__thumbs pg__thumbs{% if section.settings.media_thumbs == 'desktop' %} hidden md:block{% endif %}{% if section.settings.media_layout == 'stacked' %} md:hidden{% endif %} no-js-hidden">
+        <ul class="media-thumbs relative flex" role="tablist" aria-label="{{ 'products.product.media' | t }}">
           {%- for media in product.media -%}
             {%- liquid
               capture thumb_index
@@ -244,7 +243,7 @@
               endif
             -%}
             <li class="media-thumbs__item{% if section.settings.hide_variants and variant_images contains media.src %} media-thumbs__item--variant{% endif %}" data-media-id="{{ media.id }}">
-              <button class="media-thumbs__btn media relative w-full{% if settings.blend_product_images %} image-blend{% endif %}{% if active and section.settings.enable_media_grouping == false %} is-active{% endif %}"{% if active %} aria-current="true"{% endif %} aria-controls="gallery-viewer"{% if section.settings.thumb_ratio != 'natural' %} style="padding-top: {{ 1 | divided_by: thumb_ratio | times: 100 }}%;"{% endif %}>
+              <button class="media-thumbs__btn media relative w-full{% if settings.blend_product_images %} image-blend{% endif %}{% if active and section.settings.enable_media_grouping == false %} is-active{% endif %}" role="tab" aria-controls="Slide-{{ media.id }}" aria-selected="{{ active }}"{% if section.settings.thumb_ratio != 'natural' %} style="padding-top: {{ 1 | divided_by: thumb_ratio | times: 100 }}%;"{% endif %}>
                 <span class="visually-hidden">
                   {%- if media.media_type == 'image' -%}
                     {{- 'products.product.media.load_image' | t: index: image_index -}}
