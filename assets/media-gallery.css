@@ -38,25 +38,15 @@
   max-width: var(--pg-media-max);
   margin-inline: auto;
   position: relative;
-  height: auto;
-  overflow-y: visible;
-  overscroll-behavior: auto;
 }
-
-.pg__media .media-viewer {
-  overflow-y: hidden;
-}
-
 .pg__media .media-viewer__item,
-.pg__media .media,
 .pg__media img,
 .pg__media video,
 .pg__media model-viewer {
   width: 100%;
-  height: auto !important;
+  height: auto;
   max-height: min(72vh, 820px);
   object-fit: contain;
-  overflow-y: visible !important;
 }
 .pg__thumbs {
   max-width: var(--pg-media-max);

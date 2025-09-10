@@ -43,19 +43,6 @@ if (!customElements.get('media-gallery')) {
       this.loadingSpinner = this.querySelector('.loading-spinner');
       this.xrButton = this.querySelector('.media-xr-button');
 
-      this.mediaWrapper = this.querySelector('.pg__media');
-      if (this.mediaWrapper) {
-        this.mediaWrapper.addEventListener(
-          'wheel',
-          (e) => {
-            const el = e.currentTarget;
-            const needsScroll = el.scrollHeight > Math.ceil(el.clientHeight + 1);
-            if (!needsScroll) e.preventDefault();
-          },
-          { passive: false }
-        );
-      }
-
       if (this.hasAttribute('data-zoom-enabled')) {
         this.galleryModal = this.querySelector('.js-media-zoom-template').content.firstElementChild.cloneNode(true);
       }
