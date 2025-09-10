@@ -74,7 +74,59 @@ if (!customElements.get('media-gallery')) {
         }
       }
 
+      this.initNavVisibility();
       this.section.addEventListener('on:variant:change', this.onVariantChange.bind(this));
+    }
+
+    initNavVisibility() {
+      this.navWrapper = this.querySelector('.media-gallery__viewer');
+      if (!this.navWrapper || !this.controls) return;
+
+      this.isHovering = false;
+      const show = () => {
+        this.navWrapper.setAttribute('data-show', '1');
+      };
+      const hide = () => {
+        if (this.navWrapper.contains(document.activeElement)) return;
+        this.navWrapper.removeAttribute('data-show');
+      };
+
+      this.navWrapper.addEventListener('mouseenter', () => {
+        this.isHovering = true;
+        show();
+      });
+      this.navWrapper.addEventListener('mouseleave', () => {
+        this.isHovering = false;
+        hide();
+      });
+      this.navWrapper.addEventListener('focusin', show);
+      this.navWrapper.addEventListener('focusout', (evt) => {
+        if (!this.navWrapper.contains(evt.relatedTarget)) hide();
+      });
+
+      this.navWrapper.addEventListener(
+        'touchstart',
+        () => {
+          this.navWrapper.setAttribute('data-touch-show', '1');
+          clearTimeout(this.touchTimer);
+          this.touchTimer = setTimeout(() => {
+            this.navWrapper.removeAttribute('data-touch-show');
+          }, 1500);
+        },
+        { passive: true }
+      );
+
+      const handleControlClick = (evt) => {
+        if (evt.detail) evt.currentTarget.blur();
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            if (!this.isHovering) hide();
+          }, 0);
+        });
+      };
+      [this.prevBtn, this.nextBtn].forEach((btn) => {
+        if (btn) btn.addEventListener('click', handleControlClick);
+      });
     }
 
     triggerZoomInit() {
@@ -439,11 +491,15 @@ if (!customElements.get('media-gallery')) {
 
       if (this.controls) {
         if (this.prevBtn) {
-          this.prevBtn.disabled = this.currentIndex === 0;
+          const atStart = this.currentIndex === 0;
+          this.prevBtn.disabled = atStart;
+          this.prevBtn.toggleAttribute('hidden', atStart);
         }
 
         if (this.nextBtn) {
-          this.nextBtn.disabled = this.currentIndex === this.visibleItems.length - 1;
+          const atEnd = this.currentIndex === this.visibleItems.length - 1;
+          this.nextBtn.disabled = atEnd;
+          this.nextBtn.toggleAttribute('hidden', atEnd);
         }
 
         if (this.counterCurrent) {
