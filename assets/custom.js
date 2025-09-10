@@ -404,20 +404,3 @@
  *
  * Have fun! - The Clean Canvas Development Team.
  */
-
-document.addEventListener('DOMContentLoaded', () => {
-  const gallery = document.getElementById('galleryCard');
-  const info = document.getElementById('infoCard');
-  if (!gallery || !info) return;
-
-  const syncHeights = () => {
-    if (window.innerWidth >= 990) {
-      gallery.style.height = info.offsetHeight + 'px';
-    } else {
-      gallery.style.height = '';
-    }
-  };
-
-  syncHeights();
-  window.addEventListener('resize', syncHeights);
-});
