@@ -493,21 +493,12 @@ if (!customElements.get('media-gallery')) {
      * @param {Element} thumb - Thumb item element.
      */
     checkThumbVisibilty(thumb) {
-      const isVertical = getComputedStyle(this.thumbs).flexDirection === 'column';
-      if (isVertical) {
-        const scrollPos = this.thumbs.scrollTop;
-        const lastVisibleThumbOffset = this.thumbs.clientHeight + scrollPos;
-        const thumbOffset = thumb.offsetTop;
-        if (thumbOffset + thumb.clientHeight > lastVisibleThumbOffset || thumbOffset < scrollPos) {
-          this.thumbs.scrollTo({ top: thumbOffset, behavior: 'smooth' });
-        }
-      } else {
-        const scrollPos = this.thumbs.scrollLeft;
-        const lastVisibleThumbOffset = this.thumbs.clientWidth + scrollPos;
-        const thumbOffset = thumb.offsetLeft;
-        if (thumbOffset + thumb.clientWidth > lastVisibleThumbOffset || thumbOffset < scrollPos) {
-          this.thumbs.scrollTo({ left: thumbOffset, behavior: 'smooth' });
-        }
+      const scrollPos = this.thumbs.scrollLeft;
+      const lastVisibleThumbOffset = this.thumbs.clientWidth + scrollPos;
+      const thumbOffset = thumb.offsetLeft;
+
+      if (thumbOffset + thumb.clientWidth > lastVisibleThumbOffset || thumbOffset < scrollPos) {
+        this.thumbs.scrollTo({ left: thumbOffset, behavior: 'smooth' });
       }
     }
 
