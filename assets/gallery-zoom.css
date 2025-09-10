@@ -68,14 +68,17 @@ carousel-slider[inactive] .gallery-zoom__thumbs {
 .gallery-zoom__thumb {
   position: relative;
   flex: 0 0 80px;
-  border: 1px solid transparent;
-  transition: transform 0.2s;
-}
-.gallery-zoom__thumb:hover {
-  transform: scale(1.05);
 }
 .gallery-zoom__thumb::after {
-  display: none;
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  transition: width 0.3s;
+  background: currentColor;
 }
 .gallery-zoom__thumb[hidden] {
   display: none;
@@ -86,8 +89,8 @@ carousel-slider[inactive] .gallery-zoom__thumbs {
   }
 }
 
-.gallery-zoom__thumb--active {
-  border-color: #ff6600;
+.gallery-zoom__thumb--active::after {
+  width: 100%;
 }
 
 .gallery-zoom__controls {
