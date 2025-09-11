@@ -34,6 +34,7 @@
 {%- endif -%}
 
 <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'pdp-sticky-sync.js' | asset_url }}" defer="defer"></script>
 
 {%- liquid
   # constants
@@ -100,44 +101,43 @@
 
 <div class="container">
   <div class="product js-product" data-section="{{ section.id }}">
-    <div id="product-media" class="product-media product-media--{{ section.settings.media_layout }}">
-      <div class="product-media-card">
-        {%- if product.media.size > 0 -%}
-          {% render 'media-gallery',
-            product: product,
-            featured_media: featured_media,
-            media_ratio: media_ratio,
-            media_crop: section.settings.media_crop,
-            thumb_ratio: thumb_ratio,
-            thumb_crop: section.settings.thumb_crop,
-            first_3d_model: first_3d_model,
-            enable_zoom: section.settings.enable_zoom,
-            enable_lightbox_mobile: section.settings.enable_lightbox_mobile,
-            zoom_mode: section.settings.zoom_mode,
-            zoom_level: section.settings.hover_zoom
-          %}
-        {%- else -%}
-          <div class="media relative">
-            {{ 'image' | placeholder_svg_tag: 'media__placeholder' }}
+    <div id="pdpPair" class="pdp-pair">
+      <div class="pdp-col">
+        <div id="galleryWrap" class="stick-wrap">
+          <div id="product-media" class="product-media product-media--{{ section.settings.media_layout }}">
+            <div id="galleryCard" class="product-media-card">
+              {%- if product.media.size > 0 -%}
+                {% render 'media-gallery',
+                  product: product,
+                  featured_media: featured_media,
+                  media_ratio: media_ratio,
+                  media_crop: section.settings.media_crop,
+                  thumb_ratio: thumb_ratio,
+                  thumb_crop: section.settings.thumb_crop,
+                  first_3d_model: first_3d_model,
+                  enable_zoom: section.settings.enable_zoom,
+                  enable_lightbox_mobile: section.settings.enable_lightbox_mobile,
+                  zoom_mode: section.settings.zoom_mode,
+                  zoom_level: section.settings.hover_zoom
+                %}
+              {%- else -%}
+                <div class="media relative">
+                  {{ 'image' | placeholder_svg_tag: 'media__placeholder' }}
+                </div>
+              {%- endif -%}
+            </div>
           </div>
-        {%- endif -%}
+        </div>
       </div>
-    </div>
+      <div class="pdp-col">
+        <div id="infoWrap" class="stick-wrap">
+          <div class="product-info">
+            {%- assign has_variant_picker = false -%}
+            {%- if section.settings.sticky_atc_panel -%}
+              <a class="product-options--anchor" id="product-info" rel="nofollow"></a>
+            {%- endif -%}
 
-    <div class="product-info{% if section.settings.stick_on_scroll %} product-info--sticky{% endif %}"
-         {% if section.settings.stick_on_scroll %}data-sticky-height-elems="#product-media"{% endif %}>
-      {%- if section.settings.stick_on_scroll -%}
-      <script src="{{ 'sticky-scroll-direction.js' | asset_url }}" defer="defer"></script>
-      <sticky-scroll-direction data-min-sticky-size="md">
-        <div class="product-info__sticky">
-      {%- endif -%}
-
-      {%- assign has_variant_picker = false -%}
-      {%- if section.settings.sticky_atc_panel -%}
-        <a class="product-options--anchor" id="product-info" rel="nofollow"></a>
-      {%- endif -%}
-
-      <div class="product-info-card">
+            <div id="infoCard" class="product-info-card">
       {%- for block in section.blocks -%}
         {%- case block.type -%}
           {%- when '@app' -%}
@@ -689,12 +689,10 @@
         {%- endcase -%}
       {%- endfor -%}
      
-      </div>
-
-      {%- if section.settings.stick_on_scroll -%}
+            </div>
+          </div>
         </div>
-      </sticky-scroll-direction>
-      {%- endif -%}
+      </div>
     </div>
   </div>
 </div>
