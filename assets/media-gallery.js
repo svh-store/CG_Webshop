@@ -36,8 +36,8 @@ if (!customElements.get('media-gallery')) {
       this.stackedUnderline = this.dataset.stackedUnderline === 'true' && !this.mediaGroupingEnabled;
       this.isFeatured = this.dataset.isFeatured === 'true';
       this.viewer = this.querySelector('.media-viewer');
-      this.thumbs = this.querySelector('.media-thumbs');
-      this.thumbsItems = this.querySelectorAll('.media-thumbs__item');
+      this.thumbs = this.querySelector('.pg__thumbs-track');
+      this.thumbsItems = this.querySelectorAll('.pg__thumb');
       this.controls = this.querySelector('.media-ctrl');
       this.prevBtn = this.querySelector('.media-ctrl__btn[name="prev"]');
       this.nextBtn = this.querySelector('.media-ctrl__btn[name="next"]');
@@ -234,7 +234,7 @@ if (!customElements.get('media-gallery')) {
             const groupItem = { main: item };
             if (this.thumbs) {
               groupItem.thumb = this.thumbs.querySelector(
-                `[data-media-id="${item.dataset.mediaId}"].media-thumbs__item`
+                `[data-media-id="${item.dataset.mediaId}"]`
               );
             }
             this.mediaGroupMap.groups[currentMediaOptionName].items.push(groupItem);
@@ -536,15 +536,14 @@ if (!customElements.get('media-gallery')) {
       this.currentThumb = this.thumbs.querySelector(
         `[data-media-id="${this.currentItem.dataset.mediaId}"]`
       );
-      const btn = this.currentThumb.querySelector('button');
 
-      this.thumbs.querySelectorAll('.media-thumbs__btn').forEach((el) => {
+      this.thumbs.querySelectorAll('.pg__thumb').forEach((el) => {
         el.classList.remove('is-active');
         el.setAttribute('aria-selected', 'false');
       });
 
-      btn.classList.add('is-active');
-      btn.setAttribute('aria-selected', 'true');
+      this.currentThumb.classList.add('is-active');
+      this.currentThumb.setAttribute('aria-selected', 'true');
       this.checkThumbVisibilty(this.currentThumb);
     }
 

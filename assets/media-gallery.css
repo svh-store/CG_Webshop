@@ -53,53 +53,73 @@
   max-width: var(--pg-media-max);
   margin: 0 auto;
 }
-.pg__thumbs .media-thumbs {
+.pg__thumbs-track {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: minmax(56px, 72px);
-  gap: 12px;
+  grid-auto-columns: var(--pg-thumb-size, 80px);
   justify-content: center;
+  gap: var(--pg-thumb-gap, 16px);
   align-items: center;
   overflow-x: visible;
-  scroll-snap-type: none;
+  scrollbar-width: none;
 }
-.pg__thumbs .media-thumbs__item {
+.pg__thumbs-track::-webkit-scrollbar {
+  display: none;
+}
+.pg__thumb {
+  width: var(--pg-thumb-size, 80px);
+  height: var(--pg-thumb-size, 80px);
   flex: 0 0 auto;
-}
-.pg__thumbs .media-thumbs__btn {
   aspect-ratio: 1/1;
   border-radius: 6px;
   overflow: hidden;
-  border: 1px solid rgba(0, 0, 0, 0.08);
   background: #fff;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
 }
-.pg__thumbs .media-thumbs__btn > img {
+.pg__thumb-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
-.pg__thumbs .media-thumbs__btn[aria-selected="true"] {
-  outline: none;
-  border-color: orange;
+.pg__thumb[aria-selected="true"] {
+  box-shadow: inset 0 0 0 2px orange;
 }
-.pg__thumbs .media-thumbs__btn:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+.pg__thumb:hover {
+  box-shadow: inset 0 0 0 2px orange, 0 2px 8px rgba(0, 0, 0, 0.08);
 }
-.pg__thumbs .media-thumbs__btn:focus-visible {
+.pg__thumb:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 2px;
 }
+.pg__thumb-badge {
+  z-index: 2;
+  top: var(--space-unit);
+  right: var(--space-unit);
+  width: 25%;
+  min-width: 20px;
+  border: 1px solid rgba(51, 51, 51, 0.2);
+  background-color: #fff;
+  color: #333;
+}
+.pg__thumb-badge::before {
+  content: "";
+  padding-top: 100%;
+}
+.pg__thumb-badge > .icon {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+}
 @media (max-width: 749px) {
-  .pg__thumbs .media-thumbs {
+  .pg__thumbs-track {
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     padding-inline: 12px;
-    gap: 12px;
+    gap: var(--pg-thumb-gap, 12px);
   }
-  .pg__thumbs .media-thumbs__item {
-    flex: 0 0 64px;
+  .pg__thumb {
     scroll-snap-align: center;
   }
 }
