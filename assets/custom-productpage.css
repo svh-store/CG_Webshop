@@ -9,7 +9,7 @@
 #product-media .media,
 #product-media .image-blend,
 #product-media .media-viewer__item .media,
-#product-media .media-thumbs__btn.media {
+#product-media .pg__thumb {
   /* lokale Variablen-Overrides – gelten nur in diesem Scope */
   --card-bg-color: #ffffff;
   --blend-bg-color: #ffffff;

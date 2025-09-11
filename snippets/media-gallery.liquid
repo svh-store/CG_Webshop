@@ -224,7 +224,7 @@
   {%- if media_count > 1 and section.settings.media_thumbs != 'never' and featured_product == false -%}
     {%- unless section.settings.media_layout == 'stacked' and section.settings.media_thumbs == 'desktop' -%}
       <div class="media-gallery__thumbs pg__thumbs{% if section.settings.media_thumbs == 'desktop' %} hidden md:block{% endif %}{% if section.settings.media_layout == 'stacked' %} md:hidden{% endif %} no-js-hidden">
-        <ul class="media-thumbs relative flex" role="tablist" aria-label="{{ 'products.product.media' | t }}">
+        <div class="pg__thumbs-track" role="tablist" aria-label="{{ 'products.product.media' | t }}">
           {%- for media in product.media -%}
             {%- liquid
               capture thumb_index
@@ -242,55 +242,38 @@
                 assign active = true
               endif
             -%}
-            <li class="media-thumbs__item{% if section.settings.hide_variants and variant_images contains media.src %} media-thumbs__item--variant{% endif %}" data-media-id="{{ media.id }}">
-              <button class="media-thumbs__btn media relative w-full{% if settings.blend_product_images %} image-blend{% endif %}{% if active and section.settings.enable_media_grouping == false %} is-active{% endif %}" role="tab" aria-controls="Slide-{{ media.id }}" aria-selected="{{ active }}"{% if section.settings.thumb_ratio != 'natural' %} style="padding-top: {{ 1 | divided_by: thumb_ratio | times: 100 }}%;"{% endif %}>
-                <span class="visually-hidden">
-                  {%- if media.media_type == 'image' -%}
-                    {{- 'products.product.media.load_image' | t: index: image_index -}}
-                  {%- elsif media.media_type == 'model' -%}
-                    {{- 'products.product.media.load_model' | t: index: model_index -}}
-                  {%- elsif media.media_type == 'video' or media.media_type == 'external_video' -%}
-                    {{- 'products.product.media.load_video' | t: index: video_index -}}
-                  {%- endif -%}
-                </span>
-
-                {%- if media.media_type == 'model' -%}
-                  <span class="media-thumbs__badge absolute flex items-center justify-center pointer-events-none">
-                    {%- render 'icon-3d-model' -%}
-                  </span>
+            <button
+              class="pg__thumb{% if settings.blend_product_images %} image-blend{% endif %}{% if active and section.settings.enable_media_grouping == false %} is-active{% endif %}"
+              role="tab"
+              aria-controls="Slide-{{ media.id }}"
+              aria-selected="{{ active }}"
+              data-media-id="{{ media.id }}"
+              data-index="{{ forloop.index0 }}"
+              type="button">
+              <span class="visually-hidden">
+                {%- if media.media_type == 'image' -%}
+                  {{- 'products.product.media.load_image' | t: index: image_index -}}
+                {%- elsif media.media_type == 'model' -%}
+                  {{- 'products.product.media.load_model' | t: index: model_index -}}
                 {%- elsif media.media_type == 'video' or media.media_type == 'external_video' -%}
-                  <span class="media-thumbs__badge absolute flex items-center justify-center pointer-events-none">
-                    {%- render 'icon-video' -%}
-                  </span>
+                  {{- 'products.product.media.load_video' | t: index: video_index -}}
                 {%- endif -%}
+              </span>
 
-                {%- liquid
-                  assign src_width = 80
-                  if section.settings.thumb_ratio != 'natural'
-                    if thumb_crop == 'top'
-                      assign img_class = 'img-fit object-top w-full'
-                      assign src_width = 150
-                    elsif thumb_crop == 'center'
-                      assign img_class = 'img-fit w-full'
-                      assign src_width = 150
-                    else
-                      assign img_class = 'img-fit img-fit--contain w-full'
-                    endif
-                  endif
-                -%}
+              {%- if media.media_type == 'model' -%}
+                <span class="pg__thumb-badge absolute flex items-center justify-center pointer-events-none">
+                  {%- render 'icon-3d-model' -%}
+                </span>
+              {%- elsif media.media_type == 'video' or media.media_type == 'external_video' -%}
+                <span class="pg__thumb-badge absolute flex items-center justify-center pointer-events-none">
+                  {%- render 'icon-video' -%}
+                </span>
+              {%- endif -%}
 
-                {% render 'image',
-                  image: media,
-                  src_width: src_width,
-                  srcset_2x: true,
-                  lazy_load: false,
-                  class: img_class,
-                  disable_focal_point: true
-                %}
-              </button>
-            </li>
+              {{ media | image_url: width: 220 | image_tag: class: 'pg__thumb-img', loading: 'lazy', decoding: 'async' }}
+            </button>
           {%- endfor -%}
-        </ul>
+        </div>
       </div>
     {%- endunless -%}
   {%- endif -%}
