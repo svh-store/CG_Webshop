@@ -126,7 +126,7 @@
         "show_slide_count": false,
         "media_thumbs": "always",
         "lightbox_thumbnails": true,
-        "thumb_ratio": "1.33",
+        "thumb_ratio": "natural",
         "thumb_crop": "none",
         "border_color": "#ffffff",
         "bg_color": "#ffffff",
