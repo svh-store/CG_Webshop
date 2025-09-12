@@ -1,0 +1,105 @@
+.pdp-gallery {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: hidden;
+}
+
+.pdp-gallery__media {
+  position: relative;
+  max-width: min(100%, var(--pg-media-max, 720px));
+  margin-inline: auto;
+}
+
+.pdp-gallery__slide {
+  display: none;
+  width: 100%;
+  aspect-ratio: var(--aspect-ratio, 1/1);
+}
+
+.pdp-gallery__slide[data-active="true"] {
+  display: block;
+}
+
+.pdp-gallery__slide > * {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  max-height: min(72vh, 820px);
+}
+
+.pdp-gallery__ctrl {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .2s, transform .2s;
+}
+
+.pdp-gallery__ctrl--prev { left: 8px; }
+.pdp-gallery__ctrl--next { right: 8px; }
+
+.pdp-gallery__ctrl:active {
+  transform: translateY(-50%) scale(.92);
+}
+
+.pdp-gallery__media[data-show] .pdp-gallery__ctrl,
+.pdp-gallery__media[data-touch-show] .pdp-gallery__ctrl {
+  opacity: 1;
+}
+
+.pdp-gallery__thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+}
+
+.pdp-gallery__thumb {
+  width: var(--thumb-size, clamp(72px, 9vw, 96px));
+  aspect-ratio: 1 / 1;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  padding: 0;
+  background: none;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.pdp-gallery__thumb[aria-selected="true"] {
+  border-color: rgba(0,0,0,0.6);
+}
+
+.pdp-gallery__thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pdp-gallery__thumb:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 1px;
+}
+
+@media (min-width: 990px) {
+  .product-main .product-media { position: static; }
+  .stick-wrap[data-sticky] { min-height: var(--pair-height); }
+  .stick-wrap[data-sticky] > * { position: sticky; top: var(--pdp-sticky-top, var(--header-end-padded, 70px)); }
+}
+
+@media (max-width: 989px) {
+  .stick-wrap > * { position: static !important; }
+}
