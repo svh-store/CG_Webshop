@@ -1,0 +1,33 @@
+{% liquid
+  assign initial_media = featured_media | default: product.media.first
+%}
+<div id="galleryWrap" class="stick-wrap">
+  <div id="galleryCard" class="product-media-card pdp-gallery" data-gallery data-product-id="{{ product.id }}">
+    <div class="pdp-gallery__media" data-media tabindex="0">
+      {% for media in product.media %}
+        {% assign is_active = media.id == initial_media.id %}
+        <div class="pdp-gallery__slide" id="Media-{{ media.id }}" data-index="{{ forloop.index0 }}" {% if is_active %}data-active="true"{% endif %} role="tabpanel">
+          {% if is_active %}
+            {{ media | media_tag: image_size: 'master', loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 990px) 720px, 92vw' }}
+          {% else %}
+            {{ media | media_tag: image_size: 'master', loading: 'lazy', fetchpriority: 'low', sizes: '(min-width: 990px) 720px, 92vw' }}
+          {% endif %}
+        </div>
+      {% endfor %}
+      {% if product.media.size > 1 %}
+        <button class="pdp-gallery__ctrl pdp-gallery__ctrl--prev" data-prev aria-label="{{ 'accessibility.previous' | t }}">{% render 'icon-chevron-left' %}</button>
+        <button class="pdp-gallery__ctrl pdp-gallery__ctrl--next" data-next aria-label="{{ 'accessibility.next' | t }}">{% render 'icon-chevron-right' %}</button>
+      {% endif %}
+    </div>
+    {% if product.media.size > 1 %}
+      <div class="pdp-gallery__thumbs" role="tablist" aria-label="{{ 'products.product.media' | t }}" data-thumbs>
+        {% for media in product.media %}
+          {% assign is_active = media.id == initial_media.id %}
+          <button class="pdp-gallery__thumb" role="tab" aria-controls="Media-{{ media.id }}" aria-selected="{{ is_active }}" data-index="{{ forloop.index0 }}" type="button">
+            {{ media | image_url: width: 220 | image_tag: class: 'pdp-gallery__thumb-img', loading: 'lazy', decoding: 'async' }}
+          </button>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
