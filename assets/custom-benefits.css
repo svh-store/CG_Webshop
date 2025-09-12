@@ -1,28 +1,24 @@
 /* ===== CG Benefits (mittige Trennstriche) ===== */
-.cg-benefits{
-  --cg-accent:#F19222;
-  --cg-text:#111;
-  --cg-sub:#666;
-  --cg-line:#ddd;
-  --ico-size:72px;   /* Icon-Größe */
-  --row-h:88px;      /* visuelle Reihenhöhe -> bestimmt die Strich-Zentrierung */
-  display:flex;
-  justify-content:center;
-  align-items:stretch;            /* alle Items gleiche Höhe */
-  gap:100px;
-  max-width:1320px;
-  margin:4px auto;                /* oben & unten je 4px Abstand */
-  padding:0 32px;
+.cg-benefit {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  position: relative;
+  padding: 0 32px;
 }
 
-.cg-benefit{
-  position:relative;
-  display:flex;
-  align-items:center;             /* Inhalt mittig in der eigenen Zelle */
-  gap:24px;
-  padding:0 32px;
-  min-height:var(--row-h);        /* einheitliche Höhe für sauberes Zentrieren */
+.cg-benefit:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 72px;             /* exakt so hoch wie das Icon */
+  width: 1px;
+  background: var(--cg-line);
+  pointer-events: none;
 }
+
 
 /* Trennstrich exakt mittig der Zeile */
 .cg-benefit:not(:last-child)::after{
