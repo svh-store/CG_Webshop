@@ -1,4 +1,18 @@
-/* ===== CG Benefits (mittige Trennstriche) ===== */
+.cg-benefits {
+  --cg-accent:#F19222;
+  --cg-text:#111;
+  --cg-sub:#666;
+  --cg-line:#ddd;
+  --ico-size:72px;                      /* Icon-Größe */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 100px;
+  max-width: 1320px;
+  margin: 4px auto;                     /* nur 4px Abstand oben/unten */
+  padding: 0 32px;
+}
+
 .cg-benefit {
   display: flex;
   align-items: center;
@@ -7,39 +21,64 @@
   padding: 0 32px;
 }
 
+/* Trennstriche mittig zwischen den Icons ausrichten */
 .cg-benefit:not(:last-child)::after {
   content: "";
   position: absolute;
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-  height: 72px;             /* exakt so hoch wie das Icon */
+  height: var(--ico-size);               /* exakt so hoch wie die Icons */
   width: 1px;
   background: var(--cg-line);
   pointer-events: none;
 }
 
-
-/* Trennstrich exakt mittig der Zeile */
-.cg-benefit:not(:last-child)::after{
-  content:"";
-  position:absolute;
-  right:0;
-  top:50%;
-  transform:translateY(-50%);
-  height:calc(var(--row-h) * 0.72);  /* Länge des Strichs (optisch) */
-  width:1px;
-  background:var(--cg-line);
+.cg-ico {
+  display: inline-flex;
+  width: var(--ico-size);
+  height: var(--ico-size);
+  flex: 0 0 var(--ico-size);
+  align-items: center;
+  justify-content: center;
 }
 
-.cg-ico{ display:inline-flex; width:var(--ico-size); height:var(--ico-size); flex:0 0 var(--ico-size); }
-.cg-ico svg{ width:100%; height:100%; color:var(--cg-text); transition:color .2s ease, transform .2s ease; }
-.cg-title{ font-size:1.4rem; font-weight:700; line-height:1.3; color:var(--cg-text); }
-.cg-sub{ font-size:1.1rem; line-height:1.5; color:var(--cg-sub); margin-top:2px; }
-.cg-benefit:hover .cg-ico svg{ color:var(--cg-accent); transform:translateY(-1px); }
+.cg-ico svg {
+  width: 100%;
+  height: 100%;
+  color: var(--cg-text);
+  transition: color .2s ease, transform .2s ease;
+}
 
-@media (max-width:980px){
-  .cg-benefits{ flex-direction:column; gap:32px; padding:0 16px; }
-  .cg-benefit{ padding:0; }
-  .cg-benefit:not(:last-child)::after{ display:none; }
+.cg-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--cg-text);
+}
+
+.cg-sub {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: var(--cg-sub);
+  margin-top: 2px;
+}
+
+.cg-benefit:hover .cg-ico svg {
+  color: var(--cg-accent);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 980px) {
+  .cg-benefits {
+    flex-direction: column;
+    gap: 32px;
+    padding: 0 16px;
+  }
+  .cg-benefit {
+    padding: 0;
+  }
+  .cg-benefit:not(:last-child)::after {
+    display: none;
+  }
 }
