@@ -70,6 +70,8 @@ CG Bundle Inline – FINAL
     }
     .cg-bundle--auk .cg-bundle__card{flex-direction:column;align-items:center;text-align:center}
 
+ 
+
     /* Plus & Gleich: schwarz und größer */
     .cg-bundle--auk .cg-bundle__plus,
     .cg-bundle--auk .cg-bundle__equals{ color:#111 !important; font-size:2.4rem !important; line-height:1 !important; }
@@ -106,7 +108,7 @@ CG Bundle Inline – FINAL
         {%- assign main_img = product.featured_image | default: product.images.first -%}
         {%- if main_img -%}
           {{ main_img
-            | image_url: width: 800, format: 'pjpg'
+            | image_url: width: 400, format: 'pjpg'
             | image_tag:
                 alt: product.title,
                 loading: 'lazy',
