@@ -134,6 +134,7 @@
     },
     "custom_liquid_UnfQQm": {
       "type": "custom-liquid",
+      "custom_css": [],
       "name": "Custom HTML/Liquid",
       "settings": {
         "custom_liquid": "{% render 'cg-bundle-inline',\n   heading: 'Passend dazu – im Bundle',\n   allow_variant_select: true,\n   open_drawer: true,\n   mf_ns: 'shopify--discovery--product_recommendation',\n   mf_key: 'complementary_products',\n   auk_style: true\n%}",
