@@ -1,0 +1,85 @@
+{%- liquid
+  assign meta = product.metafields['shopify--discovery']['product_recommendation.complementary_products'].value
+  if meta == blank
+    assign meta = product.metafields.shopify--discovery['product_recommendation.complementary_products'].value
+  endif
+  if meta == blank
+    echo ''
+    break
+  endif
+  assign limit = section.settings.max_items | default: 1
+  assign items = meta | slice: 0, limit
+  assign comp_product = nil
+  for p in items
+    if p.id != product.id
+      assign comp_product = p
+      break
+    endif
+  endfor
+-%}
+{% if comp_product %}
+  {% assign comp_variant = comp_product.selected_or_first_available_variant %}
+  {% assign main_variant = product.selected_or_first_available_variant %}
+  <link rel="stylesheet" href="{{ 'complementary-bundle.css' | asset_url }}" media="print" onload="this.media='all'">
+  <script src="{{ 'complementary-bundle.js' | asset_url }}" defer></script>
+  <div class="container">
+    <div class="cb" data-cb data-product-id="{{ product.id }}" data-main-variant-id="{{ main_variant.id }}" data-main-variant-price="{{ main_variant.price }}" data-comp-variant-id="{{ comp_variant.id }}" id="complementary-bundle-{{ section.id }}">
+      {% if section.settings.heading != blank %}
+        <h2 class="cb__head">{{ section.settings.heading | escape }}</h2>
+      {% endif %}
+      <div class="cb__grid">
+        <div class="cb__prod cb__prod--main">
+          <div class="cb__img">
+            {{ product.featured_image | image_url: width: 168 | image_tag: width: 84, height: 84, alt: product.title }}
+          </div>
+          <div>
+            <p class="cb__title">{{ product.title }}</p>
+            <p class="cb__price"><span data-cb-main-price>{{ main_variant.price | money }}</span></p>
+          </div>
+        </div>
+        <div class="cb__plus" aria-hidden="true">+</div>
+        <div class="cb__prod cb__prod--comp" data-comp-product-id="{{ comp_product.id }}">
+          <div class="cb__img">
+            {{ comp_product.featured_image | image_url: width: 168 | image_tag: width: 84, height: 84, alt: comp_product.title }}
+          </div>
+          <div>
+            <p class="cb__title">{{ comp_product.title }}</p>
+            <p class="cb__price"><span data-cb-comp-price>{{ comp_variant.price | money }}</span></p>
+            {% if section.settings.enable_variant_picker and comp_product.variants.size > 1 %}
+            <div class="cb__opts" data-comp-picker>
+              {% for opt in comp_product.options_with_values %}
+                <label for="cb-{{ section.id }}-opt-{{ forloop.index }}" class="visually-hidden">{{ opt.name }}</label>
+                <select id="cb-{{ section.id }}-opt-{{ forloop.index }}" class="cb__option" data-index="{{ opt.position }}">
+                  {% for val in opt.values %}
+                    <option value="{{ val | escape }}" {% if comp_variant.options[forloop.parentloop.index0] == val %}selected{% endif %}>{{ val }}</option>
+                  {% endfor %}
+                </select>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+          <script type="application/json" data-comp-variants>
+            {{ comp_product.variants | json }}
+          </script>
+        </div>
+      </div>
+      <div class="cb__row">
+        <p class="cb__note"><span data-cb-total-price>{{ main_variant.price | plus: comp_variant.price | money }}</span></p>
+        <button type="button" class="cb__cta" data-cb-add data-success="{{ 'products.product.added_to_cart' | t }}" data-error="{{ 'cart.error' | t }}" disabled>Beide in den Warenkorb</button>
+      </div>
+      <p class="cb__note" role="status" data-cb-status hidden></p>
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Complementary bundle",
+  "settings": [
+    {"type": "text", "id": "heading", "label": "Heading", "default": "Bundle & Save"},
+    {"type": "range", "id": "max_items", "label": "Max complementary products", "min": 1, "max": 4, "step": 1, "default": 1},
+    {"type": "checkbox", "id": "enable_variant_picker", "label": "Allow variant selection", "default": true}
+  ],
+  "presets": [{"name": "Complementary bundle"}]
+}
+{% endschema %}
