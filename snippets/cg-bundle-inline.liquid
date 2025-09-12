@@ -1,5 +1,5 @@
 {%- comment -%}
-CG Bundle Inline – FINAL (größere Bilder, kein Overlay, engere Abstände)
+CG Bundle Inline – FINAL (Rahmen um Bilder, Cross-Sell klickbar, rendert nur mit comp)
 {%- endcomment -%}
 
 {%- assign heading = heading | default: 'PASSEND DAZU – IM BUNDLE' -%}
@@ -26,6 +26,8 @@ CG Bundle Inline – FINAL (größere Bilder, kein Overlay, engere Abstände)
   {%- assign comp = mf.value | first -%}
 {%- endif -%}
 
+{%- if comp -%} {#– Nur rendern, wenn es ein Cross-Sell gibt –#}
+
 <section class="cg-bundle{% if auk_style %} cg-bundle--auk{% endif %}"
   data-cg-bundle
   data-product-id="{{ product.id }}"
@@ -38,16 +40,11 @@ CG Bundle Inline – FINAL (größere Bilder, kein Overlay, engere Abstände)
   <style>
     .cg-bundle{
       --line:#e9ecef; --accent:#F19222; --text:#111; --muted:#666;
-      /* Bildkacheln */
-      --tile-desktop: 180px;
-      --tile-mobile: 140px;
-
+      --tile-desktop: 180px; --tile-mobile: 140px;
       max-width:1320px; margin:26px auto; padding:24px 16px;
       border-top:1px solid var(--line); border-bottom:1px solid var(--line);
       background:transparent;
     }
-
-    /* Überschrift an Produkttitel angelehnt */
     .cg-bundle__heading{
       text-transform:uppercase; font-weight:900; letter-spacing:.06em;
       font-family: var(--font-heading-family, var(--heading-font-family, inherit));
@@ -56,52 +53,47 @@ CG Bundle Inline – FINAL (größere Bilder, kein Overlay, engere Abstände)
       color: var(--color-foreground, var(--text,#111));
       text-align:center; margin:0 0 18px;
     }
-
-    /* Layout enger wie beim Vorbild */
     .cg-bundle__row{
       display:grid;
       grid-template-columns: minmax(220px,1fr) 16px minmax(220px,1fr) 14px 260px;
-  column-gap: 15px; align-items:center;
+      column-gap: 15px; align-items:center;
     }
     .cg-bundle__card{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;background:transparent;border:0;box-shadow:none}
 
-    /* KEIN Overlay: neutrale Kachel, Bild zentriert */
+    /* Rahmen um Bilder (beide) */
     .cg-bundle__media{
       width:var(--tile-desktop); aspect-ratio:1/1; border-radius:14px;
       display:flex; align-items:center; justify-content:center;
-      background:transparent;
+      background:#fff !important; border:1px solid #e5e7eb !important; /* dünner grauer Rahmen */
+      box-sizing:border-box; padding:8px;
     }
-    .cg-bundle__media::before{ content:none !important; } /* Overlay sicher aus */
+    .cg-bundle__media::before{ content:none !important; }
     .cg-bundle__img{
-      max-width:100% !important; max-height:100% !important; height:auto !important; width:auto !important;
-      object-fit:contain; border-radius:10px;
+      max-width:100% !important; max-height:100% !important;
+      height:auto !important; width:auto !important; object-fit:contain; border-radius:8px;
     }
 
-    .cg-bundle__title{font-weight:700;color:var(--text);font-size:.95rem;line-height:1.25;margin-top:2px}
+    /* Link-Stil für klickbares Cross-Sell */
+    .cg-bundle__link{ display:inline-flex; flex-direction:column; align-items:center; gap:8px;
+      text-decoration:none; color:inherit; cursor:pointer; }
+
+    .cg-bundle__title{font-weight:700;color:var(--text);font-size:.95rem;line-height:1.25;margin-top:2px;text-align:center}
     .cg-bundle__price{color:var(--text);font-size:.9rem}
     .cg-bundle__price--compare{color:var(--muted);margin-left:6px}
 
-    /* Plus/Equals etwas größer & schwarz */
     .cg-bundle__plus, .cg-bundle__equals{ color:#111; font-size:2rem; line-height:1; text-align:center; }
 
-    /* Rechte Spalte – kompakter Stack (Preis + Button) */
     .cg-bundle__aside{ display:flex; flex-direction:column; gap:10px; align-items:flex-start; }
     .cg-bundle__total--stack{ display:flex; flex-direction:column; gap:10px; align-items:flex-start; }
     .cg-bundle__total-label{ font-size:.82rem; color:#6b7280; font-weight:600; }
     .cg-bundle__total-amount{ font-size:3.1rem; font-weight:800; line-height:1; }
-
     .cg-bundle__btn{
-      align-self:flex-start;
-      appearance:none; border:none; cursor:pointer;
-      padding:12px 18px; border-radius:10px;
-      background:var(--accent); color:#fff; font-weight:800;
+      align-self:flex-start; appearance:none; border:none; cursor:pointer;
+      padding:12px 18px; border-radius:10px; background:var(--accent); color:#fff; font-weight:800;
     }
     .cg-bundle__btn.is-loading{ opacity:.7; cursor:wait; }
     .cg-bundle__btn:disabled{ opacity:.6; cursor:default; }
-
     .cg-bundle__msg{font-size:.9rem;color:var(--muted)}
-
-    /* Footer (fallback), im Aukey-Layout nicht nötig */
     .cg-bundle__footer{ display:none; }
 
     @media (max-width:980px){
@@ -112,29 +104,24 @@ CG Bundle Inline – FINAL (größere Bilder, kein Overlay, engere Abstände)
       .cg-bundle__aside{ align-items:stretch; }
       .cg-bundle__btn{ align-self:stretch; text-align:center; }
     }
-    /* Bilder (und +/=) dichter zusammen auf Desktop */
 
+    /* Bilder dichter zusammen (Desktop): Spalten an Inhalt binden */
     @media (min-width: 981px){
-  .cg-bundle__row{
-    /* statt 1fr: Spalten orientieren sich an der tatsächlichen Inhaltsbreite */
-    grid-template-columns: max-content 10px max-content 12px 240px; 
-    column-gap: 20px;       /* zusätzlicher Spaltenabstand noch kleiner */
-    justify-content: center; /* Block zentriert halten */
-  }
-
-  /* Verhindert, dass lange Titel die Spalte breit ziehen */
-  .cg-bundle__title{ max-width: 220px; }
-
-  /* Optional: Zeichen schmaler oder größer/kleiner setzen */
-  .cg-bundle__plus{ margin-inline: 0; }     /* kein zusätzlicher Innenabstand */
-  .cg-bundle__equals{ margin-inline: 0; }
-}
+      .cg-bundle__row{
+        grid-template-columns: max-content 10px max-content 12px 240px;
+        column-gap: 12px;
+        justify-content: center;
+      }
+      .cg-bundle__title{ max-width: 220px; }
+      .cg-bundle__plus{ margin-inline:0; }
+      .cg-bundle__equals{ margin-inline:0; }
+    }
   </style>
 
   <div class="cg-bundle__heading">{{ heading }}</div>
 
   <div class="cg-bundle__row">
-    <!-- Hauptprodukt -->
+    <!-- Hauptprodukt (Bild + Rahmen) -->
     <article class="cg-bundle__card cg-bundle__card--main"
       data-main-price="{{ product.selected_or_first_available_variant.price }}"
       data-main-compare="{{ product.selected_or_first_available_variant.compare_at_price | default: 0 }}"
@@ -168,10 +155,11 @@ CG Bundle Inline – FINAL (größere Bilder, kein Overlay, engere Abstände)
     <!-- Plus -->
     <div class="cg-bundle__plus" aria-hidden="true">+</div>
 
-    <!-- Zusatzprodukt -->
+    <!-- Zusatzprodukt (klickbar: Bild + Titel verlinkt) -->
     <article class="cg-bundle__card cg-bundle__card--comp" data-role="comp">
-      {%- if comp -%}
-        {%- assign comp_variant = comp.selected_or_first_available_variant -%}
+      {%- assign comp_variant = comp.selected_or_first_available_variant -%}
+
+      <a class="cg-bundle__link" href="{{ comp.url }}" aria-label="{{ comp.title }}">
         <div class="cg-bundle__media">
           {%- assign comp_img = comp.featured_image | default: comp.images.first -%}
           {%- if comp_img -%}
@@ -187,39 +175,37 @@ CG Bundle Inline – FINAL (größere Bilder, kein Overlay, engere Abstände)
           {%- endif -%}
         </div>
         <div class="cg-bundle__title">{{ comp.title }}</div>
+      </a>
 
-        {%- if comp.variants.size > 1 and allow_variant_select -%}
-          <label class="cg-bundle__select">
-            <span>Variante</span>
-            <select data-role="comp-variant">
-              {%- for vv in comp.variants -%}
-                <option value="{{ vv.id }}" data-price="{{ vv.price }}"
-                  data-compare="{{ vv.compare_at_price | default: 0 }}"
-                  {% if vv.available %}{% else %}disabled{% endif %}
-                  {% if vv.id == comp_variant.id %}selected{% endif %}>
-                  {{ vv.title }}{% unless vv.available %} – ausverkauft{% endunless %}
-                </option>
-              {%- endfor -%}
-            </select>
-          </label>
-        {%- else -%}
-          <input type="hidden" data-role="comp-variant"
-            value="{{ comp_variant.id }}"
-            data-price="{{ comp_variant.price }}"
-            data-compare="{{ comp_variant.compare_at_price | default: 0 }}">
-        {%- endif -%}
-
-        <div class="cg-bundle__price">
-          {%- if comp_variant.compare_at_price > comp_variant.price -%}
-            <span class="cg-bundle__price--sale">{{ comp_variant.price | money }}</span>
-            <s class="cg-bundle__price--compare">{{ comp_variant.compare_at_price | money }}</s>
-          {%- else -%}
-            <span>{{ comp_variant.price | money }}</span>
-          {%- endif -%}
-        </div>
+      {%- if comp.variants.size > 1 and allow_variant_select -%}
+        <label class="cg-bundle__select">
+          <span>Variante</span>
+          <select data-role="comp-variant">
+            {%- for vv in comp.variants -%}
+              <option value="{{ vv.id }}" data-price="{{ vv.price }}"
+                data-compare="{{ vv.compare_at_price | default: 0 }}"
+                {% if vv.available %}{% else %}disabled{% endif %}
+                {% if vv.id == comp_variant.id %}selected{% endif %}>
+                {{ vv.title }}{% unless vv.available %} – ausverkauft{% endunless %}
+              </option>
+            {%- endfor -%}
+          </select>
+        </label>
       {%- else -%}
-        <div class="cg-bundle__title">Kein Ergänzungsprodukt gefunden.</div>
+        <input type="hidden" data-role="comp-variant"
+          value="{{ comp_variant.id }}"
+          data-price="{{ comp_variant.price }}"
+          data-compare="{{ comp_variant.compare_at_price | default: 0 }}">
       {%- endif -%}
+
+      <div class="cg-bundle__price">
+        {%- if comp_variant.compare_at_price > comp_variant.price -%}
+          <span class="cg-bundle__price--sale">{{ comp_variant.price | money }}</span>
+          <s class="cg-bundle__price--compare">{{ comp_variant.compare_at_price | money }}</s>
+        {%- else -%}
+          <span>{{ comp_variant.price | money }}</span>
+        {%- endif -%}
+      </div>
     </article>
 
     <!-- Gleich + rechte Spalte -->
@@ -246,7 +232,6 @@ CG Bundle Inline – FINAL (größere Bilder, kein Overlay, engere Abstände)
   const currency = JSON.parse(root.getAttribute('data-currency') || '"EUR"');
   const log = (...a)=>{ if (DEBUG) console.log('[CG-BUNDLE]', ...a); };
 
-  /* Preise */
   const mainPrice = parseInt(root.querySelector('[data-main-price]').getAttribute('data-main-price')||'0',10);
   const compPrice = () => {
     const el = root.querySelector('[data-role="comp-variant"]');
@@ -259,7 +244,6 @@ CG Bundle Inline – FINAL (größere Bilder, kein Overlay, engere Abstände)
   const updateTotal = () => root.querySelectorAll('[data-role="bundle-total"]').forEach(n => n.textContent = fmt(mainPrice+compPrice()));
   updateTotal();
 
-  /* Cart-UI auffrischen */
   function detectCartSectionHandles(){
     const nodes = Array.from(document.querySelectorAll('[id^="shopify-section-"]'));
     const handles = nodes.map(el => el.id.replace('shopify-section-',''))
@@ -297,8 +281,7 @@ CG Bundle Inline – FINAL (größere Bilder, kein Overlay, engere Abstände)
         if (drawer && typeof drawer.open === 'function') drawer.open();
         const toggle = document.querySelector('[data-drawer-trigger="cart"], [data-cart-toggle], [data-open-cart], button[aria-controls*="Cart"], a[href="/cart"]');
         if (toggle) { try{ toggle.click(); }catch(e){} }
-      }
-    }catch(e){ log('refreshCartUI error', e); }
+    }catch(e){ if (DEBUG) console.error('refreshCartUI', e); }
   }
 
   async function addBoth(){
@@ -331,7 +314,7 @@ CG Bundle Inline – FINAL (größere Bilder, kein Overlay, engere Abstände)
     }catch(e){
       btn.disabled=false; btn.classList.remove('is-loading');
       msg.textContent='Konnte nicht hinzugefügt werden. Bitte erneut versuchen.';
-      if (DEBUG) console.error(e);
+      if (DEBUG) console.error('addBoth', e);
     }
   }
 
@@ -340,3 +323,5 @@ CG Bundle Inline – FINAL (größere Bilder, kein Overlay, engere Abstände)
   root.querySelectorAll('[data-role="bundle-add"]').forEach(b => b.addEventListener('click', addBoth));
 })();
 </script>
+
+{%- endif -%} {#– Ende: nur mit comp rendern –#}
