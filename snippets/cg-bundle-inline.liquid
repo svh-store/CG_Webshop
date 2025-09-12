@@ -90,27 +90,42 @@ CG Bundle Inline – FINAL
 
     /* --- Tweaks: stärkere Zeichen, größerer Preis, grauer Bildhintergrund --- */
 
-/* Plus & Gleich: schwarz und größer */
+/* Plus/Equal: schwarz & größer */
 .cg-bundle--auk .cg-bundle__plus,
 .cg-bundle--auk .cg-bundle__equals{
-  color:#111;          /* schwarz */
-  font-size:2.25rem;   /* größer */
-  line-height:1;
+  color:#111 !important;
+  font-size:2.25rem !important;
+  line-height:1 !important;
 }
 
-/* Gesamtpreis: größer darstellen */
+/* Gesamtpreis größer */
 .cg-bundle__total-amount{
-  font-size:2.2rem;    /* vorher 1.8rem */
-  line-height:1;
-  font-weight:800;
+  font-size:2.2rem !important;
+  line-height:1 !important;
+  font-weight:800 !important;
 }
 
-/* Bildkacheln: grauer Aukey-Background + stärkerer Radius */
-.cg-bundle--auk .cg-bundle__img{
-  background:#f2f4f7 important!;  /* Aukey-ähnliches Hellgrau */
-  border-radius:16px;  /* etwas runder */
-  /* Größe bleibt aus dem Snippet (180/140 px), damit es sofort scharf lädt */
+/* Alle grauen Outlines/Boxen zuverlässig weg */
+.cg-bundle__card{
+  border:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
 }
+
+/* Grauer Aukey-Background HINTER dem Bild (auf dem Wrapper) */
+.cg-bundle--auk .cg-bundle__media{
+  background:#f2f4f7 !important;   /* Hellgrau */
+  border-radius:16px !important;    /* weiche Ecken wie Aukey */
+  padding:14px !important;          /* Luft um das Bild */
+}
+
+/* Das Bild selbst ohne Hintergrund, damit das Grau sichtbar bleibt */
+.cg-bundle--auk .cg-bundle__img{
+  background:transparent !important;
+  border-radius:12px !important;    /* optional minimal runder Look fürs Bild */
+  display:block !important;
+}
+
 
   </style>
 
