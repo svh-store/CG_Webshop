@@ -125,17 +125,6 @@
         "media_grouping_option": "Color,Colour,Couleur,Farbe,Apple Watch, Fitbit Modell,Armbandgröße"
       }
     },
-    "custom_liquid_3rPKVK": {
-      "type": "custom-liquid",
-      "name": "Custom HTML/Liquid",
-      "settings": {
-        "custom_liquid": "{% render 'cg-bundle-inline', heading: 'Passend dazu – im Bundle', allow_variant_select: true %}",
-        "section_height": "default",
-        "full_width": false,
-        "dividers": "none",
-        "prevent_animation": false
-      }
-    },
     "custom_liquid_RypKET": {
       "type": "custom-liquid",
       "custom_css": [],
@@ -180,7 +169,6 @@
   "order": [
     "main",
     "custom_liquid_RypKET",
-    "custom_liquid_3rPKVK",
     "recommendations",
     "1743585275ab058f49"
   ]
