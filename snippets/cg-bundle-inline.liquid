@@ -1,10 +1,5 @@
 {%- comment -%}
 CG Bundle Inline – FINAL
-- Ergänzungsprodukt aus Metafeld (Standard: namespace 'shopify--discovery--product_recommendation' / key 'complementary_products')
-- Optional andere Felder via mf_ns / mf_key
-- AJAX: beide Artikel in den Warenkorb, Cart-Drawer/Bubble ohne Reload aktualisieren
-- Aukey-Layout (zwei Kacheln + „=“ + rechte Spalte mit Gesamtpreis & Button)
-- Scharfe Bilder (passende sizes/srcset), keine grauen Outlines
 {%- endcomment -%}
 
 {%- assign heading = heading | default: 'Passend dazu – im Bundle' -%}
@@ -13,7 +8,7 @@ CG Bundle Inline – FINAL
 {%- assign debug = debug | default: false -%}
 {%- assign auk_style = auk_style | default: true -%}
 
-{%- comment -%} Metafeld-Quellen (dein Standard + Fallbacks) {%- endcomment -%}
+{%- comment -%} Metafeld-Quellen (Standard + Fallbacks) {%- endcomment -%}
 {%- assign mf_ns  = mf_ns  | default: 'shopify--discovery--product_recommendation' -%}
 {%- assign mf_key = mf_key | default: 'complementary_products' -%}
 {%- assign primary_mf = product.metafields[mf_ns][mf_key] -%}
@@ -41,21 +36,26 @@ CG Bundle Inline – FINAL
   data-currency='{{ shop.currency | json }}'>
 
   <style>
-    /* Basis */
-    .cg-bundle{--bg:#f7f7f7;--border:#e9e9e9;--accent:#F19222;--text:#111;--muted:#666;
-      max-width:1320px;margin:24px auto;padding:10px 20px;border:0;background:transparent}
-    .cg-bundle__heading{font-size:1.05rem;font-weight:800;margin:0 0 12px;color:var(--text)}
+    /* Basis / Theme-Variablen */
+    .cg-bundle{
+      --bg:#f7f7f7; --line:#e9ecef; --accent:#F19222; --text:#111; --muted:#666;
+      --tile-desktop: 220px; --tile-mobile: 160px;
+      max-width:1320px; margin:28px auto; padding:28px 20px;
+      background:transparent; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    }
+    .cg-bundle__heading{
+      font-size:1.6rem; font-weight:900; text-align:center; color:var(--text);
+      margin:0 0 22px; letter-spacing:.01em;
+    }
     .cg-bundle__row{display:grid;grid-template-columns:1fr 40px 1fr;gap:24px;align-items:center}
     .cg-bundle__card{display:flex;gap:16px;align-items:center;padding:0;border:0;background:transparent;box-shadow:none}
-    .cg-bundle__media{flex:0 0 auto;margin-bottom:10px}
-    .cg-bundle__img{width:96px;height:96px;object-fit:contain;background:var(--bg);border-radius:10px;display:block;image-rendering:auto}
     .cg-bundle__body{display:flex;flex-direction:column}
-    .cg-bundle__title{font-weight:700;color:var(--text);margin:0 0 2px;font-size:1rem;line-height:1.25;text-align:center}
+    .cg-bundle__title{font-weight:700;color:var(--text);margin:10px 0 4px;font-size:.98rem;line-height:1.25;text-align:center}
     .cg-bundle__price{color:var(--text);font-size:.95rem;text-align:center}
     .cg-bundle__price--compare{color:var(--muted);margin-left:6px}
     .cg-bundle__select{display:flex;gap:8px;align-items:center;margin-top:8px;font-size:.9rem;color:var(--muted);justify-content:center}
-    .cg-bundle__select select{padding:6px 8px;border:1px solid var(--border);border-radius:8px;min-width:180px;background:#fff}
-    .cg-bundle__plus{font-weight:800;font-size:1.6rem;color:#bdbdbd;text-align:center}
+    .cg-bundle__select select{padding:6px 8px;border:1px solid #e5e7eb;border-radius:8px;min-width:180px;background:#fff}
+    .cg-bundle__plus{font-weight:800;font-size:1.6rem;color:#111;text-align:center}
     .cg-bundle__footer{display:flex;gap:14px;align-items:center;justify-content:flex-end;margin-top:14px}
     .cg-bundle__total{margin-right:auto;font-weight:700;color:var(--text);display:flex;gap:8px;align-items:center}
     .cg-bundle__btn{appearance:none;border:none;cursor:pointer;padding:14px 20px;background:var(--accent);color:#fff;border-radius:10px;font-weight:800;box-shadow:none;outline:none}
@@ -66,96 +66,41 @@ CG Bundle Inline – FINAL
     /* Aukey-Layout */
     .cg-bundle--auk .cg-bundle__row{
       grid-template-columns:minmax(260px,1fr) 56px minmax(260px,1fr) 56px 320px;
-      gap:28px;align-items:center}
+      gap:28px; align-items:center;
+    }
     .cg-bundle--auk .cg-bundle__card{flex-direction:column;align-items:center;text-align:center}
-    .cg-bundle--auk .cg-bundle__img{width:180px;height:180px}
-    .cg-bundle--auk .cg-bundle__title{margin-top:10px;font-size:.95rem;font-weight:600}
-    .cg-bundle--auk .cg-bundle__price{margin-top:6px}
-    .cg-bundle--auk .cg-bundle__equals{font-size:1.75rem;font-weight:800;color:#bdbdbd;text-align:center}
+
+    /* Bild-Kachel als Overlay (Grau hinter dem Bild) */
+    .cg-bundle--auk .cg-bundle__media{ position:relative !important; width:var(--tile-desktop) !important; aspect-ratio:1/1 !important; border-radius:18px !important; overflow:hidden !important; }
+    .cg-bundle--auk .cg-bundle__media::before{ content:"" !important; position:absolute !important; inset:0 !important; background:#f2f4f7 !important; border-radius:inherit !important; }
+    .cg-bundle--auk .cg-bundle__img{
+      position:absolute !important; top:50% !important; left:50% !important; transform:translate(-50%,-50%) !important;
+      max-width:84% !important; max-height:84% !important; width:auto !important; height:auto !important;
+      background:transparent !important; border-radius:12px !important; image-rendering:auto !important;
+    }
+
+    /* Plus & Gleich: schwarz und größer */
+    .cg-bundle--auk .cg-bundle__plus,
+    .cg-bundle--auk .cg-bundle__equals{ color:#111 !important; font-size:2.4rem !important; line-height:1 !important; }
+
+    /* Rechte Spalte */
+    .cg-bundle--auk .cg-bundle__equals{text-align:center}
     .cg-bundle--auk .cg-bundle__aside{display:flex;flex-direction:column;gap:16px;align-items:stretch;justify-self:stretch}
-    .cg-bundle--auk .cg-bundle__footer{display:none} /* Footer im Aukey-Layout nicht nötig */
+    .cg-bundle--auk .cg-bundle__footer{display:none} /* im Aukey-Layout nicht nötig */
 
     /* Gesamtpreis: Label klein, Preis groß */
     .cg-bundle__total--stack{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
     .cg-bundle__total-label{font-size:.85rem;color:#6b7280;font-weight:600;letter-spacing:.01em}
-    .cg-bundle__total-amount{font-size:1.8rem;line-height:1;font-weight:800}
+    .cg-bundle__total-amount{font-size:2.4rem;line-height:1;font-weight:800}
 
     /* Responsive */
     @media (max-width:980px){
+      .cg-bundle{ padding:22px 16px; }
+      .cg-bundle__heading{ font-size:1.35rem; margin-bottom:18px; }
       .cg-bundle--auk .cg-bundle__row{grid-template-columns:1fr;gap:16px}
       .cg-bundle--auk .cg-bundle__plus,.cg-bundle--auk .cg-bundle__equals{display:none}
-      .cg-bundle--auk .cg-bundle__img{width:140px;height:140px}
-      .cg-bundle--auk .cg-bundle__aside{order:3}
+      .cg-bundle--auk .cg-bundle__media{ width:var(--tile-mobile) !important; }
     }
-
-    /* --- Tweaks: stärkere Zeichen, größerer Preis, grauer Bildhintergrund --- */
-
-//* ===== Overlay-Kachel hinter dem Bild (Aukey-Style) ===== */
-.cg-bundle--auk{ --tile-desktop: 220px; --tile-mobile: 160px; }
-
-/* Kachel: quadratisch, relativer Container */
-.cg-bundle--auk .cg-bundle__media{
-  position: relative !important;
-  width: var(--tile-desktop) !important;
-  aspect-ratio: 1 / 1 !important;
-  border-radius: 18px !important;
-  display: block !important;
-  overflow: hidden !important;
-}
-
-/* Grau-Hintergrund als Overlay hinter dem Bild */
-.cg-bundle--auk .cg-bundle__media::before{
-  content:"" !important;
-  position: absolute !important;
-  inset: 0 !important;
-  background: #f2f4f7 !important; /* Aukey-Grau */
-  border-radius: inherit !important;
-}
-
-/* Bild absolut zentriert in der Kachel, mit Innenabstand */
-.cg-bundle--auk .cg-bundle__img{
-  position: absolute !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  max-width: 84% !important;
-  max-height: 84% !important;
-  width: auto !important;
-  height: auto !important;
-  background: transparent !important; /* Grau kommt vom ::before */
-  border-radius: 12px !important;
-  image-rendering: auto !important;
-}
-
-/* Mobile Größe */
-@media (max-width: 980px){
-  .cg-bundle--auk .cg-bundle__media{ width: var(--tile-mobile) !important; }
-}
-
-/* Plus & Gleich: schwarz und größer */
-.cg-bundle--auk .cg-bundle__plus,
-.cg-bundle--auk .cg-bundle__equals{
-  color:#111 !important;
-  font-size:2.4rem !important;
-  line-height:1 !important;
-}
-
-/* Gesamtpreis deutlicher größer */
-.cg-bundle__total-amount{
-  font-size:2.4rem !important;  /* vorher 2.2 / 1.8 */
-  line-height:1 !important;
-  font-weight:800 !important;
-}
-
-/* Sicherheit: keine grauen Box-Ränder */
-.cg-bundle__card{
-  border:0 !important;
-  background:transparent !important;
-  box-shadow:none !important;
-}
-
-
-
   </style>
 
   <div class="cg-bundle__heading">{{ heading }}</div>
@@ -170,14 +115,14 @@ CG Bundle Inline – FINAL
         {%- assign main_img = product.featured_image | default: product.images.first -%}
         {%- if main_img -%}
           {{ main_img
-            | image_url: width: 600, format: 'pjpg'
+            | image_url: width: 800, format: 'pjpg'
             | image_tag:
                 alt: product.title,
                 loading: 'lazy',
                 decoding: 'async',
                 class: 'cg-bundle__img',
-                sizes: '(min-width:980px) 180px, 140px',
-                widths: '140, 180, 280, 360' }}
+                sizes: '(min-width:980px) 220px, 160px',
+                widths: '160, 220, 320, 440' }}
         {%- endif -%}
       </div>
       <div class="cg-bundle__body">
@@ -205,14 +150,14 @@ CG Bundle Inline – FINAL
           {%- assign comp_img = comp.featured_image | default: comp.images.first -%}
           {%- if comp_img -%}
             {{ comp_img
-              | image_url: width: 600, format: 'pjpg'
+              | image_url: width: 800, format: 'pjpg'
               | image_tag:
                   alt: comp.title,
                   loading: 'lazy',
                   decoding: 'async',
                   class: 'cg-bundle__img',
-                  sizes: '(min-width:980px) 180px, 140px',
-                  widths: '140, 180, 280, 360' }}
+                  sizes: '(min-width:980px) 220px, 160px',
+                  widths: '160, 220, 320, 440' }}
           {%- endif -%}
         </div>
         <div class="cg-bundle__body"
@@ -273,7 +218,7 @@ CG Bundle Inline – FINAL
     </div>
   </div>
 
-  <!-- Klassischer Footer (für Nicht-Aukey-Layout); im Aukey-Layout ausgeblendet -->
+  <!-- Fallback-Footer (im Aukey-Layout ausgeblendet) -->
   <div class="cg-bundle__footer">
     <div class="cg-bundle__total">
       <span>Gesamt:</span> <strong data-role="bundle-total">–</strong>
