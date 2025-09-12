@@ -1,14 +1,27 @@
 {%- comment -%}
-CG Bundle Inline – Self-contained
-- Kritische Styles inline, damit nichts „nackt“ erscheint.
-- Headings als <div> mit Klasse statt h4, damit Theme-Heading-Styles nicht greifen.
+CG Bundle Inline – self-contained
+- Liest ein einzelnes Produkt aus einem Metafeld (Product Reference)
+- Optional: mf_ns und mf_key zum Überschreiben von Namespace/Key
+- Kein Seitenreload: AJAX add + Drawer/Badge/Sections Refresh
 {%- endcomment -%}
 
 {%- assign heading = heading | default: 'Passend dazu – im Bundle' -%}
 {%- assign allow_variant_select = allow_variant_select | default: true -%}
 {%- assign open_drawer = open_drawer | default: true -%}
 {%- assign debug = debug | default: false -%}
-{%- assign comps = product.metafields['shopify--discovery']['product_recommendation.complementary_products'].value -%}
+
+{%- comment -%} Metafeld-Quelle: Standard = wie im Screenshot {%- endcomment -%}
+{%- assign mf_ns = mf_ns | default: 'shopify--discovery' -%}
+{%- assign mf_key = mf_key | default: 'product_recommendation.complementary_products' -%}
+{%- assign comp_src = product.metafields[mf_ns][mf_key].value -%}
+
+{%- comment -%} comp: einzelnes Produkt (oder falls Liste, nimm first) {%- endcomment -%}
+{%- assign comp = nil -%}
+{%- if comp_src and comp_src.id -%}
+  {%- assign comp = comp_src -%}
+{%- elsif comp_src != blank and comp_src.size > 0 -%}
+  {%- assign comp = comp_src | first -%}
+{%- endif -%}
 
 <section class="cg-bundle"
   data-cg-bundle
@@ -19,7 +32,6 @@ CG Bundle Inline – Self-contained
   data-money-format='{{ shop.money_format | json }}'
   data-currency='{{ shop.currency | json }}'>
 
-  {%- comment -%} CRITICAL CSS (scoped) {%- endcomment -%}
   <style>
     .cg-bundle{--bg:#f7f7f7;--border:#e9e9e9;--accent:#F19222;--text:#111;--muted:#666;
       max-width:1320px;margin:24px auto;padding:20px;border:1px solid var(--border);
@@ -54,6 +66,7 @@ CG Bundle Inline – Self-contained
   <div class="cg-bundle__heading">{{ heading }}</div>
 
   <div class="cg-bundle__row">
+    <!-- Hauptprodukt -->
     <article class="cg-bundle__card cg-bundle__card--main"
              data-main-price="{{ product.selected_or_first_available_variant.price }}"
              data-main-compare="{{ product.selected_or_first_available_variant.compare_at_price | default: 0 }}"
@@ -88,9 +101,9 @@ CG Bundle Inline – Self-contained
 
     <div class="cg-bundle__plus" aria-hidden="true">+</div>
 
+    <!-- Ergänzendes Produkt -->
     <article class="cg-bundle__card cg-bundle__card--comp" data-role="comp">
-      {%- if comps != blank and comps.size > 0 -%}
-        {%- assign comp = comps | first -%}
+      {%- if comp -%}
         {%- assign comp_variant = comp.selected_or_first_available_variant -%}
         <div class="cg-bundle__media">
           {%- assign comp_img = comp.featured_image | default: comp.images.first -%}
@@ -172,37 +185,37 @@ CG Bundle Inline – Self-contained
   const currency = JSON.parse(root.getAttribute('data-currency') || '"EUR"');
 
   function log(...a){ if (DEBUG) console.log('[CG-BUNDLE]', ...a); }
-  function fmt(c){ if (window.Shopify?.formatMoney) return Shopify.formatMoney(c, moneyFormat);
+  function fmt(c){
+    if (window.Shopify?.formatMoney) return Shopify.formatMoney(c, moneyFormat);
     try { return new Intl.NumberFormat(undefined,{style:'currency',currency}).format(c/100); }
-    catch { return (c/100).toFixed(2)+' '+currency; } }
-
-  function mainVariantId(){
-    const idInput = document.querySelector('form[action*="/cart/add"] input[name="id"]');
-    return idInput?.value ? parseInt(idInput.value,10)
-      : parseInt(root.querySelector('[data-main-variant-id]').getAttribute('data-main-variant-id'),10);
+    catch { return (c/100).toFixed(2)+' '+currency; }
   }
+
+  // Preise/Totals
   const mainPrice = parseInt(root.querySelector('[data-main-price]').getAttribute('data-main-price')||'0',10);
   function compPrice(){
     const el = root.querySelector('[data-role="comp-variant"]');
     const p = el?.selectedOptions?.[0]?.dataset.price || el?.dataset?.price || '0';
     return parseInt(p,10);
   }
-  function updateTotal(){ root.querySelector('[data-role="bundle-total"]').textContent = fmt(mainPrice + compPrice()); }
+  function updateTotal(){
+    root.querySelector('[data-role="bundle-total"]').textContent = fmt(mainPrice + compPrice());
+  }
 
-  // Fallback, falls Metafield leer – lädt 1. Empfehlung inkl. Bild
+  // Fallback: Recommendations, falls Metafeld leer
   async function fetchComplementary(){
     const pid = root.getAttribute('data-product-id');
-    const res = await fetch(`/recommendations/products.json?product_id=${pid}&intent=complementary&limit=4`);
+    const res = await fetch(`/recommendations/products.json?product_id=${pid}&intent=complementary&limit=4`, {credentials:'same-origin'});
     if (!res.ok) throw new Error('reco failed');
     const data = await res.json();
     return Array.isArray(data.products) ? data.products : data;
   }
   function renderCompFromAPI(p){
     const card = root.querySelector('[data-role="comp"]');
-    const allow = root.getAttribute('data-allow-variant') === 'true';
     const img = (p.featured_image && p.featured_image.url) || (p.images?.[0]?.url) || '';
     const media = img ? `<div class="cg-bundle__media"><img src="${img}&width=384" width="96" height="96" class="cg-bundle__img" alt="${p.title}"></div>` : '';
     const firstV = p.variants?.[0];
+    const allow = root.getAttribute('data-allow-variant') === 'true';
 
     let variantHTML = '';
     if (allow && p.variants && p.variants.length > 1){
@@ -215,7 +228,7 @@ CG Bundle Inline – Self-contained
     }
 
     const price = firstV ? fmt(firstV.price) : '';
-    const compare = (firstV && firstV.compare_at_price>firstV.price) ? `<s class="cg-bundle__price--compare">${fmt(firstV.compare_at_price)}</s>` : '';
+    const compare = (firstV && firstV.compare_at_price > firstV.price) ? `<s class="cg-bundle__price--compare">${fmt(firstV.compare_at_price)}</s>` : '';
 
     card.innerHTML = `${media}
       <div class="cg-bundle__body" data-comp-product-id="${p.id}">
@@ -223,15 +236,15 @@ CG Bundle Inline – Self-contained
         <div class="cg-bundle__price"><span class="cg-bundle__price--sale">${price}</span>${compare}</div>
         ${variantHTML}
       </div>`;
+
     const sel = root.querySelector('[data-role="comp-variant"]');
     sel && sel.addEventListener('change', updateTotal);
   }
-
   async function ensureComp(){
     if (!root.querySelector('[data-role="comp-empty"]')) { updateTotal(); return; }
-    try {
-      const list = await fetchComplementary();
-      const first = Array.isArray(list) ? list[0] : (list.products && list.products[0]);
+    try{
+      const arr = await fetchComplementary();
+      const first = Array.isArray(arr) ? arr[0] : (arr.products && arr.products[0]);
       if (first){ renderCompFromAPI(first); updateTotal(); }
       else {
         root.querySelector('.cg-bundle__plus').style.display='none';
@@ -240,7 +253,7 @@ CG Bundle Inline – Self-contained
         const btn = root.querySelector('[data-role="bundle-add"]');
         btn.disabled = true; btn.textContent = 'Kein Ergänzungsprodukt';
       }
-    } catch(e){
+    }catch(e){
       root.querySelector('.cg-bundle__plus').style.display='none';
       root.querySelector('[data-role="comp"]').style.display='none';
       root.querySelector('[data-role="bundle-total"]').textContent = fmt(mainPrice);
@@ -249,18 +262,45 @@ CG Bundle Inline – Self-contained
     }
   }
 
+  // Warenkorb UI sicher aktualisieren (ohne Reload)
   async function refreshCartUI(){
     try{
-      const res = await fetch('/cart.js');
-      if (!res.ok) return;
+      // 1) cart.js -> Badge/Zähler
+      const res = await fetch('/cart.js', { credentials: 'same-origin' });
+      if (!res.ok) throw new Error('cart.js failed');
       const cart = await res.json();
       const cnt = document.querySelector('[data-cart-count], .cart-count-bubble .text, .site-header__cart-count');
       if (cnt){ cnt.textContent = cart.item_count; cnt.style.display = cart.item_count ? '' : 'none'; }
-      ['cart:refresh','cart:updated','theme:cart:open','cart:open'].forEach(n =>
-        document.dispatchEvent(new CustomEvent(n,{detail:{source:'cg-bundle',cart}})));
-      if (root.getAttribute('data-open-drawer')==='true'){
-        const toggle = document.querySelector('[data-drawer-trigger="cart"], [data-cart-toggle], button[aria-controls*="Cart"], a[href="/cart"]');
-        if (toggle) try{ toggle.click(); }catch(e){}
+
+      // Events, die viele Themes hören
+      ['cart:refresh','cart:updated','ajaxProduct:added','theme:cart:change','cart:change'].forEach(n => {
+        document.dispatchEvent(new CustomEvent(n,{detail:{source:'cg-bundle',cart}}));
+        window.dispatchEvent(new CustomEvent(n,{detail:{source:'cg-bundle',cart}}));
+      });
+
+      // 2) Sections serverseitig neu laden und ersetzen
+      const handles = ['cart-drawer','cart-icon-bubble','mini-cart','header-cart','cart-notification'];
+      const url = `${(window.Shopify?.routes?.root)||'/'}?sections=${handles.join(',')}`;
+      try{
+        const sec = await fetch(url, { credentials: 'same-origin' });
+        if (sec.ok){
+          const htmls = await sec.json();
+          Object.keys(htmls||{}).forEach(key => {
+            const target = document.getElementById(`shopify-section-${key}`) ||
+                           document.querySelector(`[data-section-id="${key}"]`);
+            if (target) target.innerHTML = htmls[key];
+          });
+        }
+      }catch(e){/* not fatal */ }
+
+      // 3) Drawer öffnen (Best-Effort)
+      if (OPEN_DRAWER){
+        const drawer = document.querySelector('cart-drawer');
+        if (drawer && typeof drawer.open === 'function') drawer.open();
+        const toggle = document.querySelector(
+          '[data-drawer-trigger="cart"], [data-cart-toggle], [data-open-cart], button[aria-controls*="Cart"], a[href="/cart"]'
+        );
+        if (toggle) { try { toggle.click(); } catch(e){} }
       }
     }catch(e){}
   }
@@ -268,7 +308,12 @@ CG Bundle Inline – Self-contained
   async function addBoth(){
     const btn = root.querySelector('[data-role="bundle-add"]');
     const msg = root.querySelector('.cg-bundle__msg');
-    const mainId = mainVariantId();
+
+    const idInput = document.querySelector('form[action*="/cart/add"] input[name="id"]');
+    const mainId = idInput?.value
+      ? parseInt(idInput.value,10)
+      : parseInt(root.querySelector('[data-main-variant-id]').getAttribute('data-main-variant-id'),10);
+
     const compEl = root.querySelector('[data-role="comp-variant"]');
     const compId = compEl ? parseInt(compEl.value,10) : null;
     if (!compId){ msg.textContent='Bitte Variante wählen.'; return; }
@@ -278,21 +323,28 @@ CG Bundle Inline – Self-contained
       const res = await fetch('/cart/add.js',{
         method:'POST',
         headers:{'Content-Type':'application/json','Accept':'application/json'},
-        body: JSON.stringify({ items:[ {id:mainId,quantity:1}, {id:compId,quantity:1} ] })
+        body: JSON.stringify({ items:[ {id:mainId,quantity:1}, {id:compId,quantity:1} ] }),
+        credentials: 'same-origin'
       });
       if (!res.ok) throw new Error('add failed');
-      btn.textContent='Im Warenkorb'; btn.classList.remove('is-loading'); msg.textContent='';
+
+      btn.textContent='Im Warenkorb';
+      btn.classList.remove('is-loading');
+      msg.textContent='';
       await refreshCartUI(); // kein Reload
     }catch(e){
-      btn.disabled=false; btn.classList.remove('is-loading');
+      btn.disabled=false;
+      btn.classList.remove('is-loading');
       msg.textContent='Konnte nicht hinzugefügt werden. Bitte erneut versuchen.';
     }
   }
 
+  // Init
   updateTotal();
   ensureComp();
-  root.querySelector('[data-role="bundle-add"]').addEventListener('click', addBoth);
+
   const sel = root.querySelector('[data-role="comp-variant"]');
   sel && sel.addEventListener('change', updateTotal);
+  root.querySelector('[data-role="bundle-add"]').addEventListener('click', addBoth);
 })();
 </script>
