@@ -1,37 +1,38 @@
 {%- comment -%}
-CG Bundle Inline – FINAL (UI angepasst an Produkt: Button, Preis, Hover)
+CG Bundle Inline – FINAL
+- zeigt Block nur, wenn ein Cross-Sell vorhanden ist
+- Bilder mit dünnem grauen Rahmen
+- Cross-Sell klickbar (Bild + Titel -> Produktseite)
+- Preis summiert robust (Fallback, auch wenn <select> noch nicht ready)
+- Button + Typografie an Theme angelehnt (Variablen mit Fallback)
 {%- endcomment -%}
 
-{%- assign heading              = heading | default: 'PASSEND DAZU – IM BUNDLE' -%}
-{%- assign allow_variant_select = allow_variant_select | default: true -%}
-{%- assign open_drawer          = open_drawer | default: true -%}
-{%- assign debug                = debug | default: false -%}
-{%- assign auk_style            = auk_style | default: true -%}
+{%- liquid
+  assign heading             = heading | default: 'PASSEND DAZU – IM BUNDLE'
+  assign allow_variant_select = allow_variant_select | default: true
+  assign open_drawer         = open_drawer | default: true
+  assign debug               = debug | default: false
 
-{%- comment -%} Metafeld ermitteln (mit Fallbacks) {%- endcomment -%}
-{%- assign mf_ns  = mf_ns  | default: 'shopify--discovery--product_recommendation' -%}
-{%- assign mf_key = mf_key | default: 'complementary_products' -%}
-{%- assign primary_mf = product.metafields[mf_ns][mf_key] -%}
-{%- assign alt_mf1    = product.metafields['shopify--discovery']['product_recommendation.complementary_products'] -%}
-{%- assign alt_mf2    = product.metafields['shopify--discovery--product_recommendation']['complementary_products'] -%}
-{%- assign mf = nil -%}
-{%- if primary_mf and primary_mf.value -%}
-  {%- assign mf = primary_mf -%}
-{%- elsif alt_mf1 and alt_mf1.value -%}
-  {%- assign mf = alt_mf1 -%}
-{%- elsif alt_mf2 and alt_mf2.value -%}
-  {%- assign mf = alt_mf2 -%}
-{%- endif -%}
+  # Metafeld-Quellen (robust)
+  assign mf_ns   = mf_ns  | default: 'shopify--discovery--product_recommendation'
+  assign mf_key  = mf_key | default: 'complementary_products'
+  assign mf1     = product.metafields[mf_ns][mf_key]
+  assign mf2     = product.metafields['shopify--discovery']['product_recommendation.complementary_products']
+  assign mf3     = product.metafields['shopify--discovery--product_recommendation']['complementary_products']
 
-{%- assign comp = nil -%}
-{%- if mf and mf.type == 'product_reference' and mf.value -%}
-  {%- assign comp = mf.value -%}
-{%- elsif mf and mf.type == 'list.product_reference' and mf.value != blank -%}
-  {%- assign comp = mf.value | first -%}
-{%- endif -%}
+  assign comp = nil
+  if mf1 and mf1.value
+    assign comp = mf1.value
+  elsif mf2 and mf2.value
+    assign comp = mf2.value
+  elsif mf3 and mf3.value
+    assign comp = mf3.value
+  endif
+-%}
 
-{%- if comp -%}
-<section class="cg-bundle{% if auk_style %} cg-bundle--auk{% endif %}"
+{%- if comp != blank -%}
+<section
+  class="cg-bundle cg-bundle--auk"
   data-cg-bundle
   data-product-id="{{ product.id }}"
   data-allow-variant="{{ allow_variant_select }}"
@@ -42,114 +43,146 @@ CG Bundle Inline – FINAL (UI angepasst an Produkt: Button, Preis, Hover)
 
   <style>
     .cg-bundle{
-      /* Versuche möglichst Theme-Variablen zu respektieren */
-      --accent: var(--color-button-background, #F19222);
-      --accent-hover: color-mix(in srgb, var(--accent) 88%, #000 12%);
+      /* Theme-nahe Farben/Radius mit Fallbacks */
+      --btn-bg: var(--color-button, var(--color-button-background, #F19222));
+      --btn-text: var(--color-button-text, #ffffff);
+      --btn-radius: var(--buttons-radius, var(--radius-button, 10px));
+      --line: #e9ecef;
       --text: var(--color-foreground, #111);
-      --muted:#666;
-      --line:#e9ecef;
-      --btn-radius: var(--radius-button, var(--buttons-radius, 6px));
-      --btn-font: var(--font-button-family, var(--font-body-family, inherit));
-      --heading-font: var(--font-heading-family, var(--heading-font-family, inherit));
+      --muted: #666;
+      --tile-desktop: 180px;
+      --tile-mobile: 140px;
 
-      --tile-desktop: 180px; --tile-mobile: 140px;
-
-      max-width:1320px; margin:26px auto; padding:24px 16px;
-      border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+      max-width:1320px;
+      margin:26px auto;
+      padding:24px 16px;
+      border-top:1px solid var(--line);
+      border-bottom:1px solid var(--line);
       background:transparent;
     }
 
+    /* Überschrift an Produkttitel angelehnt */
     .cg-bundle__heading{
-      text-transform:uppercase; font-weight:900; letter-spacing:.06em;
-      font-family: var(--heading-font);
+      text-transform:uppercase;
+      font-weight:900;
+      letter-spacing:.06em;
+      font-family: var(--font-heading-family, var(--heading-font-family, inherit));
       font-style: var(--font-heading-style, normal);
       font-size: clamp(2.0rem, 2.0vw, 2.6rem);
       color: var(--text);
-      text-align:center; margin:0 0 18px;
+      text-align:center;
+      margin:0 0 18px;
     }
 
-    /* Kompaktes Grid: Bild1 + Bild2 + rechte Spalte */
+    /* Layout – kompakt wie beim Vorbild */
     .cg-bundle__row{
       display:grid;
-      grid-template-columns: max-content 10px max-content 14px 280px;
-      column-gap:14px; align-items:center; justify-content:center;
+      grid-template-columns: max-content 12px max-content 14px 300px;
+      column-gap: 16px;
+      align-items:center;
+      justify-content:center;
     }
-    .cg-bundle__card{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;background:transparent;border:0}
+    .cg-bundle__card{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+      gap:8px;
+      background:transparent;
+      border:0;
+      box-shadow:none;
+    }
 
-    /* Dünner grauer Rahmen (wie angefragt) */
+    /* Bildkachel mit dünnem Rahmen */
     .cg-bundle__media{
-      width:var(--tile-desktop); aspect-ratio:1/1;
-      display:flex; align-items:center; justify-content:center;
-      background:#fff !important;
-      border:1px solid #e5e7eb !important; border-radius:14px;
-      padding:8px; box-sizing:border-box;
-      transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+      width:var(--tile-desktop);
+      aspect-ratio:1/1;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px; /* Rahmen etwas Luft geben */
+      border:1px solid #e5e7eb;
+      background:#fff;
+      transition:border-color .2s ease, transform .2s ease, box-shadow .2s ease;
     }
-    .cg-bundle__media::before{ content:none !important; }
+    .cg-bundle__media:hover{
+      border-color: var(--btn-bg);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 18px rgba(0,0,0,.06);
+    }
     .cg-bundle__img{
-      max-width:100% !important; max-height:100% !important;
-      width:auto !important; height:auto !important; object-fit:contain; border-radius:8px;
+      max-width:100% !important;
+      max-height:100% !important;
+      height:auto !important;
+      width:auto !important;
+      object-fit:contain;
+      border-radius:8px;
+      display:block;
     }
 
-    /* Cross-Sell anklickbar + Hover-Hinweis */
-    .cg-bundle__link{ display:inline-flex; flex-direction:column; align-items:center; gap:8px; text-decoration:none; color:inherit; }
-    .cg-bundle__link:hover .cg-bundle__media{
-      border-color: var(--accent);
-      box-shadow: 0 8px 20px rgba(0,0,0,.07);
-      transform: translateY(-2px);
-      cursor:pointer;
+    /* Titel & Preis unter dem Bild */
+    .cg-bundle__title{
+      font-weight:700;
+      color:var(--text);
+      font-size:.95rem;
+      line-height:1.25;
+      margin-top:2px;
+      max-width: 220px; /* verhindert zu breite Spalte */
+    }
+    .cg-bundle__price{ color:var(--text); font-size:.9rem; }
+    .cg-bundle__price--compare{ color:var(--muted); margin-left:6px; }
+
+    /* Plus / Gleich: deutlicher & schwarz */
+    .cg-bundle__plus,
+    .cg-bundle__equals{
+      color:#111;
+      font-size:2rem;
+      line-height:1;
+      text-align:center;
+      user-select:none;
     }
 
-    .cg-bundle__title{font-weight:700;color:var(--text);font-size:.95rem;line-height:1.25;margin-top:2px;text-align:center;max-width:220px}
-    .cg-bundle__price{color:var(--text);font-size:.9rem}
-    .cg-bundle__price--compare{color:var(--muted);margin-left:6px}
-
-    .cg-bundle__plus, .cg-bundle__equals{ color:#111; font-size:2rem; line-height:1; text-align:center; }
-
-    /* Rechte Spalte – Preis/Font wie Produktpreis oben */
-    .cg-bundle__aside{ display:flex; flex-direction:column; gap:10px; align-items:flex-start; }
-    .cg-bundle__total--stack{ display:flex; flex-direction:column; gap:8px; align-items:flex-start; }
+    /* Rechte Spalte (Gesamt + Button) */
+    .cg-bundle__aside{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .cg-bundle__total{ display:flex; flex-direction:column; gap:6px; }
     .cg-bundle__total-label{ font-size:.82rem; color:#6b7280; font-weight:600; }
     .cg-bundle__total-amount{
-      display:block !important; visibility:visible !important;
-      color:var(--text) !important;
-      font-family: var(--heading-font);
-      font-weight:800; line-height:1.1;
-      /* Größen-Range ähnlich deinem Produktpreis */
-      font-size: clamp(1.8rem, 2.1vw, 2.2rem);
-      white-space:nowrap; min-width:6ch;
+      font-size: 2.6rem; /* an Produktpreis anlehnen */
+      font-weight: 800;
+      line-height: 1;
+      display:block !important;
+      visibility:visible !important;
     }
 
-    /* Button-Style an Produkt-Warenkorb angelehnt */
+    /* Button wie Produkt-ATC (Radius/Schrift/Farbe via Variablen) */
     .cg-bundle__btn{
-      align-self:flex-start;
-      appearance:none; border:none; cursor:pointer;
+      appearance:none;
+      border:none;
+      cursor:pointer;
       padding:14px 22px;
       border-radius: var(--btn-radius);
-      background: var(--accent);
-      color:#fff;
-      font-family: var(--btn-font);
-      font-weight:800;
-      text-transform: uppercase;
-      letter-spacing:.02em;
-      font-size: 1.05rem;
-      transition: background .15s ease, transform .12s ease, box-shadow .2s ease;
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      font-weight: 800;
+      font-family: var(--font-body-family, inherit);
+      transition: transform .08s ease, filter .15s ease, background .15s ease;
+      will-change: transform;
     }
-    .cg-bundle__btn:hover{
-      background: var(--accent-hover);
-      transform: translateY(-1px);
-      box-shadow: 0 8px 22px rgba(0,0,0,.08), 0 0 0 1px rgba(0,0,0,.02) inset;
-    }
-    .cg-bundle__btn:active{
-      transform: translateY(0);
-      box-shadow: 0 4px 12px rgba(0,0,0,.06);
-    }
+    .cg-bundle__btn:hover{ filter: brightness(0.96); transform: translateY(-1px); }
+    .cg-bundle__btn:active{ transform: translateY(0); }
     .cg-bundle__btn.is-loading{ opacity:.7; cursor:wait; }
     .cg-bundle__btn:disabled{ opacity:.6; cursor:default; }
 
-    .cg-bundle__msg{font-size:.9rem;color:var(--muted)}
+    /* Footer (Fallback) ausblenden im Aukey-Layout */
     .cg-bundle__footer{ display:none; }
 
+    /* Responsive */
     @media (max-width:980px){
       .cg-bundle{ padding:20px 12px; }
       .cg-bundle__row{ grid-template-columns:1fr; gap:14px; }
@@ -163,12 +196,14 @@ CG Bundle Inline – FINAL (UI angepasst an Produkt: Button, Preis, Hover)
   <div class="cg-bundle__heading">{{ heading }}</div>
 
   <div class="cg-bundle__row">
+    {%- assign main_v = product.selected_or_first_available_variant -%}
+
     <!-- Hauptprodukt -->
     <article class="cg-bundle__card cg-bundle__card--main"
-      data-main-price="{{ product.selected_or_first_available_variant.price }}"
-      data-main-compare="{{ product.selected_or_first_available_variant.compare_at_price | default: 0 }}"
-      data-main-variant-id="{{ product.selected_or_first_available_variant.id }}">
-      <div class="cg-bundle__media">
+      data-main-price="{{ main_v.price }}"
+      data-main-compare="{{ main_v.compare_at_price | default: 0 }}"
+      data-main-variant-id="{{ main_v.id }}">
+      <div class="cg-bundle__media" aria-hidden="true">
         {%- assign main_img = product.featured_image | default: product.images.first -%}
         {%- if main_img -%}
           {{ main_img
@@ -183,13 +218,12 @@ CG Bundle Inline – FINAL (UI angepasst an Produkt: Button, Preis, Hover)
         {%- endif -%}
       </div>
       <div class="cg-bundle__title">{{ product.title }}</div>
-      {%- assign v = product.selected_or_first_available_variant -%}
       <div class="cg-bundle__price">
-        {%- if v.compare_at_price > v.price -%}
-          <span class="cg-bundle__price--sale">{{ v.price | money }}</span>
-          <s class="cg-bundle__price--compare">{{ v.compare_at_price | money }}</s>
+        {%- if main_v.compare_at_price > main_v.price -%}
+          <span class="cg-bundle__price--sale">{{ main_v.price | money }}</span>
+          <s class="cg-bundle__price--compare">{{ main_v.compare_at_price | money }}</s>
         {%- else -%}
-          <span>{{ v.price | money }}</span>
+          <span>{{ main_v.price | money }}</span>
         {%- endif -%}
       </div>
     </article>
@@ -197,37 +231,37 @@ CG Bundle Inline – FINAL (UI angepasst an Produkt: Button, Preis, Hover)
     <!-- Plus -->
     <div class="cg-bundle__plus" aria-hidden="true">+</div>
 
-    <!-- Cross-Sell (klickbar) -->
-    <article class="cg-bundle__card cg-bundle__card--comp" data-role="comp">
-      {%- assign comp_variant = comp.selected_or_first_available_variant -%}
-
-      <a class="cg-bundle__link" href="{{ comp.url }}" aria-label="{{ comp.title }}">
-        <div class="cg-bundle__media">
-          {%- assign comp_img = comp.featured_image | default: comp.images.first -%}
-          {%- if comp_img -%}
-            {{ comp_img
-              | image_url: width: 700, format: 'pjpg'
-              | image_tag:
-                  alt: comp.title,
-                  loading: 'lazy',
-                  decoding: 'async',
-                  class: 'cg-bundle__img',
-                  sizes: '(min-width:980px) 180px, 140px',
-                  widths: '140, 180, 280, 360' }}
-          {%- endif -%}
-        </div>
-        <div class="cg-bundle__title">{{ comp.title }}</div>
+    <!-- Zusatzprodukt (klickbar) -->
+    {%- assign comp_v = comp.selected_or_first_available_variant -%}
+    <article class="cg-bundle__card cg-bundle__card--comp"
+             data-role="comp"
+             data-comp-default="{{ comp_v.price }}">
+      <a class="cg-bundle__media" href="{{ comp.url }}" title="{{ comp.title }}">
+        {%- assign comp_img = comp.featured_image | default: comp.images.first -%}
+        {%- if comp_img -%}
+          {{ comp_img
+            | image_url: width: 700, format: 'pjpg'
+            | image_tag:
+                alt: comp.title,
+                loading: 'lazy',
+                decoding: 'async',
+                class: 'cg-bundle__img',
+                sizes: '(min-width:980px) 180px, 140px',
+                widths: '140, 180, 280, 360' }}
+        {%- endif -%}
       </a>
+      <a class="cg-bundle__title" href="{{ comp.url }}" title="{{ comp.title }}">{{ comp.title }}</a>
 
       {%- if comp.variants.size > 1 and allow_variant_select -%}
-        <label class="cg-bundle__select">
+        <label class="cg-bundle__select" style="display:flex;gap:8px;align-items:center;margin-top:6px;font-size:.9rem;color:var(--muted)">
           <span>Variante</span>
-          <select data-role="comp-variant">
+          <select data-role="comp-variant" style="padding:6px 8px;border:1px solid #e5e7eb;border-radius:8px;min-width:180px;background:#fff">
             {%- for vv in comp.variants -%}
-              <option value="{{ vv.id }}" data-price="{{ vv.price }}"
-                data-compare="{{ vv.compare_at_price | default: 0 }}"
-                {% if vv.available %}{% else %}disabled{% endif %}
-                {% if vv.id == comp_variant.id %}selected{% endif %}>
+              <option value="{{ vv.id }}"
+                      data-price="{{ vv.price }}"
+                      data-compare="{{ vv.compare_at_price | default: 0 }}"
+                      {% unless vv.available %}disabled{% endunless %}
+                      {% if vv.id == comp_v.id %}selected{% endif %}>
                 {{ vv.title }}{% unless vv.available %} – ausverkauft{% endunless %}
               </option>
             {%- endfor -%}
@@ -235,17 +269,17 @@ CG Bundle Inline – FINAL (UI angepasst an Produkt: Button, Preis, Hover)
         </label>
       {%- else -%}
         <input type="hidden" data-role="comp-variant"
-          value="{{ comp_variant.id }}"
-          data-price="{{ comp_variant.price }}"
-          data-compare="{{ comp_variant.compare_at_price | default: 0 }}">
+               value="{{ comp_v.id }}"
+               data-price="{{ comp_v.price }}"
+               data-compare="{{ comp_v.compare_at_price | default: 0 }}">
       {%- endif -%}
 
       <div class="cg-bundle__price">
-        {%- if comp_variant.compare_at_price > comp_variant.price -%}
-          <span class="cg-bundle__price--sale">{{ comp_variant.price | money }}</span>
-          <s class="cg-bundle__price--compare">{{ comp_variant.compare_at_price | money }}</s>
+        {%- if comp_v.compare_at_price > comp_v.price -%}
+          <span class="cg-bundle__price--sale">{{ comp_v.price | money }}</span>
+          <s class="cg-bundle__price--compare">{{ comp_v.compare_at_price | money }}</s>
         {%- else -%}
-          <span>{{ comp_variant.price | money }}</span>
+          <span>{{ comp_v.price | money }}</span>
         {%- endif -%}
       </div>
     </article>
@@ -253,13 +287,24 @@ CG Bundle Inline – FINAL (UI angepasst an Produkt: Button, Preis, Hover)
     <!-- Gleich + rechte Spalte -->
     <div class="cg-bundle__equals" aria-hidden="true">=</div>
     <div class="cg-bundle__aside">
-      <div class="cg-bundle__total cg-bundle__total--stack">
+      <div class="cg-bundle__total">
         <div class="cg-bundle__total-label">Gesamtpreis</div>
         <div class="cg-bundle__total-amount" data-role="bundle-total">–</div>
       </div>
-      <button type="button" class="cg-bundle__btn" data-role="bundle-add">Beide in den Warenkorb</button>
+      <button type="button" class="cg-bundle__btn" data-role="bundle-add">
+        Beide in den Warenkorb
+      </button>
       <div class="cg-bundle__msg" aria-live="polite"></div>
     </div>
+  </div>
+
+  <!-- Fallback-Footer (im Aukey-Layout ausgeblendet) -->
+  <div class="cg-bundle__footer">
+    <div class="cg-bundle__total">
+      <span>Gesamt:</span> <strong data-role="bundle-total">–</strong>
+    </div>
+    <button type="button" class="cg-bundle__btn" data-role="bundle-add">Beide in den Warenkorb</button>
+    <div class="cg-bundle__msg" aria-live="polite"></div>
   </div>
 </section>
 
@@ -268,35 +313,39 @@ CG Bundle Inline – FINAL (UI angepasst an Produkt: Button, Preis, Hover)
   const root = document.currentScript.previousElementSibling;
   if (!root || !root.matches('.cg-bundle')) return;
 
-  const DEBUG = root.getAttribute('data-debug') === 'true';
+  const DEBUG       = root.getAttribute('data-debug') === 'true';
   const OPEN_DRAWER = root.getAttribute('data-open-drawer') === 'true';
   const moneyFormat = JSON.parse(root.getAttribute('data-money-format') || '"€{{amount}}"');
-  const currency = JSON.parse(root.getAttribute('data-currency') || '"EUR"');
+  const currency    = JSON.parse(root.getAttribute('data-currency') || '"EUR"');
   const log = (...a)=>{ if (DEBUG) console.log('[CG-BUNDLE]', ...a); };
 
   /* Preise */
-  const mainPrice = parseInt(root.querySelector('[data-main-price]').getAttribute('data-main-price')||'0',10);
-  const compEl = () => root.querySelector('[data-role="comp-variant"]');
+  const mainPrice = parseInt(root.querySelector('[data-main-price]')?.getAttribute('data-main-price') || '0', 10);
+
   const compPrice = () => {
-    const el = compEl();
-    const p = el?.selectedOptions?.[0]?.dataset.price || el?.dataset?.price || '0';
-    return parseInt(p,10);
+    const el = root.querySelector('[data-role="comp-variant"]');
+    if (el) {
+      const p = el?.selectedOptions?.[0]?.dataset.price || el?.dataset?.price || '0';
+      return parseInt(p, 10);
+    }
+    const def = root.querySelector('[data-role="comp"]')?.getAttribute('data-comp-default') || '0';
+    return parseInt(def, 10);
   };
+
   const fmt = (c)=> (window.Shopify?.formatMoney)
     ? Shopify.formatMoney(c, moneyFormat)
     : new Intl.NumberFormat(undefined,{style:'currency',currency}).format(c/100);
 
-  const writeTotal = (v) => {
-    root.querySelectorAll('[data-role="bundle-total"]').forEach(n => {
-      n.textContent = v;
-      n.style.display = 'block';
-      n.style.visibility = 'visible';
-    });
+  const updateTotal = () => {
+    const total = mainPrice + compPrice();
+    root.querySelectorAll('[data-role="bundle-total"]').forEach(n => n.textContent = fmt(total));
   };
-  const updateTotal = () => writeTotal(fmt(mainPrice + compPrice()));
-  updateTotal(); requestAnimationFrame(updateTotal); setTimeout(updateTotal,0);
 
-  /* Cart UI aktualisieren */
+  updateTotal();
+  requestAnimationFrame(updateTotal);
+  setTimeout(updateTotal, 0);
+
+  /* Cart-UI auffrischen (Badge, Drawer, evtl. Sections) */
   function detectCartSectionHandles(){
     const nodes = Array.from(document.querySelectorAll('[id^="shopify-section-"]'));
     const handles = nodes.map(el => el.id.replace('shopify-section-',''))
@@ -311,6 +360,12 @@ CG Bundle Inline – FINAL (UI angepasst an Produkt: Button, Preis, Hover)
 
       const cnt = document.querySelector('[data-cart-count], .cart-count-bubble .text, .site-header__cart-count');
       if (cnt){ cnt.textContent = cart.item_count; cnt.style.display = cart.item_count ? '' : 'none'; }
+
+      ['cart:refresh','cart:updated','ajaxProduct:added','theme:cart:change','cart:change']
+        .forEach(n => {
+          document.dispatchEvent(new CustomEvent(n,{detail:{source:'cg-bundle',cart}}));
+          window.dispatchEvent(new CustomEvent(n,{detail:{source:'cg-bundle',cart}}));
+        });
 
       const handles = detectCartSectionHandles();
       if (handles.length){
@@ -331,10 +386,11 @@ CG Bundle Inline – FINAL (UI angepasst an Produkt: Button, Preis, Hover)
         if (drawer && typeof drawer.open === 'function') drawer.open();
         const toggle = document.querySelector('[data-drawer-trigger="cart"], [data-cart-toggle], [data-open-cart], button[aria-controls*="Cart"], a[href="/cart"]');
         if (toggle) { try{ toggle.click(); }catch(e){} }
-    }catch(e){ if (DEBUG) console.error('refreshCartUI', e); }
+      }
+    }catch(e){ log('refreshCartUI error', e); }
   }
 
-  /* Beide Artikel hinzufügen */
+  /* Beide in den Warenkorb */
   async function addBoth(){
     const btn = root.querySelector('[data-role="bundle-add"]');
     const msg = root.querySelector('.cg-bundle__msg');
@@ -342,10 +398,10 @@ CG Bundle Inline – FINAL (UI angepasst an Produkt: Button, Preis, Hover)
     const idInput = document.querySelector('form[action*="/cart/add"] input[name="id"]');
     const mainId = idInput?.value
       ? parseInt(idInput.value,10)
-      : parseInt(root.querySelector('[data-main-variant-id]').getAttribute('data-main-variant-id'),10);
+      : parseInt(root.querySelector('[data-main-variant-id]')?.getAttribute('data-main-variant-id') || '0',10);
 
-    const el = compEl();
-    const compId = el ? parseInt(el.value,10) : null;
+    const compEl = root.querySelector('[data-role="comp-variant"]');
+    const compId = compEl ? parseInt(compEl.value,10) : null;
     if (!compId){ msg.textContent='Bitte Variante wählen.'; return; }
 
     btn.disabled = true; btn.classList.add('is-loading'); msg.textContent='Wird hinzugefügt …';
@@ -358,18 +414,18 @@ CG Bundle Inline – FINAL (UI angepasst an Produkt: Button, Preis, Hover)
       });
       if (!res.ok) throw new Error('add failed');
 
-      btn.textContent='BUNDLE IST IM WARENKORB';
+      btn.textContent='Im Warenkorb';
       btn.classList.remove('is-loading');
       msg.textContent='';
       await refreshCartUI();
     }catch(e){
       btn.disabled=false; btn.classList.remove('is-loading');
       msg.textContent='Konnte nicht hinzugefügt werden. Bitte erneut versuchen.';
-      if (DEBUG) console.error('addBoth', e);
+      if (DEBUG) console.error(e);
     }
   }
 
-  const sel = compEl();
+  const sel = root.querySelector('[data-role="comp-variant"]');
   sel && sel.addEventListener('change', updateTotal);
   root.querySelectorAll('[data-role="bundle-add"]').forEach(b => b.addEventListener('click', addBoth));
 })();
