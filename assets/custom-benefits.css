@@ -5,11 +5,11 @@
   --cg-line:#ddd;
   display: flex;
   justify-content: center;
-  align-items: stretch;
-  gap: 100px;                       /* großer Abstand zwischen Items */
+  align-items: center;
+  gap: 100px;
   max-width: 1320px;
-  margin: 2px auto 25px; 
-  padding: 0 20px;
+  margin: 4px auto;            /* oben & unten nur 4px */
+  padding: 0 32px;
 }
 
 .cg-benefit {
@@ -23,55 +23,10 @@
 .cg-benefit:not(:last-child)::after {
   content: "";
   position: absolute;
-  top: 10%;
+  top: 50%;                     /* vertikal mittig */
   right: 0;
-  height: 80%;
+  transform: translateY(-50%);  /* exakte Zentrierung */
+  height: 60%;                   /* Länge des Strichs */
   width: 1px;
-  background: var(--cg-line);      /* Trennstrich */
-}
-
-.cg-ico {
-  display: inline-flex;
-  width: 72px;                      /* deutlich größer */
-  height: 72px;
-  flex: 0 0 72px;
-}
-
-.cg-ico svg {
-  width: 100%;
-  height: 100%;
-  color: var(--cg-text);
-  transition: color .2s ease, transform .2s ease;
-}
-
-.cg-title {
-  font-size: 1.4rem;                 /* größerer Titel */
-  font-weight: 700;
-  line-height: 1.3;
-  color: var(--cg-text);
-}
-
-.cg-sub {
-  font-size: 1.1rem;                 /* größere Subline */
-  line-height: 1.5;
-  color: var(--cg-sub);
-  margin-top: 2px;
-}
-
-.cg-benefit:hover .cg-ico svg {
-  color: var(--cg-accent);
-  transform: translateY(-1px);
-}
-
-@media (max-width: 980px) {
-  .cg-benefits {
-    flex-direction: column;
-    gap: 32px;
-  }
-  .cg-benefit {
-    padding: 0;
-  }
-  .cg-benefit:not(:last-child)::after {
-    display: none;
-  }
+  background: var(--cg-line);
 }
