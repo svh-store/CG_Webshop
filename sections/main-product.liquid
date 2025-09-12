@@ -34,7 +34,6 @@
 {%- endif -%}
 
 <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
-<script src="{{ 'product-sticky-columns.js' | asset_url }}" defer="defer"></script>
 
 {%- liquid
   # constants
@@ -125,8 +124,13 @@
       </div>
     </div>
 
-    <div class="product-info">
-      <div class="product-info__sticky">
+    <div class="product-info{% if section.settings.stick_on_scroll %} product-info--sticky{% endif %}"
+         {% if section.settings.stick_on_scroll %}data-sticky-height-elems="#product-media"{% endif %}>
+      {%- if section.settings.stick_on_scroll -%}
+      <script src="{{ 'sticky-scroll-direction.js' | asset_url }}" defer="defer"></script>
+      <sticky-scroll-direction data-min-sticky-size="md">
+        <div class="product-info__sticky">
+      {%- endif -%}
 
       {%- assign has_variant_picker = false -%}
       {%- if section.settings.sticky_atc_panel -%}
@@ -686,6 +690,11 @@
       {%- endfor -%}
      
       </div>
+
+      {%- if section.settings.stick_on_scroll -%}
+        </div>
+      </sticky-scroll-direction>
+      {%- endif -%}
     </div>
   </div>
 </div>
