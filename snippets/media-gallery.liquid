@@ -222,9 +222,9 @@
   {%- endif -%}
 
   {%- if media_count > 1 and section.settings.media_thumbs != 'never' and featured_product == false -%}
-      {%- unless section.settings.media_layout == 'stacked' and section.settings.media_thumbs == 'desktop' -%}
-        <div class="media-gallery__thumbs pg__thumbs{% if section.settings.media_thumbs == 'desktop' %} hidden md:block{% endif %}{% if section.settings.media_layout == 'stacked' %} md:hidden{% endif %} no-js-hidden" role="tablist" aria-label="{{ 'products.product.media' | t }}">
-          <div class="pg__thumbs-track">
+    {%- unless section.settings.media_layout == 'stacked' and section.settings.media_thumbs == 'desktop' -%}
+      <div class="media-gallery__thumbs pg__thumbs{% if section.settings.media_thumbs == 'desktop' %} hidden md:block{% endif %}{% if section.settings.media_layout == 'stacked' %} md:hidden{% endif %} no-js-hidden">
+        <div class="pg__thumbs-track" role="tablist" aria-label="{{ 'products.product.media' | t }}">
           {%- for media in product.media -%}
             {%- liquid
               capture thumb_index
