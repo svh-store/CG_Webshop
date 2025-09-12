@@ -1,17 +1,8 @@
 {%- comment -%}
-CG Bundle Inline (für Custom HTML/Liquid)
-Rendert Hauptprodukt + erstes Complementary-Produkt.
-Primärquelle: Metafield aus Search & Discovery
-  product.metafields['shopify--discovery']['product_recommendation.complementary_products'].value
-Fallback: /recommendations/products.json?product_id=...&intent=complementary
-
-Optionale Parameter:
-  - heading: Überschrift (String)
-  - allow_variant_select: true/false
-  - debug: true/false -> zeigt Metafield-Status in der Konsole
-
-WICHTIG: Dieses Snippet nur auf Produktvorlagen verwenden,
-damit 'product' verfügbar ist.
+CG Bundle Inline (Custom HTML/Liquid)
+- Hauptprodukt + erstes Complementary-Produkt
+- Mengen entfernt (immer 1 + 1)
+- Gesamtpreis im CTA-Bereich (rechts), live bei Variantwechsel
 {%- endcomment -%}
 
 {%- assign heading = heading | default: 'Passend dazu – im Bundle' -%}
@@ -25,12 +16,17 @@ damit 'product' verfügbar ist.
 
 <section class="cg-bundle" data-cg-bundle data-product-id="{{ product.id }}"
   data-allow-variant="{{ allow_variant_select }}"
-  data-debug="{{ debug }}">
+  data-debug="{{ debug }}"
+  data-money-format='{{ shop.money_format | json }}'
+  data-currency='{{ shop.currency | json }}'>
   <h3 class="cg-bundle__heading">{{ heading }}</h3>
 
   <div class="cg-bundle__wrap" data-role="wrap">
     <!-- Hauptprodukt -->
-    <div class="cg-bundle__item cg-bundle__item--main">
+    <div class="cg-bundle__item cg-bundle__item--main"
+         data-main-price="{{ product.selected_or_first_available_variant.price }}"
+         data-main-compare="{{ product.selected_or_first_available_variant.compare_at_price | default: 0 }}"
+         data-main-variant-id="{{ product.selected_or_first_available_variant.id }}">
       <div class="cg-bundle__media">
         {%- assign main_img = product.featured_image | default: product.images.first -%}
         {%- if main_img -%}
@@ -56,17 +52,12 @@ damit 'product' verfügbar ist.
             <span>{{ v.price | money }}</span>
           {%- endif -%}
         </div>
-        <label class="cg-bundle__qty">
-          <span>Menge</span>
-          <input type="number" min="1" value="1" step="1" inputmode="numeric" pattern="[0-9]*"
-                 class="cg-bundle__qty-input" data-role="qty-main">
-        </label>
       </div>
     </div>
 
     <div class="cg-bundle__plus" aria-hidden="true">+</div>
 
-    <!-- Ergänzendes Produkt: zuerst über Metafield rendern, sonst JS-Fallback -->
+    <!-- Ergänzendes Produkt -->
     <div class="cg-bundle__item cg-bundle__item--comp" data-role="comp">
       {%- if comps != blank and comps.size > 0 -%}
         {%- assign comp = comps | first -%}
@@ -87,7 +78,11 @@ damit 'product' verfügbar ist.
           {%- endif -%}
         </div>
 
-        <div class="cg-bundle__info" data-comp-product-id="{{ comp.id }}">
+        <div class="cg-bundle__info"
+             data-comp-product-id="{{ comp.id }}"
+             data-comp-variant-id="{{ comp_variant.id }}"
+             data-comp-price="{{ comp_variant.price }}"
+             data-comp-compare="{{ comp_variant.compare_at_price | default: 0 }}">
           <div class="cg-bundle__title">{{ comp.title }}</div>
 
           {%- if comp.variants.size > 1 and allow_variant_select -%}
@@ -96,15 +91,19 @@ damit 'product' verfügbar ist.
               <select data-role="comp-variant">
                 {%- for vv in comp.variants -%}
                   <option value="{{ vv.id }}"
-                    {% if vv.available %}{% else %}disabled{% endif %}
-                    {% if vv.id == comp_variant.id %}selected{% endif %}>
+                          data-price="{{ vv.price }}"
+                          data-compare="{{ vv.compare_at_price | default: 0 }}"
+                          {% if vv.available %}{% else %}disabled{% endif %}
+                          {% if vv.id == comp_variant.id %}selected{% endif %}>
                     {{ vv.title }}{% unless vv.available %} – ausverkauft{% endunless %}
                   </option>
                 {%- endfor -%}
               </select>
             </label>
           {%- else -%}
-            <input type="hidden" data-role="comp-variant" value="{{ comp_variant.id }}">
+            <input type="hidden" data-role="comp-variant" value="{{ comp_variant.id }}"
+                   data-price="{{ comp_variant.price }}"
+                   data-compare="{{ comp_variant.compare_at_price | default: 0 }}">
           {%- endif -%}
 
           <div class="cg-bundle__price">
@@ -115,15 +114,9 @@ damit 'product' verfügbar ist.
               <span>{{ comp_variant.price | money }}</span>
             {%- endif -%}
           </div>
-
-          <label class="cg-bundle__qty">
-            <span>Menge</span>
-            <input type="number" min="1" value="1" step="1" inputmode="numeric" pattern="[0-9]*"
-                   class="cg-bundle__qty-input" data-role="qty-comp">
-          </label>
         </div>
       {%- else -%}
-        <!-- Platzhalter, JS füllt hier den Fallback ein -->
+        <!-- Platzhalter; JS-Fallback füllt (mit Bild) -->
         <div class="cg-bundle__info" data-role="comp-empty">
           <div class="cg-bundle__title">Wird geladen …</div>
         </div>
@@ -132,6 +125,10 @@ damit 'product' verfügbar ist.
   </div>
 
   <div class="cg-bundle__cta">
+    <div class="cg-bundle__total">
+      <span>Gesamt:</span>
+      <strong data-role="bundle-total">–</strong>
+    </div>
     <button type="button" class="cg-bundle__btn" data-role="bundle-add">Beide in den Warenkorb</button>
     <div class="cg-bundle__msg" aria-live="polite"></div>
   </div>
@@ -143,91 +140,109 @@ damit 'product' verfügbar ist.
   if (!root || !root.matches('[data-cg-bundle]')) return;
 
   const DEBUG = root.getAttribute('data-debug') === 'true';
+  const moneyFormat = JSON.parse(root.getAttribute('data-money-format') || '"€{{amount}}"');
+  const currency = JSON.parse(root.getAttribute('data-currency') || '"EUR"');
 
-  function log(...args){ if (DEBUG) console.log('[CG-BUNDLE]', ...args); }
+  function log(...args){ if(DEBUG) console.log('[CG-BUNDLE]', ...args); }
+
+  function formatMoney(cents){
+    if (window.Shopify && typeof Shopify.formatMoney === 'function') {
+      return Shopify.formatMoney(cents, moneyFormat);
+    }
+    try {
+      return new Intl.NumberFormat(undefined, {style:'currency', currency}).format(cents/100);
+    } catch {
+      return (cents/100).toFixed(2) + ' ' + currency;
+    }
+  }
 
   function getCurrentMainVariantId() {
     const idInput = document.querySelector('form[action*="/cart/add"] input[name="id"]');
     if (idInput && idInput.value) return parseInt(idInput.value, 10);
-    return {{ product.selected_or_first_available_variant.id }};
+    return parseInt(root.querySelector('[data-main-variant-id]').getAttribute('data-main-variant-id'), 10);
   }
 
+  function getMainPriceCents(){
+    const el = root.querySelector('[data-main-price]');
+    return parseInt(el.getAttribute('data-main-price') || '0', 10);
+  }
+
+  function getCompPriceCents(){
+    const input = root.querySelector('[data-role="comp-variant"]');
+    const price = input?.selectedOptions?.[0]?.getAttribute('data-price') || input?.getAttribute?.('data-price') || '0';
+    return parseInt(price, 10);
+  }
+
+  function updateTotal(){
+    const totalEl = root.querySelector('[data-role="bundle-total"]');
+    const total = getMainPriceCents() + getCompPriceCents();
+    totalEl.textContent = formatMoney(total);
+  }
+
+  // Fallback: Recommendations API (inkl. Bild)
   async function fetchComplementaryFallback() {
     const pid = root.getAttribute('data-product-id');
     const url = `/recommendations/products.json?product_id=${pid}&intent=complementary&limit=4`;
-    log('Fallback fetch:', url);
     const res = await fetch(url);
     if (!res.ok) throw new Error('recommendations fetch failed');
-    const data = await res.json(); // Array von Produkten
-    return Array.isArray(data.products) ? data.products : data; // je nach Shopify-Version
+    const data = await res.json();
+    return Array.isArray(data.products) ? data.products : data;
   }
 
   function renderCompFromAPI(p) {
     const wrap = root.querySelector('[data-role="comp"]');
     const allowVariant = root.getAttribute('data-allow-variant') === 'true';
 
-    // Bild
-    const imgUrl = (p.featured_image && p.featured_image.url) || (p.images && p.images[0] && p.images[0].url);
-    const mediaHTML = imgUrl
-      ? `<img src="${imgUrl}&width=384" width="96" height="96" class="cg-bundle__img" alt="${p.title}">`
-      : '';
+    const img = (p.featured_image && p.featured_image.url) || (p.images && p.images[0] && p.images[0].url) || '';
+    const mediaHTML = img ? `<img src="${img}&width=384" width="96" height="96" class="cg-bundle__img" alt="${p.title}">` : '';
 
-    // Varianten
-    let variantSelectHTML = '';
-    let hiddenVariantHTML = '';
-    let defaultVariantId = (p.variants && p.variants.length) ? p.variants[0].id : null;
+    const firstVar = (p.variants && p.variants.length) ? p.variants[0] : null;
 
+    let variantHTML = '';
     if (allowVariant && p.variants && p.variants.length > 1) {
-      variantSelectHTML = `
+      variantHTML = `
         <label class="cg-bundle__select">
           <span>Variante</span>
           <select data-role="comp-variant">
             ${p.variants.map(v =>
-              `<option value="${v.id}" ${v.available ? '' : 'disabled'}>${v.title}${v.available ? '' : ' – ausverkauft'}</option>`
+              `<option value="${v.id}" data-price="${v.price}" ${v.available ? '' : 'disabled'}>${v.title}${v.available ? '' : ' – ausverkauft'}</option>`
             ).join('')}
           </select>
         </label>`;
-    } else if (defaultVariantId) {
-      hiddenVariantHTML = `<input type="hidden" data-role="comp-variant" value="${defaultVariantId}">`;
+    } else if (firstVar) {
+      variantHTML = `<input type="hidden" data-role="comp-variant" value="${firstVar.id}" data-price="${firstVar.price}">`;
     }
 
-    // Preis (einfacher, da JSON-Struktur je nach Theme variieren kann)
-    const price = p.price ? (p.price/100).toLocaleString(undefined, {style:'currency', currency:'EUR'}) : '';
-    const compare = p.compare_at_price ? (p.compare_at_price/100).toLocaleString(undefined, {style:'currency', currency:'EUR'}) : '';
+    const price = firstVar ? formatMoney(firstVar.price) : '';
+    const compare = (firstVar && firstVar.compare_at_price && firstVar.compare_at_price > firstVar.price)
+      ? `<s class="cg-bundle__price--compare">${formatMoney(firstVar.compare_at_price)}</s>` : '';
 
     wrap.innerHTML = `
       <div class="cg-bundle__media">${mediaHTML}</div>
       <div class="cg-bundle__info" data-comp-product-id="${p.id}">
         <div class="cg-bundle__title">${p.title}</div>
         <div class="cg-bundle__price">
-          ${ (p.compare_at_price && p.compare_at_price > p.price)
-              ? `<span class="cg-bundle__price--sale">${price}</span><s class="cg-bundle__price--compare">${compare}</s>`
-              : `<span>${price}</span>`
-          }
+          <span class="cg-bundle__price--sale">${price}</span>${compare}
         </div>
-        ${variantSelectHTML || hiddenVariantHTML}
-        <label class="cg-bundle__qty">
-          <span>Menge</span>
-          <input type="number" min="1" value="1" step="1" inputmode="numeric" pattern="[0-9]*"
-                 class="cg-bundle__qty-input" data-role="qty-comp">
-        </label>
+        ${variantHTML}
       </div>`;
   }
 
   async function ensureCompExists() {
     const empty = root.querySelector('[data-role="comp-empty"]');
-    if (!empty) { log('Metafield present – no fallback needed'); return; }
+    if (!empty) { updateTotal(); return; }
     try {
       const list = await fetchComplementaryFallback();
       const first = Array.isArray(list) ? list[0] : (list.products && list.products[0]);
       if (first) {
-        log('Fallback product:', first);
         renderCompFromAPI(first);
+        updateTotal();
+        const sel = root.querySelector('[data-role="comp-variant"]');
+        sel && sel.addEventListener('change', updateTotal);
       } else {
         empty.innerHTML = '<div class="cg-bundle__title">Kein Ergänzungsprodukt gefunden.</div>';
       }
     } catch(e) {
-      log('Fallback error:', e);
       empty.innerHTML = '<div class="cg-bundle__title">Ergänzungsprodukt konnte nicht geladen werden.</div>';
     }
   }
@@ -235,27 +250,20 @@ damit 'product' verfügbar ist.
   async function addBothToCart() {
     const btn = root.querySelector('[data-role="bundle-add"]');
     const msg = root.querySelector('.cg-bundle__msg');
-    const qtyMain = parseInt(root.querySelector('[data-role="qty-main"]').value || '1', 10);
-    const qtyComp = parseInt(root.querySelector('[data-role="qty-comp"]').value || '1', 10);
     const compVariantEl = root.querySelector('[data-role="comp-variant"]');
     const compVariantId = compVariantEl ? parseInt(compVariantEl.value, 10) : null;
     const mainVariantId = getCurrentMainVariantId();
-
-    if (!compVariantId) {
-      msg.textContent = 'Bitte Variante wählen.';
-      return;
-    }
+    if (!compVariantId) { msg.textContent = 'Bitte Variante wählen.'; return; }
 
     btn.disabled = true; msg.textContent = 'Wird hinzugefügt …';
-
     try {
       const res = await fetch('/cart/add.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({
           items: [
-            { id: mainVariantId, quantity: Math.max(1, qtyMain) },
-            { id: compVariantId, quantity: Math.max(1, qtyComp) }
+            { id: mainVariantId, quantity: 1 },
+            { id: compVariantId, quantity: 1 }
           ]
         })
       });
@@ -269,7 +277,13 @@ damit 'product' verfügbar ist.
     }
   }
 
+  // Initialisierung
+  updateTotal();
   ensureCompExists();
+
+  const sel = root.querySelector('[data-role="comp-variant"]');
+  sel && sel.addEventListener('change', updateTotal);
+
   root.querySelector('[data-role="bundle-add"]').addEventListener('click', addBothToCart);
 })();
 </script>
