@@ -136,15 +136,6 @@
         "prevent_animation": false
       }
     },
-    "cg_complementary_bundle_yzcVbx": {
-      "type": "cg-complementary-bundle",
-      "custom_css": [],
-      "name": "CG Ergänzend dazu",
-      "settings": {
-        "heading": "Passend dazu – im Bundle",
-        "allow_variant_select": true
-      }
-    },
     "custom_liquid_RypKET": {
       "type": "custom-liquid",
       "custom_css": [],
@@ -188,9 +179,8 @@
   },
   "order": [
     "main",
-    "custom_liquid_3rPKVK",
-    "cg_complementary_bundle_yzcVbx",
     "custom_liquid_RypKET",
+    "custom_liquid_3rPKVK",
     "recommendations",
     "1743585275ab058f49"
   ]
