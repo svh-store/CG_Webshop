@@ -43,7 +43,27 @@ CG Bundle Inline – FINAL
       max-width:1320px; margin:28px auto; padding:28px 20px;
       background:transparent; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
     }
-    /* Überschrift wie der Produkt-Titel */
+    .cg-bundle__heading{
+      font-size:3.6rem; font-weight:1000; text-align:center; color:var(--text);
+      margin:0 0 22px; letter-spacing:.01em; text-transform: uppercase; fon
+    }
+    .cg-bundle__row{display:grid;grid-template-columns:1fr 40px 1fr;gap:24px;align-items:center}
+    .cg-bundle__card{display:flex;gap:16px;align-items:center;padding:0;border:0;background:transparent;box-shadow:none}
+    .cg-bundle__body{display:flex;flex-direction:column}
+    .cg-bundle__title{font-weight:700;color:var(--text);margin:10px 0 4px;font-size:.98rem;line-height:1.25;text-align:center}
+    .cg-bundle__price{color:var(--text);font-size:.95rem;text-align:center}
+    .cg-bundle__price--compare{color:var(--muted);margin-left:6px}
+    .cg-bundle__select{display:flex;gap:8px;align-items:center;margin-top:8px;font-size:.9rem;color:var(--muted);justify-content:center}
+    .cg-bundle__select select{padding:6px 8px;border:1px solid #e5e7eb;border-radius:8px;min-width:180px;background:#fff}
+    .cg-bundle__plus{font-weight:800;font-size:1.6rem;color:#111;text-align:center}
+    .cg-bundle__footer{display:flex;gap:14px;align-items:center;justify-content:flex-end;margin-top:14px}
+    .cg-bundle__total{margin-right:auto;font-weight:700;color:var(--text);display:flex;gap:8px;align-items:center}
+    .cg-bundle__btn{appearance:none;border:none;cursor:pointer;padding:14px 20px;background:var(--accent);color:#fff;border-radius:10px;font-weight:800;box-shadow:none;outline:none}
+    .cg-bundle__btn.is-loading{opacity:.7;cursor:wait}
+    .cg-bundle__btn:disabled{opacity:.65;cursor:default}
+    .cg-bundle__msg{font-size:.95rem;color:var(--muted)}
+
+/* Überschrift wie der Produkt-Titel */
 .cg-bundle__heading{
   text-transform: uppercase;                 /* wie gewünscht */
   font-weight: 900 !important;               /* fett */
@@ -72,22 +92,6 @@ CG Bundle Inline – FINAL
   margin: 0 0 22px;
 }
 
-    }
-    .cg-bundle__row{display:grid;grid-template-columns:1fr 40px 1fr;gap:24px;align-items:center}
-    .cg-bundle__card{display:flex;gap:16px;align-items:center;padding:0;border:0;background:transparent;box-shadow:none}
-    .cg-bundle__body{display:flex;flex-direction:column}
-    .cg-bundle__title{font-weight:700;color:var(--text);margin:10px 0 4px;font-size:.98rem;line-height:1.25;text-align:center}
-    .cg-bundle__price{color:var(--text);font-size:.95rem;text-align:center}
-    .cg-bundle__price--compare{color:var(--muted);margin-left:6px}
-    .cg-bundle__select{display:flex;gap:8px;align-items:center;margin-top:8px;font-size:.9rem;color:var(--muted);justify-content:center}
-    .cg-bundle__select select{padding:6px 8px;border:1px solid #e5e7eb;border-radius:8px;min-width:180px;background:#fff}
-    .cg-bundle__plus{font-weight:800;font-size:1.6rem;color:#111;text-align:center}
-    .cg-bundle__footer{display:flex;gap:14px;align-items:center;justify-content:flex-end;margin-top:14px}
-    .cg-bundle__total{margin-right:auto;font-weight:700;color:var(--text);display:flex;gap:8px;align-items:center}
-    .cg-bundle__btn{appearance:none;border:none;cursor:pointer;padding:14px 20px;background:var(--accent);color:#fff;border-radius:10px;font-weight:800;box-shadow:none;outline:none}
-    .cg-bundle__btn.is-loading{opacity:.7;cursor:wait}
-    .cg-bundle__btn:disabled{opacity:.65;cursor:default}
-    .cg-bundle__msg{font-size:.95rem;color:var(--muted)}
 
     /* Aukey-Layout */
     .cg-bundle--auk .cg-bundle__row{
