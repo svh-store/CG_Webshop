@@ -257,7 +257,7 @@ CG Bundle Inline – FINAL (sichtbarer Gesamtpreis, engeres Layout, klickbarer C
 
   const DEBUG = root.getAttribute('data-debug') === 'true';
   const OPEN_DRAWER = root.getAttribute('data-open-drawer') === 'true';
-  const moneyFormat = JSON.parse(root.getAttribute('data-money-format') || '"€{{amount}}"';
+  const moneyFormat = JSON.parse(root.getAttribute('data-money-format') || '"€{{amount}}"');
   const currency = JSON.parse(root.getAttribute('data-currency') || '"EUR"');
   const log = (...a)=>{ if (DEBUG) console.log('[CG-BUNDLE]', ...a); };
 
