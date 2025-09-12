@@ -1,0 +1,168 @@
+/* horizontalmenu.css (scoped auf .cc-custom-navigation-panel) */
+/* =================== Zentrale Steuerung =================== */
+.cc-custom-navigation-panel .container--quick-nav{
+  --quick-nav-max-width: 100%;
+  --quick-nav-gap: calc(4 * var(--space-unit, 8px)); /* EIN Regler: Abstand zwischen allen Controls */
+  --heading-gap: clamp(24px, 4vw, 64px);            /* Abstand rechts vom Heading */
+  --btn-font-size: clamp(14px, 1.05vw, 16px);       /* Button-Schrift */
+  --quick-nav-height: 48px;   
+
+}
+
+/* Wrapper zentriert */
+.cc-custom-navigation-panel .container--quick-nav{
+  width:100%;
+  max-width:var(--quick-nav-max-width);
+  margin-inline:auto;
+  padding-inline:var(--quick-nav-gutter);
+  box-sizing:border-box;
+}
+
+/* =================== Layout-Basis =================== */
+.cc-custom-navigation-panel .quick-nav{
+  display:flex;
+  width:100%;
+  align-items:stretch;
+  gap:var(--quick-nav-gap);
+  flex-wrap:wrap;            /* mobil/eng darf umbrechen */
+}
+
+/* Überschrift */
+.cc-custom-navigation-panel .quick-nav__heading,
+.cc-custom-navigation-panel h2.quick-nav__heading{
+  margin:0;
+  color:var(--h4-color, rgb(var(--heading-color)));
+  font-family:var(--heading-font-family);
+  font-style:var(--heading-font-style);
+  font-weight:var(--heading-font-weight, 900);
+  font-size:var(--h4-font-size, 22px);
+  line-height:1.3;
+
+  height:var(--quick-nav-height);
+  display:flex; align-items:center;
+  white-space:nowrap; min-width:max-content;
+  flex:0 0 auto; /* fix links */
+}
+
+/* =================== Controls =================== */
+/* Alle Bedienelemente: Selects, Suche, Submit */
+.cc-custom-navigation-panel .quick-nav > :not(.quick-nav__heading){
+  /* gleichmäßig verteilen und mitwachsen */
+  flex:1 1 0;
+  min-width:0;               /* wichtig für Ellipsis */
+  height:var(--quick-nav-height);
+  display:flex; align-items:center; box-sizing:border-box;
+  font-size:var(--btn-font-size);
+}
+
+/* Selektoren/Buttons in voller Breite füllen */
+.cc-custom-navigation-panel .quick-nav custom-select[data-level] .custom-select,
+.cc-custom-navigation-panel .quick-nav__search,
+.cc-custom-navigation-panel .quick-nav__submit{
+  width:100%; height:100%;
+  display:flex; align-items:center; justify-content:flex-start;
+
+  box-sizing:border-box;
+  height:var(--quick-nav-height);
+}
+
+/* Buttontexte sicher ellipsen */
+.cc-custom-navigation-panel .quick-nav__btn [data-default-text]{
+  min-width:0; max-width:100%;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+
+/* Optional: Submit mittig texten */
+.cc-custom-navigation-panel .quick-nav__submit{ justify-content:center; }
+
+/* =================== Desktop-Optimierung =================== */
+@media (min-width:1024px){
+  .cc-custom-navigation-panel .quick-nav{
+    flex-wrap:nowrap;      /* EINER Reihe bleiben */
+  }
+  .cc-custom-navigation-panel .quick-nav__heading{
+    margin-right:var(--heading-gap); /* separat steuerbar */
+  }
+}
+
+/* =================== Responsive: kleine Desktops enger, aber einzeilig =================== */
+@media (min-width:769px) and (max-width:1199px){
+  .cc-custom-navigation-panel .quick-nav{
+    gap: clamp(8px, 1.2vw, var(--quick-nav-gap));
+    flex-wrap:nowrap; /* weiterhin keine 2. Zeile */
+  }
+}
+
+/* =================== Mobile: untereinander =================== */
+@media (max-width:768px){
+  .cc-custom-navigation-panel .quick-nav{
+    flex-wrap:wrap; /* darf umbrechen */
+  }
+  .cc-custom-navigation-panel .quick-nav__heading,
+  .cc-custom-navigation-panel .quick-nav > :not(.quick-nav__heading){
+    flex:1 1 100%;
+  }
+
+  /* Heading mobil zentrieren */
+  .cc-custom-navigation-panel .quick-nav__heading,
+  .cc-custom-navigation-panel h2.quick-nav__heading{
+    min-width:0;
+    white-space:normal;
+    justify-content:center;
+    text-align:center !important; /* überschreibt .text-start etc. */
+    margin-right:0; /* Desktop-Gap ignorieren */
+  }
+}
+
+/* === Vertikal angleichen: Heading & Search auf gleiche Höhe wie Selects === */
+.cc-custom-navigation-panel .quick-nav { align-items: center; }
+
+/* Selects strikt auf Control-Höhe bringen */
+.cc-custom-navigation-panel .quick-nav custom-select[data-level],
+.cc-custom-navigation-panel .quick-nav custom-select[data-level] .custom-select{
+  height: var(--quick-nav-height);
+  display:flex; align-items:center;
+  margin:0 !important; padding-block:0; line-height:1;
+  box-sizing:border-box;
+}
+
+/* Nudge-Variable: feine Höhenkorrektur */
+.cc-custom-navigation-panel .container--quick-nav{
+}
+
+/* Heading leicht anheben */
+.cc-custom-navigation-panel .quick-nav__heading,
+.cc-custom-navigation-panel h2.quick-nav__heading{
+  height: var(--quick-nav-height);
+  display:flex; align-items:center;
+  line-height:1; margin:0;
+  transform: translateY(var(--align-nudge));
+}
+.cc-custom-navigation-panel .quick-nav > :not(.quick-nav__heading),
+.cc-custom-navigation-panel .quick-nav custom-select[data-level],
+.cc-custom-navigation-panel .quick-nav custom-select[data-level] .custom-select,
+.cc-custom-navigation-panel .quick-nav__search,
+.cc-custom-navigation-panel .quick-nav__submit{
+  height: calc(var(--quick-nav-height) - 2px);
+}
+.cc-custom-navigation-panel .quick-nav__search,
+.cc-custom-navigation-panel .quick-nav__search input{
+  border: 0 !important; /* zum Testen; danach gezielt definieren */
+}
+/* Container oben auf 0 */
+.cc-custom-navigation-panel .container--quick-nav{
+  padding-top: 0 !important;
+}
+
+/* Quick-Nav selbst (überschreibt p-8 etc.) */
+.cc-custom-navigation-panel .quick-nav{
+  padding-top: 0 !important;
+}
+.cc-custom-navigation-panel .quick-nav.p-8{
+  padding-top: 0 !important;
+}
+
+/* Falls das Theme per Variable Section-Padding setzt */
+.cc-custom-navigation-panel{
+  --section-padding-top: 0px;
+}
