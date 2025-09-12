@@ -1,24 +1,19 @@
 {%- comment -%}
-CG Bundle Inline – FINAL
-- Dünner grauer Rahmen um Bilder
-- Cross-Sell klickbar (Bild + Titel)
-- Rendert nur, wenn ein Cross-Sell vorhanden ist
-- Enge Abstände, ohne Bild-Overlay
+CG Bundle Inline – FINAL (sichtbarer Gesamtpreis, engeres Layout, klickbarer Cross-Sell)
 {%- endcomment -%}
 
-{%- assign heading            = heading | default: 'PASSEND DAZU – IM BUNDLE' -%}
+{%- assign heading              = heading | default: 'PASSEND DAZU – IM BUNDLE' -%}
 {%- assign allow_variant_select = allow_variant_select | default: true -%}
-{%- assign open_drawer        = open_drawer | default: true -%}
-{%- assign debug              = debug | default: false -%}
-{%- assign auk_style          = auk_style | default: true -%}
+{%- assign open_drawer          = open_drawer | default: true -%}
+{%- assign debug                = debug | default: false -%}
+{%- assign auk_style            = auk_style | default: true -%}
 
-{%- comment -%} Metafeld finden (mit Fallbacks) {%- endcomment -%}
+{%- comment -%} Metafeld ermitteln (mit Fallbacks) {%- endcomment -%}
 {%- assign mf_ns  = mf_ns  | default: 'shopify--discovery--product_recommendation' -%}
 {%- assign mf_key = mf_key | default: 'complementary_products' -%}
 {%- assign primary_mf = product.metafields[mf_ns][mf_key] -%}
 {%- assign alt_mf1    = product.metafields['shopify--discovery']['product_recommendation.complementary_products'] -%}
 {%- assign alt_mf2    = product.metafields['shopify--discovery--product_recommendation']['complementary_products'] -%}
-
 {%- assign mf = nil -%}
 {%- if primary_mf and primary_mf.value -%}
   {%- assign mf = primary_mf -%}
@@ -28,6 +23,7 @@ CG Bundle Inline – FINAL
   {%- assign mf = alt_mf2 -%}
 {%- endif -%}
 
+{%- comment -%} Ein einzelnes Cross-Sell Produkt bestimmen {%- endcomment -%}
 {%- assign comp = nil -%}
 {%- if mf and mf.type == 'product_reference' and mf.value -%}
   {%- assign comp = mf.value -%}
@@ -62,16 +58,15 @@ CG Bundle Inline – FINAL
       text-align:center; margin:0 0 18px;
     }
 
+    /* Enges Desktop-Grid: Bild1 +, Bild2 =, rechte Spalte */
     .cg-bundle__row{
       display:grid;
-      grid-template-columns: max-content 10px max-content 12px 240px; /* Bild1 + Bild2 enger, rechte Spalte fix */
-      column-gap: 12px;
-      align-items:center;
-      justify-content:center;
+      grid-template-columns: max-content 10px max-content 14px 280px;
+      column-gap:14px; align-items:center; justify-content:center;
     }
-    .cg-bundle__card{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;background:transparent;border:0;box-shadow:none}
+    .cg-bundle__card{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;background:transparent;border:0}
 
-    /* Rahmen um Bilder (beide) */
+    /* Dünner grauer Rahmen um Bilder */
     .cg-bundle__media{
       width:var(--tile-desktop); aspect-ratio:1/1;
       display:flex; align-items:center; justify-content:center;
@@ -82,12 +77,11 @@ CG Bundle Inline – FINAL
     .cg-bundle__media::before{ content:none !important; }
     .cg-bundle__img{
       max-width:100% !important; max-height:100% !important;
-      height:auto !important; width:auto !important; object-fit:contain; border-radius:8px;
+      width:auto !important; height:auto !important; object-fit:contain; border-radius:8px;
     }
 
-    /* Link (Cross-Sell klickbar) */
-    .cg-bundle__link{ display:inline-flex; flex-direction:column; align-items:center; gap:8px;
-      text-decoration:none; color:inherit; }
+    /* Cross-Sell anklickbar */
+    .cg-bundle__link{ display:inline-flex; flex-direction:column; align-items:center; gap:8px; text-decoration:none; color:inherit; }
 
     .cg-bundle__title{font-weight:700;color:var(--text);font-size:.95rem;line-height:1.25;margin-top:2px;text-align:center;max-width:220px}
     .cg-bundle__price{color:var(--text);font-size:.9rem}
@@ -95,10 +89,18 @@ CG Bundle Inline – FINAL
 
     .cg-bundle__plus, .cg-bundle__equals{ color:#111; font-size:2rem; line-height:1; text-align:center; }
 
+    /* Rechte Spalte mit harter Sichtbarkeit des Gesamtpreises */
     .cg-bundle__aside{ display:flex; flex-direction:column; gap:10px; align-items:flex-start; }
-    .cg-bundle__total--stack{ display:flex; flex-direction:column; gap:10px; align-items:flex-start; }
+    .cg-bundle__total--stack{ display:flex; flex-direction:column; gap:8px; align-items:flex-start; }
     .cg-bundle__total-label{ font-size:.82rem; color:#6b7280; font-weight:600; }
-    .cg-bundle__total-amount{ font-size:3.1rem; font-weight:800; line-height:1; }
+    .cg-bundle__total-amount{
+      display:block !important; visibility:visible !important;
+      color:var(--text,#111) !important;
+      font-weight:800; line-height:1.1;
+      font-size: clamp(2.2rem, 2.6vw, 3.0rem) !important;
+      white-space:nowrap;
+      min-width:6ch;
+    }
 
     .cg-bundle__btn{
       align-self:flex-start; appearance:none; border:none; cursor:pointer;
@@ -156,7 +158,7 @@ CG Bundle Inline – FINAL
     <!-- Plus -->
     <div class="cg-bundle__plus" aria-hidden="true">+</div>
 
-    <!-- Cross-Sell (Bild + Titel klickbar) -->
+    <!-- Cross-Sell (klickbar) -->
     <article class="cg-bundle__card cg-bundle__card--comp" data-role="comp">
       {%- assign comp_variant = comp.selected_or_first_available_variant -%}
 
@@ -233,20 +235,33 @@ CG Bundle Inline – FINAL
   const currency = JSON.parse(root.getAttribute('data-currency') || '"EUR"');
   const log = (...a)=>{ if (DEBUG) console.log('[CG-BUNDLE]', ...a); };
 
-  /* Preise */
+  /* Preise berechnen */
   const mainPrice = parseInt(root.querySelector('[data-main-price]').getAttribute('data-main-price')||'0',10);
+  const compEl = () => root.querySelector('[data-role="comp-variant"]');
   const compPrice = () => {
-    const el = root.querySelector('[data-role="comp-variant"]');
+    const el = compEl();
     const p = el?.selectedOptions?.[0]?.dataset.price || el?.dataset?.price || '0';
     return parseInt(p,10);
   };
   const fmt = (c)=> (window.Shopify?.formatMoney)
     ? Shopify.formatMoney(c, moneyFormat)
     : new Intl.NumberFormat(undefined,{style:'currency',currency}).format(c/100);
-  const updateTotal = () => root.querySelectorAll('[data-role="bundle-total"]').forEach(n => n.textContent = fmt(mainPrice+compPrice()));
-  updateTotal();
 
-  /* Cart UI aktualisieren (Badge/Drawer/Sections) */
+  const writeTotal = (v) => {
+    root.querySelectorAll('[data-role="bundle-total"]').forEach(n => {
+      n.textContent = v;
+      n.style.display = 'block';
+      n.style.visibility = 'visible';
+    });
+  };
+
+  const updateTotal = () => writeTotal(fmt(mainPrice + compPrice()));
+  // Sofort, nach DOM-Paint und bei Auswahländerung updaten
+  updateTotal();
+  requestAnimationFrame(updateTotal);
+  setTimeout(updateTotal, 0);
+
+  /* Cart-UI aktualisieren */
   function detectCartSectionHandles(){
     const nodes = Array.from(document.querySelectorAll('[id^="shopify-section-"]'));
     const handles = nodes.map(el => el.id.replace('shopify-section-',''))
@@ -258,13 +273,9 @@ CG Bundle Inline – FINAL
       const res = await fetch('/cart.js',{credentials:'same-origin'});
       if (!res.ok) throw new Error('cart.js');
       const cart = await res.json();
+
       const cnt = document.querySelector('[data-cart-count], .cart-count-bubble .text, .site-header__cart-count');
       if (cnt){ cnt.textContent = cart.item_count; cnt.style.display = cart.item_count ? '' : 'none'; }
-      ['cart:refresh','cart:updated','ajaxProduct:added','theme:cart:change','cart:change']
-        .forEach(n => {
-          document.dispatchEvent(new CustomEvent(n,{detail:{source:'cg-bundle',cart}}));
-          window.dispatchEvent(new CustomEvent(n,{detail:{source:'cg-bundle',cart}}));
-        });
 
       const handles = detectCartSectionHandles();
       if (handles.length){
@@ -273,8 +284,8 @@ CG Bundle Inline – FINAL
         if (sec.ok){
           const htmls = await sec.json();
           Object.keys(htmls||{}).forEach(key => {
-            const target = document.getElementById(\`shopify-section-\${key}\`) ||
-                           document.querySelector(\`[data-section-id="\${key}"]\`);
+            const target = document.getElementById(`shopify-section-${key}`) ||
+                           document.querySelector(`[data-section-id="${key}"]`);
             if (target) target.innerHTML = htmls[key];
           });
         }
@@ -299,8 +310,8 @@ CG Bundle Inline – FINAL
       ? parseInt(idInput.value,10)
       : parseInt(root.querySelector('[data-main-variant-id]').getAttribute('data-main-variant-id'),10);
 
-    const compEl = root.querySelector('[data-role="comp-variant"]');
-    const compId = compEl ? parseInt(compEl.value,10) : null;
+    const compNode = compEl();
+    const compId = compNode ? parseInt(compNode.value,10) : null;
     if (!compId){ msg.textContent='Bitte Variante wählen.'; return; }
 
     btn.disabled = true; btn.classList.add('is-loading'); msg.textContent='Wird hinzugefügt …';
@@ -324,7 +335,7 @@ CG Bundle Inline – FINAL
     }
   }
 
-  const sel = root.querySelector('[data-role="comp-variant"]');
+  const sel = compEl();
   sel && sel.addEventListener('change', updateTotal);
   root.querySelectorAll('[data-role="bundle-add"]').forEach(b => b.addEventListener('click', addBoth));
 })();
