@@ -125,25 +125,39 @@ CG Bundle Inline – FINAL (sichtbarer Gesamtpreis, engeres Layout, klickbarer C
       .cg-bundle__aside{ align-items:stretch; }
       .cg-bundle__btn{ align-self:stretch; text-align:center; }
     }
-    .cg-bundle__btn{
-  /* Grundfarbe und Hoverfarbe (passt sich via CSS-Variablen ans Theme an) */
-  --btn-bg: var(--color-button, var(--color-button-background, #F19222));
-  --btn-bg-hover: var(--color-button-hover,rgb(250, 182, 109));
-
+    
+    /* Slide-Hover von links → rechts für den Bundle-Button */
+.cg-bundle__btn{
   position: relative;
+  overflow: hidden;
   border-radius: var(--buttons-radius, var(--radius-button, 10px));
+  background: var(--color-button, #F19222);
   color: var(--color-button-text, #fff);
-
-  /* Layer 1 = animierte Hover-Füllung (startet bei 0%), Layer 2 = Basisfarbe */
-  background:
-    linear-gradient(90deg, var(--btn-bg-hover) 0 0) left / 0% 100% no-repeat,
-    var(--btn-bg);
-  transition: background-size .28s ease;
+  transition: color .2s ease;
 }
 
-.cg-bundle__btn:hover{
-  /* Füllung fährt von 0% auf 100% → Slide-Effekt nach rechts */
-  background-size: 100% 100%;
+.cg-bundle__btn::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: var(--color-button-hover, #d87f1f);
+  transform: translateX(-100%);          /* startet ganz links außerhalb */
+  transition: transform .28s ease;       /* animierter Slide */
+  z-index:0;
+}
+
+.cg-bundle__btn:hover::before,
+.cg-bundle__btn:focus-visible::before{
+  transform: translateX(0);              /* fährt nach rechts ein */
+}
+
+.cg-bundle__btn > *{                     /* Text/Icon über dem Slide halten */
+  position: relative;
+  z-index: 1;
+}
+
+.cg-bundle__btn:disabled::before{ display:none; }
+
 }
   </style>
 
