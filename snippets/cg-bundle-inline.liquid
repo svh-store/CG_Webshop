@@ -1,19 +1,28 @@
 {%- comment -%}
-CG Bundle Inline – robust:
-- Metafeld: einzelnes Product-Reference (Namespace/Key konfigurierbar)
-- Kein Reload: AJAX add → Sections neu laden → Drawer öffnen
-- Inline CSS (kollisionssicher)
+CG Bundle Inline – final
+- Liest ein einzelnes Produkt aus deinem Metafeld (Namespace/Key via Parameter)
+- Kein Reload: AJAX add → Cart-Sections neu laden → Drawer öffnen
+- Aukey-Layout (Bild oben, Text unten, "+" und "=" in der Reihe)
 {%- endcomment -%}
 
 {%- assign heading = heading | default: 'Passend dazu – im Bundle' -%}
 {%- assign allow_variant_select = allow_variant_select | default: true -%}
 {%- assign open_drawer = open_drawer | default: true -%}
 {%- assign debug = debug | default: false -%}
+{%- assign auk_style = auk_style | default: true -%}
 
-{%- assign mf_ns = mf_ns | default: 'shopify--discovery' -%}
-{%- assign mf_key = mf_key | default: 'product_recommendation.complementary_products' -%}
+{%- comment -%} Metafeld (konfigurierbar; Default = deine Definition) {%- endcomment -%}
+{%- assign mf_ns = mf_ns | default: 'shopify--discovery--product_recommendation' -%}
+{%- assign mf_key = mf_key | default: 'complementary_products' -%}
 
-{%- assign mf = product.metafields[mf_ns][mf_key] -%}
+{%- assign primary_mf = product.metafields[mf_ns][mf_key] -%}
+{%- assign alt_mf1 = product.metafields['shopify--discovery']['product_recommendation.complementary_products'] -%}
+{%- assign alt_mf2 = product.metafields['shopify--discovery--product_recommendation']['complementary_products'] -%}
+{%- assign mf = nil -%}
+{%- if primary_mf and primary_mf.value %}{% assign mf = primary_mf %}
+{%- elsif alt_mf1 and alt_mf1.value %}{% assign mf = alt_mf1 %}
+{%- elsif alt_mf2 and alt_mf2.value %}{% assign mf = alt_mf2 %}{% endif %}
+
 {%- assign comp = nil -%}
 {%- if mf and mf.type == 'product_reference' and mf.value -%}
   {%- assign comp = mf.value -%}
@@ -21,7 +30,7 @@ CG Bundle Inline – robust:
   {%- assign comp = mf.value | first -%}
 {%- endif -%}
 
-<section class="cg-bundle"
+<section class="cg-bundle{% if auk_style %} cg-bundle--auk{% endif %}"
   data-cg-bundle
   data-product-id="{{ product.id }}"
   data-allow-variant="{{ allow_variant_select }}"
@@ -45,19 +54,30 @@ CG Bundle Inline – robust:
     .cg-bundle__price--compare{color:var(--muted);margin-left:6px}
     .cg-bundle__select{display:flex;gap:8px;align-items:center;margin-top:8px;font-size:.9rem;color:var(--muted)}
     .cg-bundle__select select{padding:6px 8px;border:1px solid var(--border);border-radius:8px;min-width:180px;background:#fff}
-    .cg-bundle__plus{font-weight:800;font-size:1.6rem;color:var(--muted);justify-self:center;align-self:center}
+    .cg-bundle__plus{font-weight:800;font-size:1.6rem;color:var(--muted);text-align:center}
     .cg-bundle__footer{display:flex;gap:14px;align-items:center;justify-content:flex-end;margin-top:14px}
     .cg-bundle__total{margin-right:auto;font-weight:700;color:var(--text);display:flex;gap:8px;align-items:center}
     .cg-bundle__btn{appearance:none;border:none;cursor:pointer;padding:12px 18px;background:var(--accent);color:#fff;border-radius:10px;font-weight:800}
     .cg-bundle__btn.is-loading{opacity:.7;cursor:wait}
     .cg-bundle__btn:disabled{opacity:.65;cursor:default}
     .cg-bundle__msg{font-size:.95rem;color:var(--muted)}
+
+    /* Aukey-Layout */
+    .cg-bundle--auk .cg-bundle__row{
+      grid-template-columns:minmax(260px,1fr) 56px minmax(260px,1fr) 56px 320px;
+      gap:28px;align-items:center}
+    .cg-bundle--auk .cg-bundle__card{flex-direction:column;align-items:center;text-align:center;padding:20px}
+    .cg-bundle--auk .cg-bundle__img{width:160px;height:160px}
+    .cg-bundle--auk .cg-bundle__title{margin-top:10px;font-size:.95rem;font-weight:600}
+    .cg-bundle--auk .cg-bundle__price{margin-top:6px}
+    .cg-bundle--auk .cg-bundle__equals{font-size:2rem;font-weight:800;color:var(--muted);text-align:center}
+    .cg-bundle--auk .cg-bundle__aside{display:flex;flex-direction:column;gap:14px;align-items:stretch;justify-self:stretch}
+    .cg-bundle--auk .cg-bundle__footer{display:none}
     @media (max-width:980px){
-      .cg-bundle__row{grid-template-columns:1fr;gap:16px}
-      .cg-bundle__img{width:84px;height:84px}
-      .cg-bundle__plus{display:none}
-      .cg-bundle__footer{flex-wrap:wrap}
-      .cg-bundle__total{order:-1;width:100%;justify-content:space-between}
+      .cg-bundle--auk .cg-bundle__row{grid-template-columns:1fr;gap:16px}
+      .cg-bundle--auk .cg-bundle__plus,.cg-bundle--auk .cg-bundle__equals{display:none}
+      .cg-bundle--auk .cg-bundle__img{width:128px;height:128px}
+      .cg-bundle--auk .cg-bundle__aside{order:3}
     }
   </style>
 
@@ -66,15 +86,15 @@ CG Bundle Inline – robust:
   <div class="cg-bundle__row">
     <!-- Hauptprodukt -->
     <article class="cg-bundle__card cg-bundle__card--main"
-             data-main-price="{{ product.selected_or_first_available_variant.price }}"
-             data-main-compare="{{ product.selected_or_first_available_variant.compare_at_price | default: 0 }}"
-             data-main-variant-id="{{ product.selected_or_first_available_variant.id }}">
+      data-main-price="{{ product.selected_or_first_available_variant.price }}"
+      data-main-compare="{{ product.selected_or_first_available_variant.compare_at_price | default: 0 }}"
+      data-main-variant-id="{{ product.selected_or_first_available_variant.id }}">
       <div class="cg-bundle__media">
         {%- assign main_img = product.featured_image | default: product.images.first -%}
         {%- if main_img -%}
           {{ main_img | image_url: width: 720 | image_tag:
-              alt: product.title, loading: 'lazy', class: 'cg-bundle__img',
-              sizes: '(min-width:980px) 96px, 33vw', widths: '96,144,192,288,384,576' }}
+            alt: product.title, loading: 'lazy', class: 'cg-bundle__img',
+            sizes: '(min-width:980px) 96px, 33vw', widths: '96,144,192,288,384,576' }}
         {%- endif -%}
       </div>
       <div class="cg-bundle__body">
@@ -91,6 +111,7 @@ CG Bundle Inline – robust:
       </div>
     </article>
 
+    <!-- Plus -->
     <div class="cg-bundle__plus" aria-hidden="true">+</div>
 
     <!-- Zusatzprodukt -->
@@ -101,15 +122,15 @@ CG Bundle Inline – robust:
           {%- assign comp_img = comp.featured_image | default: comp.images.first -%}
           {%- if comp_img -%}
             {{ comp_img | image_url: width: 720 | image_tag:
-                alt: comp.title, loading: 'lazy', class: 'cg-bundle__img',
-                sizes: '(min-width:980px) 96px, 33vw', widths: '96,144,192,288,384,576' }}
+              alt: comp.title, loading: 'lazy', class: 'cg-bundle__img',
+              sizes: '(min-width:980px) 96px, 33vw', widths: '96,144,192,288,384,576' }}
           {%- endif -%}
         </div>
         <div class="cg-bundle__body"
-             data-comp-product-id="{{ comp.id }}"
-             data-comp-variant-id="{{ comp_variant.id }}"
-             data-comp-price="{{ comp_variant.price }}"
-             data-comp-compare="{{ comp_variant.compare_at_price | default: 0 }}">
+          data-comp-product-id="{{ comp.id }}"
+          data-comp-variant-id="{{ comp_variant.id }}"
+          data-comp-price="{{ comp_variant.price }}"
+          data-comp-compare="{{ comp_variant.compare_at_price | default: 0 }}">
           <div class="cg-bundle__title">{{ comp.title }}</div>
 
           {%- if comp.variants.size > 1 and allow_variant_select -%}
@@ -117,11 +138,10 @@ CG Bundle Inline – robust:
               <span>Variante</span>
               <select data-role="comp-variant">
                 {%- for vv in comp.variants -%}
-                  <option value="{{ vv.id }}"
-                          data-price="{{ vv.price }}"
-                          data-compare="{{ vv.compare_at_price | default: 0 }}"
-                          {% if vv.available %}{% else %}disabled{% endif %}
-                          {% if vv.id == comp_variant.id %}selected{% endif %}>
+                  <option value="{{ vv.id }}" data-price="{{ vv.price }}"
+                    data-compare="{{ vv.compare_at_price | default: 0 }}"
+                    {% if vv.available %}{% else %}disabled{% endif %}
+                    {% if vv.id == comp_variant.id %}selected{% endif %}>
                     {{ vv.title }}{% unless vv.available %} – ausverkauft{% endunless %}
                   </option>
                 {%- endfor -%}
@@ -129,9 +149,9 @@ CG Bundle Inline – robust:
             </label>
           {%- else -%}
             <input type="hidden" data-role="comp-variant"
-                   value="{{ comp_variant.id }}"
-                   data-price="{{ comp_variant.price }}"
-                   data-compare="{{ comp_variant.compare_at_price | default: 0 }}">
+              value="{{ comp_variant.id }}"
+              data-price="{{ comp_variant.price }}"
+              data-compare="{{ comp_variant.compare_at_price | default: 0 }}">
           {%- endif -%}
 
           <div class="cg-bundle__price">
@@ -149,8 +169,21 @@ CG Bundle Inline – robust:
         </div>
       {%- endif -%}
     </article>
+
+    <!-- Gleich-Zeichen + rechte Spalte (Aukey-Layout) -->
+    <div class="cg-bundle__equals" aria-hidden="true">=</div>
+    <div class="cg-bundle__aside">
+      <div class="cg-bundle__total">
+        <span>Total price:</span> <strong data-role="bundle-total">–</strong>
+      </div>
+      <button type="button" class="cg-bundle__btn" data-role="bundle-add">
+        Beide in den Warenkorb
+      </button>
+      <div class="cg-bundle__msg" aria-live="polite"></div>
+    </div>
   </div>
 
+  <!-- Klassischer Footer (wird im Aukey-Layout ausgeblendet) -->
   <div class="cg-bundle__footer">
     <div class="cg-bundle__total">
       <span>Gesamt:</span> <strong data-role="bundle-total">–</strong>
@@ -165,12 +198,9 @@ CG Bundle Inline – robust:
   const root = document.currentScript.previousElementSibling;
   if (!root || !root.matches('.cg-bundle')) return;
 
-  const DEBUG = root.getAttribute('data-debug') === 'true';
   const OPEN_DRAWER = root.getAttribute('data-open-drawer') === 'true';
   const moneyFormat = JSON.parse(root.getAttribute('data-money-format') || '"€{{amount}}"');
   const currency = JSON.parse(root.getAttribute('data-currency') || '"EUR"');
-
-  const log = (...a) => { if (DEBUG) console.log('[CG-BUNDLE]', ...a); };
 
   const mainPrice = parseInt(root.querySelector('[data-main-price]').getAttribute('data-main-price')||'0',10);
   const compPrice = () => {
@@ -178,89 +208,24 @@ CG Bundle Inline – robust:
     const p = el?.selectedOptions?.[0]?.dataset.price || el?.dataset?.price || '0';
     return parseInt(p,10);
   };
-  const fmt = (cents) => {
-    if (window.Shopify?.formatMoney) return Shopify.formatMoney(cents, moneyFormat);
-    try { return new Intl.NumberFormat(undefined,{style:'currency',currency}).format(cents/100); }
-    catch { return (cents/100).toFixed(2)+' '+currency; }
-  };
-  const updateTotal = () => root.querySelector('[data-role="bundle-total"]').textContent = fmt(mainPrice+compPrice());
+  const fmt = (c) => (window.Shopify?.formatMoney)
+    ? Shopify.formatMoney(c, moneyFormat)
+    : (new Intl.NumberFormat(undefined,{style:'currency',currency}).format(c/100));
+  const updateTotal = () => root.querySelectorAll('[data-role="bundle-total"]').forEach(n => n.textContent=fmt(mainPrice+compPrice()));
 
-  // ---- Fallback (nur falls Metafeld leer) ----
-  async function fetchComplementary(){
-    const pid = root.getAttribute('data-product-id');
-    const res = await fetch(`/recommendations/products.json?product_id=${pid}&intent=complementary&limit=4`, {credentials:'same-origin'});
-    if (!res.ok) throw new Error('reco failed');
-    const data = await res.json();
-    return Array.isArray(data.products) ? data.products : data;
-  }
-  function renderCompFromAPI(p){
-    const card = root.querySelector('[data-role="comp"]');
-    const img = (p.featured_image && p.featured_image.url) || (p.images?.[0]?.url) || '';
-    const media = img ? `<div class="cg-bundle__media"><img src="${img}&width=384" width="96" height="96" class="cg-bundle__img" alt="${p.title}"></div>` : '';
-    const firstV = p.variants?.[0];
-    const allow = root.getAttribute('data-allow-variant') === 'true';
-
-    let variantHTML = '';
-    if (allow && p.variants && p.variants.length > 1){
-      variantHTML = `<label class="cg-bundle__select"><span>Variante</span>
-        <select data-role="comp-variant">
-          ${p.variants.map(v=>`<option value="${v.id}" data-price="${v.price}" ${v.available?'':'disabled'}>${v.title}${v.available?'':' – ausverkauft'}</option>`).join('')}
-        </select></label>`;
-    } else if (firstV){
-      variantHTML = `<input type="hidden" data-role="comp-variant" value="${firstV.id}" data-price="${firstV.price}">`;
-    }
-
-    const price = firstV ? fmt(firstV.price) : '';
-    const compare = (firstV && firstV.compare_at_price > firstV.price) ? `<s class="cg-bundle__price--compare">${fmt(firstV.compare_at_price)}</s>` : '';
-
-    card.innerHTML = `${media}
-      <div class="cg-bundle__body" data-comp-product-id="${p.id}">
-        <div class="cg-bundle__title">${p.title}</div>
-        <div class="cg-bundle__price"><span class="cg-bundle__price--sale">${price}</span>${compare}</div>
-        ${variantHTML}
-      </div>`;
-
-    const sel = root.querySelector('[data-role="comp-variant"]');
-    sel && sel.addEventListener('change', updateTotal);
-  }
-  async function ensureComp(){
-    if (!root.querySelector('[data-role="comp-empty"]')) { updateTotal(); return; }
-    try {
-      const arr = await fetchComplementary();
-      const first = Array.isArray(arr) ? arr[0] : (arr.products && arr.products[0]);
-      if (first){ renderCompFromAPI(first); updateTotal(); }
-      else {
-        root.querySelector('.cg-bundle__plus').style.display='none';
-        root.querySelector('[data-role="comp"]').style.display='none';
-        root.querySelector('[data-role="bundle-total"]').textContent = fmt(mainPrice);
-        const btn = root.querySelector('[data-role="bundle-add"]');
-        btn.disabled = true; btn.textContent = 'Kein Ergänzungsprodukt';
-      }
-    }catch(e){
-      root.querySelector('.cg-bundle__plus').style.display='none';
-      root.querySelector('[data-role="comp"]').style.display='none';
-      root.querySelector('[data-role="bundle-total"]').textContent = fmt(mainPrice);
-      const btn = root.querySelector('[data-role="bundle-add"]');
-      btn.disabled = true; btn.textContent = 'Derzeit nicht verfügbar';
-    }
-  }
-
-  // ---- Cart UI ohne Reload aktualisieren ----
   function detectCartSectionHandles(){
     const nodes = Array.from(document.querySelectorAll('[id^="shopify-section-"]'));
     const handles = nodes.map(el => el.id.replace('shopify-section-',''))
       .filter(h => /(cart|drawer|mini|icon|notification)/i.test(h));
-    // Duplikate entfernen
     return [...new Set(handles)];
   }
 
   async function refreshCartUI(){
     try{
-      // 1) cart.js → Badge/Zähler + Events
+      // Badge
       const res = await fetch('/cart.js', { credentials:'same-origin' });
-      if (!res.ok) throw new Error('cart.js failed');
+      if (!res.ok) throw new Error();
       const cart = await res.json();
-
       const cnt = document.querySelector('[data-cart-count], .cart-count-bubble .text, .site-header__cart-count');
       if (cnt){ cnt.textContent = cart.item_count; cnt.style.display = cart.item_count ? '' : 'none'; }
 
@@ -270,7 +235,7 @@ CG Bundle Inline – robust:
           window.dispatchEvent(new CustomEvent(n,{detail:{source:'cg-bundle',cart}}));
         });
 
-      // 2) Sections dynamisch ermitteln und ersetzen
+      // Sections neu laden
       const handles = detectCartSectionHandles();
       if (handles.length){
         const url = `${(window.Shopify?.routes?.root)||'/'}?sections=${handles.join(',')}`;
@@ -285,16 +250,16 @@ CG Bundle Inline – robust:
         }
       }
 
-      // 3) Drawer öffnen (Best-Effort, mehrere Varianten)
-      if (root.getAttribute('data-open-drawer')==='true'){
+      // Drawer öffnen
+      if (OPEN_DRAWER){
         const drawer = document.querySelector('cart-drawer');
         if (drawer && typeof drawer.open === 'function') drawer.open();
         const toggle = document.querySelector(
           '[data-drawer-trigger="cart"], [data-cart-toggle], [data-open-cart], button[aria-controls*="Cart"], a[href="/cart"]'
         );
-        if (toggle) { try { toggle.click(); } catch(e){} }
+        if (toggle) try{ toggle.click(); }catch(e){}
       }
-    }catch(e){ /* nicht fatal */ }
+    }catch(e){}
   }
 
   async function addBoth(){
@@ -311,7 +276,6 @@ CG Bundle Inline – robust:
     if (!compId){ msg.textContent='Bitte Variante wählen.'; return; }
 
     btn.disabled = true; btn.classList.add('is-loading'); msg.textContent='Wird hinzugefügt …';
-
     try{
       const res = await fetch('/cart/add.js',{
         method:'POST',
@@ -319,12 +283,12 @@ CG Bundle Inline – robust:
         body: JSON.stringify({ items:[ {id:mainId,quantity:1}, {id:compId,quantity:1} ] }),
         credentials:'same-origin'
       });
-      if (!res.ok) throw new Error('add failed');
+      if (!res.ok) throw new Error();
 
       btn.textContent='Im Warenkorb';
       btn.classList.remove('is-loading');
       msg.textContent='';
-      await refreshCartUI(); // ohne Seitenreload
+      await refreshCartUI();
     }catch(e){
       btn.disabled=false;
       btn.classList.remove('is-loading');
@@ -334,10 +298,8 @@ CG Bundle Inline – robust:
 
   // Init
   updateTotal();
-  if (root.querySelector('[data-role="comp-empty"]')) ensureComp();
-
   const sel = root.querySelector('[data-role="comp-variant"]');
   sel && sel.addEventListener('change', updateTotal);
-  root.querySelector('[data-role="bundle-add"]').addEventListener('click', addBoth);
+  root.querySelectorAll('[data-role="bundle-add"]').forEach(b => b.addEventListener('click', addBoth));
 })();
 </script>
