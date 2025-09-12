@@ -90,41 +90,70 @@ CG Bundle Inline – FINAL
 
     /* --- Tweaks: stärkere Zeichen, größerer Preis, grauer Bildhintergrund --- */
 
-/* Plus/Equal: schwarz & größer */
+//* ===== Overlay-Kachel hinter dem Bild (Aukey-Style) ===== */
+.cg-bundle--auk{ --tile-desktop: 220px; --tile-mobile: 160px; }
+
+/* Kachel: quadratisch, relativer Container */
+.cg-bundle--auk .cg-bundle__media{
+  position: relative !important;
+  width: var(--tile-desktop) !important;
+  aspect-ratio: 1 / 1 !important;
+  border-radius: 18px !important;
+  display: block !important;
+  overflow: hidden !important;
+}
+
+/* Grau-Hintergrund als Overlay hinter dem Bild */
+.cg-bundle--auk .cg-bundle__media::before{
+  content:"" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: #f2f4f7 !important; /* Aukey-Grau */
+  border-radius: inherit !important;
+}
+
+/* Bild absolut zentriert in der Kachel, mit Innenabstand */
+.cg-bundle--auk .cg-bundle__img{
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  max-width: 84% !important;
+  max-height: 84% !important;
+  width: auto !important;
+  height: auto !important;
+  background: transparent !important; /* Grau kommt vom ::before */
+  border-radius: 12px !important;
+  image-rendering: auto !important;
+}
+
+/* Mobile Größe */
+@media (max-width: 980px){
+  .cg-bundle--auk .cg-bundle__media{ width: var(--tile-mobile) !important; }
+}
+
+/* Plus & Gleich: schwarz und größer */
 .cg-bundle--auk .cg-bundle__plus,
 .cg-bundle--auk .cg-bundle__equals{
   color:#111 !important;
-  font-size:2.25rem !important;
+  font-size:2.4rem !important;
   line-height:1 !important;
 }
 
-/* Gesamtpreis größer */
+/* Gesamtpreis deutlicher größer */
 .cg-bundle__total-amount{
-  font-size:2.2rem !important;
+  font-size:2.4rem !important;  /* vorher 2.2 / 1.8 */
   line-height:1 !important;
   font-weight:800 !important;
 }
 
-/* Alle grauen Outlines/Boxen zuverlässig weg */
+/* Sicherheit: keine grauen Box-Ränder */
 .cg-bundle__card{
   border:0 !important;
   background:transparent !important;
   box-shadow:none !important;
 }
 
-/* Grauer Aukey-Background HINTER dem Bild (auf dem Wrapper) */
-.cg-bundle--auk .cg-bundle__media{
-  background:#f2f4f7 !important;   /* Hellgrau */
-  border-radius:16px !important;    /* weiche Ecken wie Aukey */
-  padding:14px !important;          /* Luft um das Bild */
-}
-
-/* Das Bild selbst ohne Hintergrund, damit das Grau sichtbar bleibt */
-.cg-bundle--auk .cg-bundle__img{
-  background:transparent !important;
-  border-radius:12px !important;    /* optional minimal runder Look fürs Bild */
-  display:block !important;
-}
 
 
   </style>
