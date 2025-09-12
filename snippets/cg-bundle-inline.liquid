@@ -48,7 +48,7 @@ CG Bundle Inline – FINAL (UI angepasst an Produkt: Button, Preis, Hover)
       --text: var(--color-foreground, #111);
       --muted:#666;
       --line:#e9ecef;
-      --btn-radius: var(--radius-button, var(--buttons-radius, 10px));
+      --btn-radius: var(--radius-button, var(--buttons-radius, 6px));
       --btn-font: var(--font-button-family, var(--font-body-family, inherit));
       --heading-font: var(--font-heading-family, var(--heading-font-family, inherit));
 
@@ -358,7 +358,7 @@ CG Bundle Inline – FINAL (UI angepasst an Produkt: Button, Preis, Hover)
       });
       if (!res.ok) throw new Error('add failed');
 
-      btn.textContent='Im Warenkorb';
+      btn.textContent='BUNDLE IST IM WARENKORB';
       btn.classList.remove('is-loading');
       msg.textContent='';
       await refreshCartUI();
