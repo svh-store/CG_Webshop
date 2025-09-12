@@ -1,0 +1,174 @@
+{% comment %}
+  CG – Ergänzend dazu
+  Zeigt das aktuelle Produkt + erstes Complementary-Produkt aus:
+  product.metafields["shopify--discovery"]["product_recommendation.complementary_products"]
+  und legt beide mit 1 Klick in den Warenkorb.
+{% endcomment %}
+
+{% assign comps = product.metafields["shopify--discovery"]["product_recommendation.complementary_products"].value %}
+{% if comps != blank and comps.size > 0 %}
+  {% assign comp = comps | first %}
+  {% assign comp_variant = comp.selected_or_first_available_variant %}
+
+  <section class="cg-bundle">
+    {% if section.settings.heading != blank %}
+      <h3 class="cg-bundle__heading">{{ section.settings.heading }}</h3>
+    {% endif %}
+
+    <div class="cg-bundle__wrap">
+      <!-- Hauptprodukt -->
+      <div class="cg-bundle__item cg-bundle__item--main">
+        <div class="cg-bundle__media">
+          {% assign main_img = product.featured_image | default: product.images.first %}
+          {% if main_img %}
+            {{ main_img
+              | image_url: width: 720
+              | image_tag:
+                  alt: product.title,
+                  loading: 'lazy',
+                  class: 'cg-bundle__img',
+                  sizes: '(min-width:980px) 96px, 33vw',
+                  widths: '96,144,192,288,384,576'
+            }}
+          {% endif %}
+        </div>
+        <div class="cg-bundle__info">
+          <div class="cg-bundle__title">{{ product.title }}</div>
+          {% assign v = product.selected_or_first_available_variant %}
+          <div class="cg-bundle__price">
+            {% if v.compare_at_price > v.price %}
+              <span class="cg-bundle__price--sale">{{ v.price | money }}</span>
+              <s class="cg-bundle__price--compare">{{ v.compare_at_price | money }}</s>
+            {% else %}
+              <span>{{ v.price | money }}</span>
+            {% endif %}
+          </div>
+          <label class="cg-bundle__qty">
+            <span>Menge</span>
+            <input type="number" min="1" value="1" step="1" inputmode="numeric" pattern="[0-9]*" class="cg-bundle__qty-input" data-role="qty-main">
+          </label>
+        </div>
+      </div>
+
+      <!-- Plus -->
+      <div class="cg-bundle__plus" aria-hidden="true">+</div>
+
+      <!-- Ergänzendes Produkt -->
+      <div class="cg-bundle__item cg-bundle__item--comp" data-comp-product-id="{{ comp.id }}">
+        <div class="cg-bundle__media">
+          {% assign comp_img = comp.featured_image | default: comp.images.first %}
+          {% if comp_img %}
+            {{ comp_img
+              | image_url: width: 720
+              | image_tag:
+                  alt: comp.title,
+                  loading: 'lazy',
+                  class: 'cg-bundle__img',
+                  sizes: '(min-width:980px) 96px, 33vw',
+                  widths: '96,144,192,288,384,576'
+            }}
+          {% endif %}
+        </div>
+        <div class="cg-bundle__info">
+          <div class="cg-bundle__title">{{ comp.title }}</div>
+
+          {% if comp.variants.size > 1 and section.settings.allow_variant_select %}
+            <label class="cg-bundle__select">
+              <span>Variante</span>
+              <select data-role="comp-variant">
+                {% for v in comp.variants %}
+                  <option value="{{ v.id }}" {% if v.available %}{% else %}disabled{% endif %} {% if v.id == comp_variant.id %}selected{% endif %}>
+                    {{ v.title }}{% unless v.available %} – ausverkauft{% endunless %}
+                  </option>
+                {% endfor %}
+              </select>
+            </label>
+          {% else %}
+            <input type="hidden" data-role="comp-variant" value="{{ comp_variant.id }}">
+          {% endif %}
+
+          <div class="cg-bundle__price">
+            {% if comp_variant.compare_at_price > comp_variant.price %}
+              <span class="cg-bundle__price--sale">{{ comp_variant.price | money }}</span>
+              <s class="cg-bundle__price--compare">{{ comp_variant.compare_at_price | money }}</s>
+            {% else %}
+              <span>{{ comp_variant.price | money }}</span>
+            {% endif %}
+          </div>
+
+          <label class="cg-bundle__qty">
+            <span>Menge</span>
+            <input type="number" min="1" value="1" step="1" inputmode="numeric" pattern="[0-9]*" class="cg-bundle__qty-input" data-role="qty-comp">
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="cg-bundle__cta">
+      <button type="button" class="cg-bundle__btn" data-role="bundle-add">
+        Beide in den Warenkorb
+      </button>
+      <div class="cg-bundle__msg" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <script>
+    (() => {
+      const root = document.currentScript.closest('.cg-bundle') || document.querySelector('.cg-bundle');
+      if (!root) return;
+
+      function getCurrentMainVariantId() {
+        const idInput = document.querySelector('form[action*="/cart/add"] input[name="id"]');
+        if (idInput && idInput.value) return parseInt(idInput.value, 10);
+        return {{ product.selected_or_first_available_variant.id }};
+      }
+
+      async function addBothToCart() {
+        const btn = root.querySelector('[data-role="bundle-add"]');
+        const msg = root.querySelector('.cg-bundle__msg');
+        const qtyMain = parseInt(root.querySelector('[data-role="qty-main"]').value || '1', 10);
+        const qtyComp = parseInt(root.querySelector('[data-role="qty-comp"]').value || '1', 10);
+        const compVariantEl = root.querySelector('[data-role="comp-variant"]');
+        const compVariantId = parseInt(compVariantEl.value, 10);
+        const mainVariantId = getCurrentMainVariantId();
+
+        btn.disabled = true; msg.textContent = 'Wird hinzugefügt …';
+
+        try {
+          const res = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({
+              items: [
+                { id: mainVariantId, quantity: Math.max(1, qtyMain) },
+                { id: compVariantId, quantity: Math.max(1, qtyComp) }
+              ]
+            })
+          });
+          if (!res.ok) throw new Error('Fehler beim Hinzufügen');
+          msg.textContent = 'Beide Artikel liegen im Warenkorb.';
+          btn.disabled = false;
+          document.dispatchEvent(new CustomEvent('cart:refresh'));
+        } catch (e) {
+          msg.textContent = 'Konnte nicht hinzugefügt werden. Bitte erneut versuchen.';
+          btn.disabled = false;
+        }
+      }
+
+      root.querySelector('[data-role="bundle-add"]').addEventListener('click', addBothToCart);
+    })();
+  </script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "CG Ergänzend dazu",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Überschrift", "default": "Passend dazu – im Bundle" },
+    { "type": "checkbox", "id": "allow_variant_select", "label": "Variante beim Ergänzungsprodukt wählbar", "default": true }
+  ],
+  "presets": [
+    { "name": "CG Ergänzend dazu" }
+  ]
+}
+{% endschema %}
