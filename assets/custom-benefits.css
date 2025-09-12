@@ -1,14 +1,19 @@
 /* ===== CG Benefits (scoped) ===== */
-.cg-benefits{
-  --cg-accent:#F19222;  /* Marken-Orange */
+.cg-benefits {
+  --cg-accent:#F19222;
   --cg-text:#111;
   --cg-sub:#666;
   --cg-line:#e9e9e9;
-  --cg-gap:32px;
-  display:grid; grid-template-columns:repeat(3,1fr);
-  gap:var(--cg-gap); align-items:center;
-  margin:32px 0 16px; padding:8px 0;
+  --cg-gap:64px; /* kleiner Abstand als vorher */
+  display: flex;
+  justify-content: center;     /* mittig auf der Seite */
+  gap: var(--cg-gap);
+  align-items: center;
+  margin: 32px auto 16px;
+  max-width: 1200px;            /* zentrale Begrenzung wie bei Arktis */
+  padding: 0 16px;
 }
+
 .cg-benefit{
   display:flex; align-items:center; gap:16px; position:relative;
   padding:8px 12px;
