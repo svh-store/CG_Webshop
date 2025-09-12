@@ -1,33 +1,61 @@
-/* ===== CG Benefits (scoped) ===== */
 .cg-benefits {
   --cg-accent:#F19222;
   --cg-text:#111;
   --cg-sub:#666;
   --cg-line:#e9e9e9;
-  --cg-gap:64px; /* kleiner Abstand als vorher */
+  --cg-gap:80px;                /* mehr Abstand für größere Elemente */
   display: flex;
-  justify-content: center;     /* mittig auf der Seite */
+  justify-content: center;
   gap: var(--cg-gap);
   align-items: center;
-  margin: 32px auto 16px;
-  max-width: 1200px;            /* zentrale Begrenzung wie bei Arktis */
-  padding: 0 16px;
+  margin: 40px auto 24px;
+  max-width: 1200px;
+  padding: 0 24px;
 }
 
-.cg-benefit{
-  display:flex; align-items:center; gap:16px; position:relative;
-  padding:8px 12px;
+.cg-benefit {
+  display: flex;
+  align-items: center;
+  gap: 20px;                    /* etwas mehr Abstand Icon/Text */
+  position: relative;
 }
-.cg-benefit:not(:last-child)::after{
-  content:""; position:absolute; top:10%; right:-16px; bottom:10%;
-  width:1px; background:var(--cg-line);
+
+.cg-ico {
+  display: inline-flex;
+  width: 56px;                  /* vorher 40px → größer */
+  height: 56px;
+  flex: 0 0 56px;
 }
-.cg-ico{ display:inline-flex; width:40px; height:40px; flex:0 0 40px; }
-.cg-ico svg{ width:100%; height:100%; color:var(--cg-text); transition:color .2s ease, transform .2s ease; }
-.cg-title{ font-weight:700; line-height:1.2; color:var(--cg-text); }
-.cg-sub{ font-size:.9rem; line-height:1.3; color:var(--cg-sub); margin-top:2px; }
-.cg-benefit:hover .cg-ico svg{ color:var(--cg-accent); transform:translateY(-1px); }
-@media (max-width: 980px){
-  .cg-benefits{ grid-template-columns:1fr; gap:20px; }
-  .cg-benefit:not(:last-child)::after{ display:none; }
+
+.cg-ico svg {
+  width: 100%;
+  height: 100%;
+  color: var(--cg-text);
+  transition: color .2s ease, transform .2s ease;
+}
+
+.cg-title {
+  font-size: 1.2rem;             /* Titel größer */
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--cg-text);
+}
+
+.cg-sub {
+  font-size: 1rem;               /* Subline leicht größer */
+  line-height: 1.4;
+  color: var(--cg-sub);
+  margin-top: 2px;
+}
+
+.cg-benefit:hover .cg-ico svg {
+  color: var(--cg-accent);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 980px) {
+  .cg-benefits {
+    flex-direction: column;
+    gap: 28px;
+  }
 }
