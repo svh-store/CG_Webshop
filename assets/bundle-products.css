@@ -1,0 +1,23 @@
+.bundle-products {
+  border: 1px solid #e5e5e5;
+  padding: 1rem;
+  margin-top: 2rem;
+}
+.bundle-products__items {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.bundle-products__plus {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.bundle-products__footer {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.bundle-products__total {
+  font-weight: 600;
+}
