@@ -34,7 +34,6 @@
 {%- endif -%}
 
 <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
-<script src="{{ 'pdp-sticky.js' | asset_url }}" defer="defer"></script>
 
 {%- liquid
   # constants
@@ -100,7 +99,7 @@
 {%- endif -%}
 
 <div class="container">
-  <div id="pdpPair" class="product js-product" data-section="{{ section.id }}">
+  <div class="product js-product" data-section="{{ section.id }}">
     <div id="product-media" class="product-media product-media--{{ section.settings.media_layout }}">
       <div class="product-media-card">
         {%- if product.media.size > 0 -%}
@@ -125,7 +124,14 @@
       </div>
     </div>
 
-    <div id="pdpInfo" class="product-info">
+    <div class="product-info{% if section.settings.stick_on_scroll %} product-info--sticky{% endif %}"
+         {% if section.settings.stick_on_scroll %}data-sticky-height-elems="#product-media"{% endif %}>
+      {%- if section.settings.stick_on_scroll -%}
+      <script src="{{ 'sticky-scroll-direction.js' | asset_url }}" defer="defer"></script>
+      <sticky-scroll-direction data-min-sticky-size="md">
+        <div class="product-info__sticky">
+      {%- endif -%}
+
       {%- assign has_variant_picker = false -%}
       {%- if section.settings.sticky_atc_panel -%}
         <a class="product-options--anchor" id="product-info" rel="nofollow"></a>
@@ -684,6 +690,11 @@
       {%- endfor -%}
      
       </div>
+
+      {%- if section.settings.stick_on_scroll -%}
+        </div>
+      </sticky-scroll-direction>
+      {%- endif -%}
     </div>
   </div>
 </div>

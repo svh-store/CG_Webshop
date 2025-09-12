@@ -58,15 +58,3 @@ ab hier neu
   height: 600px;
   width: 600px;
 }
-
-/* sticky pairing for product gallery and info */
-@media (min-width: 990px) {
-  #pdpPair {
-    align-items: flex-start;
-  }
-
-  #product-media,
-  #pdpInfo {
-    align-self: flex-start;
-  }
-}
