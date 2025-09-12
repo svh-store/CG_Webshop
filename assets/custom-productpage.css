@@ -58,3 +58,28 @@ ab hier neu
   height: 600px;
   width: 600px;
 }
+
+@media (min-width: 769px) {
+  .product {
+    display: grid;
+    grid-template-columns: 600px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  #product-media,
+  .product-info,
+  .product-info__sticky {
+    float: none;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    position: static;
+    top: auto;
+  }
+
+  .product .is-sticky {
+    position: sticky;
+    top: calc(var(--header-height) + 20px);
+  }
+}
