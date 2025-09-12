@@ -58,3 +58,29 @@ ab hier neu
   height: 600px;
   width: 600px;
 }
+
+/* Remove card styling from product gallery */
+.product-media-card {
+  background-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  overflow: visible;
+}
+
+/* Preserve spacing for main media and thumbnails */
+.product-media-card .pg__media,
+.product-media-card .pg__thumbs {
+  max-width: 600px;
+  margin-inline: auto;
+}
+
+.product-media-card .pg__thumbs {
+  margin-top: 12px;
+}
+
+/* Ensure gallery controls remain visible on all backgrounds */
+.product-media-card .media-ctrl__btn {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
