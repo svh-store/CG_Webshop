@@ -134,6 +134,18 @@
         "media_grouping_option": "Color,Colour,Couleur,Farbe,Apple Watch, Fitbit Modell,Armbandgröße"
       }
     },
+    "custom_liquid_RypKET": {
+      "type": "custom-liquid",
+      "custom_css": [],
+      "name": "Custom HTML/Liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"cg-benefits\">\n\n  <!-- Benefit 1 -->\n  <div class=\"cg-benefit\">\n    <span class=\"cg-ico\">\n      <!-- Paket-Icon -->\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n        <path d=\"M3 7l9 5 9-5M3 7l9-5 9 5M3 7v10l9 5 9-5V7\"/>\n      </svg>\n    </span>\n    <div>\n      <div class=\"cg-title\">Heute bestellt – bald geliebt</div>\n      <div class=\"cg-sub\">Blitzversand direkt aus Deutschland</div>\n    </div>\n  </div>\n\n  <!-- Benefit 2 -->\n  <div class=\"cg-benefit\">\n    <span class=\"cg-ico\">\n      <!-- Schild-Icon -->\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n        <path d=\"M12 3l7 3v6c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6l7-3z\"/>\n        <path d=\"M9 12l2.2 2.2L15 10\"/>\n      </svg>\n    </span>\n    <div>\n      <div class=\"cg-title\">Sorgenfrei shoppen</div>\n      <div class=\"cg-sub\">Käuferschutz & SSL-gesichert</div>\n    </div>\n  </div>\n\n  <!-- Benefit 3 -->\n  <div class=\"cg-benefit\">\n    <span class=\"cg-ico\">\n      <!-- Chat-Icon -->\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n        <path d=\"M21 11a7 7 0 0 1-7 7H8l-5 3 1.5-4.5A7 7 0 1 1 21 11z\"/>\n        <path d=\"M8.5 11h7\"/>\n        <path d=\"M8.5 14h4\"/>\n      </svg>\n    </span>\n    <div>\n      <div class=\"cg-title\">Immer für dich da</div>\n      <div class=\"cg-sub\">Persönlicher Support statt Warteschleife</div>\n    </div>\n  </div>\n\n</div>",
+        "section_height": "default",
+        "full_width": false,
+        "dividers": "none",
+        "prevent_animation": false
+      }
+    },
     "recommendations": {
       "type": "product-recommendations",
       "settings": {
@@ -165,6 +177,7 @@
   },
   "order": [
     "main",
+    "custom_liquid_RypKET",
     "recommendations",
     "1743585275ab058f49"
   ]
