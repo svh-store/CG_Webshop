@@ -79,6 +79,11 @@ CG Bundle Inline – FINAL (sichtbarer Gesamtpreis, engeres Layout, klickbarer C
       max-width:100% !important; max-height:100% !important;
       width:auto !important; height:auto !important; object-fit:contain; border-radius:8px;
     }
+ 
+    .cg-bundle__media:hover{
+      border-color: var(--btn-bg);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 18px rgba(0,0,0,.06);
 
     /* Cross-Sell anklickbar */
     .cg-bundle__link{ display:inline-flex; flex-direction:column; align-items:center; gap:8px; text-decoration:none; color:inherit; }
@@ -104,7 +109,7 @@ CG Bundle Inline – FINAL (sichtbarer Gesamtpreis, engeres Layout, klickbarer C
 
     .cg-bundle__btn{
       align-self:flex-start; appearance:none; border:none; cursor:pointer;
-      padding:12px 18px; border-radius:7px; background:var(--accent); color:#fff; font-weight:800;
+      padding:12px 18px; border-radius:6px; background:var(--accent); color:#fff; font-weight:800;
     }
     .cg-bundle__btn.is-loading{ opacity:.7; cursor:wait; }
     .cg-bundle__btn:disabled{ opacity:.6; cursor:default; }
