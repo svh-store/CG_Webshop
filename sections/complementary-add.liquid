@@ -1,0 +1,49 @@
+{% comment %}
+  Separate section to show a complementary product and allow adding both items to the cart.
+  Complementary products are sourced from the product metafield
+  discovery.product_recommendation.complementary_products.
+{% endcomment %}
+
+{% if product %}
+  {% assign recommendation_meta = product.metafields.discovery.product_recommendation %}
+  {% if recommendation_meta %}
+    {% assign recommendation_meta = recommendation_meta.value %}
+    {% if recommendation_meta.complementary_products and recommendation_meta.complementary_products.value.size > 0 %}
+      {% assign comp_product = recommendation_meta.complementary_products.value.first %}
+      <div class="bundle-products">
+        <div class="bundle-products__items">
+          <div class="bundle-products__item">
+            {% render 'product-card-mini', product: product %}
+          </div>
+          <div class="bundle-products__plus">+</div>
+          <div class="bundle-products__item">
+            {% render 'product-card-mini', product: comp_product %}
+          </div>
+        </div>
+        <div class="bundle-products__footer">
+          {% assign total_price = product.selected_or_first_available_variant.price | plus: comp_product.selected_or_first_available_variant.price %}
+          <div class="bundle-products__total">Total: {{ total_price | money_with_currency }}</div>
+          <button class="bundle-products__add btn" data-main="{{ product.selected_or_first_available_variant.id }}" data-comp="{{ comp_product.selected_or_first_available_variant.id }}">
+            Add both to cart
+          </button>
+        </div>
+      </div>
+      <script src="{{ 'bundle-products.js' | asset_url }}" defer></script>
+      {{ 'bundle-products.css' | asset_url | stylesheet_tag }}
+    {% endif %}
+  {% endif %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Complementary add to cart",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Complementary add to cart"
+    }
+  ]
+}
+{% endschema %}
