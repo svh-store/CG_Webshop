@@ -79,6 +79,14 @@
           "settings": {
             "show_variant_icon": true
           }
+        },
+        "complementary_9K8Ljc": {
+          "type": "complementary",
+          "settings": {
+            "heading": "PASSEND DAZU!",
+            "products_to_show": 4,
+            "layout": "carousel"
+          }
         }
       },
       "block_order": [
@@ -91,7 +99,8 @@
         "variant-picker",
         "buy-buttons",
         "custom_liquid_kKPgLF",
-        "product-labels"
+        "product-labels",
+        "complementary_9K8Ljc"
       ],
       "custom_css": [
         "h1 {font-weight: 700; font-size: 3.2rem; letter-spacing: -0.02em; color: #181c32; margin-top: 20px; margin-right: 40px; /* optional für Abstand nach unten */ line-height: 1.15;}"
