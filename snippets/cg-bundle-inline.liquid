@@ -87,6 +87,31 @@ CG Bundle Inline – FINAL
       .cg-bundle--auk .cg-bundle__img{width:140px;height:140px}
       .cg-bundle--auk .cg-bundle__aside{order:3}
     }
+
+    /* --- Tweaks: stärkere Zeichen, größerer Preis, grauer Bildhintergrund --- */
+
+/* Plus & Gleich: schwarz und größer */
+.cg-bundle--auk .cg-bundle__plus,
+.cg-bundle--auk .cg-bundle__equals{
+  color:#111;          /* schwarz */
+  font-size:2.25rem;   /* größer */
+  line-height:1;
+}
+
+/* Gesamtpreis: größer darstellen */
+.cg-bundle__total-amount{
+  font-size:2.2rem;    /* vorher 1.8rem */
+  line-height:1;
+  font-weight:800;
+}
+
+/* Bildkacheln: grauer Aukey-Background + stärkerer Radius */
+.cg-bundle--auk .cg-bundle__img{
+  background:#f2f4f7;  /* Aukey-ähnliches Hellgrau */
+  border-radius:16px;  /* etwas runder */
+  /* Größe bleibt aus dem Snippet (180/140 px), damit es sofort scharf lädt */
+}
+
   </style>
 
   <div class="cg-bundle__heading">{{ heading }}</div>
