@@ -173,12 +173,24 @@
       "settings": {
         "full_width": false
       }
+    },
+    "custom_liquid_UnfQQm": {
+      "type": "custom-liquid",
+      "name": "Custom HTML/Liquid",
+      "settings": {
+        "custom_liquid": "{% render 'cg-bundle-inline', heading: 'Passend dazu – im Bundle', allow_variant_select: true, open_drawer: true, debug: false %}",
+        "section_height": "default",
+        "full_width": false,
+        "dividers": "none",
+        "prevent_animation": false
+      }
     }
   },
   "order": [
     "main",
     "custom_liquid_RypKET",
     "recommendations",
-    "1743585275ab058f49"
+    "1743585275ab058f49",
+    "custom_liquid_UnfQQm"
   ]
 }
