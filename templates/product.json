@@ -79,14 +79,6 @@
           "settings": {
             "show_variant_icon": true
           }
-        },
-        "complementary_rx84bf": {
-          "type": "complementary",
-          "settings": {
-            "heading": "Passend dazu!",
-            "products_to_show": 4,
-            "layout": "list"
-          }
         }
       },
       "block_order": [
@@ -99,8 +91,7 @@
         "variant-picker",
         "buy-buttons",
         "custom_liquid_kKPgLF",
-        "product-labels",
-        "complementary_rx84bf"
+        "product-labels"
       ],
       "custom_css": [
         "h1 {font-weight: 700; font-size: 3.2rem; letter-spacing: -0.02em; color: #181c32; margin-top: 20px; margin-right: 40px; /* optional für Abstand nach unten */ line-height: 1.15;}"
@@ -182,6 +173,17 @@
       "settings": {
         "full_width": false
       }
+    },
+    "custom_liquid_3rPKVK": {
+      "type": "custom-liquid",
+      "name": "Custom HTML/Liquid",
+      "settings": {
+        "custom_liquid": "{% render 'cg-bundle-inline', heading: 'Passend dazu – im Bundle', allow_variant_select: true %}",
+        "section_height": "default",
+        "full_width": false,
+        "dividers": "none",
+        "prevent_animation": false
+      }
     }
   },
   "order": [
@@ -189,6 +191,7 @@
     "cg_complementary_bundle_yzcVbx",
     "custom_liquid_RypKET",
     "recommendations",
-    "1743585275ab058f49"
+    "1743585275ab058f49",
+    "custom_liquid_3rPKVK"
   ]
 }
