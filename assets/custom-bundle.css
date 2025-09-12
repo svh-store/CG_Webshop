@@ -1,0 +1,33 @@
+.cg-bundle{--bg:#f7f7f7;--border:#e9e9e9;--accent:#F19222;--text:#111;--muted:#666;
+  max-width:1320px;margin:24px auto;padding:20px;border:1px solid var(--border);
+  border-radius:16px;background:#fff}
+.cg-bundle__heading{font-size:1.05rem;font-weight:800;margin:0 0 12px;color:var(--text);letter-spacing:.02em}
+
+/* Layout: zwei Cards + Plus mittig */
+.cg-bundle__row{display:grid;grid-template-columns:1fr 40px 1fr;gap:24px;align-items:center}
+.cg-bundle__card{display:flex;gap:16px;align-items:center;padding:12px;border:1px solid var(--border);border-radius:12px;background:#fff}
+.cg-bundle__media{flex:0 0 auto}
+.cg-bundle__img{width:96px;height:96px;object-fit:contain;background:var(--bg);border-radius:10px}
+.cg-bundle__body{display:flex;flex-direction:column}
+.cg-bundle__title{font-weight:700;color:var(--text);margin:0 0 2px}
+.cg-bundle__price{color:var(--text)}
+.cg-bundle__price--compare{color:var(--muted);margin-left:6px}
+.cg-bundle__select{display:flex;gap:8px;align-items:center;margin-top:8px;font-size:.9rem;color:var(--muted)}
+.cg-bundle__select select{padding:6px 8px;border:1px solid var(--border);border-radius:8px;min-width:180px}
+.cg-bundle__plus{font-weight:800;font-size:1.6rem;color:var(--muted);justify-self:center;align-self:center}
+
+/* Footer: Total links, Button rechts */
+.cg-bundle__footer{display:flex;gap:14px;align-items:center;justify-content:flex-end;margin-top:14px}
+.cg-bundle__total{margin-right:auto;font-weight:700;color:var(--text);display:flex;gap:8px;align-items:center}
+.cg-bundle__btn{appearance:none;border:none;cursor:pointer;padding:12px 18px;background:var(--accent);color:#fff;border-radius:10px;font-weight:800}
+.cg-bundle__btn.is-loading{opacity:.7;cursor:wait}
+.cg-bundle__btn:disabled{opacity:.65;cursor:default}
+.cg-bundle__msg{font-size:.95rem;color:var(--muted)}
+
+@media (max-width:980px){
+  .cg-bundle__row{grid-template-columns:1fr;gap:16px}
+  .cg-bundle__img{width:84px;height:84px}
+  .cg-bundle__plus{display:none}
+  .cg-bundle__footer{flex-wrap:wrap}
+  .cg-bundle__total{order:-1;width:100%;justify-content:space-between}
+}
