@@ -112,6 +112,23 @@ CG Bundle Inline – FINAL (größere Bilder, kein Overlay, engere Abstände)
       .cg-bundle__aside{ align-items:stretch; }
       .cg-bundle__btn{ align-self:stretch; text-align:center; }
     }
+    /* Bilder (und +/=) dichter zusammen auf Desktop */
+
+    @media (min-width: 981px){
+  .cg-bundle__row{
+    /* statt 1fr: Spalten orientieren sich an der tatsächlichen Inhaltsbreite */
+    grid-template-columns: max-content 10px max-content 12px 240px; 
+    column-gap: 8px;       /* zusätzlicher Spaltenabstand noch kleiner */
+    justify-content: center; /* Block zentriert halten */
+  }
+
+  /* Verhindert, dass lange Titel die Spalte breit ziehen */
+  .cg-bundle__title{ max-width: 220px; }
+
+  /* Optional: Zeichen schmaler oder größer/kleiner setzen */
+  .cg-bundle__plus{ margin-inline: 0; }     /* kein zusätzlicher Innenabstand */
+  .cg-bundle__equals{ margin-inline: 0; }
+}
   </style>
 
   <div class="cg-bundle__heading">{{ heading }}</div>
