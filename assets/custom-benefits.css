@@ -3,35 +3,34 @@
   --cg-text:#111;
   --cg-sub:#666;
   --cg-line:#ddd;
-  --ico-size:72px;                      /* Icon-Größe */
+  --ico-size:72px;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 100px;
   max-width: 1320px;
-  margin: 4px auto;                     /* nur 4px Abstand oben/unten */
+  margin: 4px auto;
   padding: 0 32px;
+  gap: 0; /* kein Spalt, wir regeln Abstand mit Padding */
 }
 
 .cg-benefit {
   display: flex;
   align-items: center;
   gap: 24px;
+  padding: 0 60px; /* sorgt für gleichen Abstand links/rechts */
   position: relative;
-  padding: 0 32px;
 }
 
-/* Trennstriche mittig zwischen den Icons ausrichten */
-.cg-benefit:not(:last-child)::after {
+/* Striche als Pseudo-Spalten zwischen Items */
+.cg-benefit + .cg-benefit::before {
   content: "";
   position: absolute;
-  right: 0;
+  left: 0;
   top: 50%;
   transform: translateY(-50%);
-  height: var(--ico-size);               /* exakt so hoch wie die Icons */
+  height: var(--ico-size);
   width: 1px;
   background: var(--cg-line);
-  pointer-events: none;
 }
 
 .cg-ico {
@@ -72,13 +71,12 @@
 @media (max-width: 980px) {
   .cg-benefits {
     flex-direction: column;
-    gap: 32px;
     padding: 0 16px;
   }
   .cg-benefit {
     padding: 0;
   }
-  .cg-benefit:not(:last-child)::after {
+  .cg-benefit + .cg-benefit::before {
     display: none;
   }
 }
