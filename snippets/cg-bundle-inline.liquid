@@ -1,8 +1,8 @@
 {%- comment -%}
-CG Bundle Inline – self-contained
-- Liest ein einzelnes Produkt aus einem Metafeld (Product Reference)
-- Optional: mf_ns und mf_key zum Überschreiben von Namespace/Key
-- Kein Seitenreload: AJAX add + Drawer/Badge/Sections Refresh
+CG Bundle Inline – robust:
+- Metafeld: einzelnes Product-Reference (Namespace/Key konfigurierbar)
+- Kein Reload: AJAX add → Sections neu laden → Drawer öffnen
+- Inline CSS (kollisionssicher)
 {%- endcomment -%}
 
 {%- assign heading = heading | default: 'Passend dazu – im Bundle' -%}
@@ -10,17 +10,15 @@ CG Bundle Inline – self-contained
 {%- assign open_drawer = open_drawer | default: true -%}
 {%- assign debug = debug | default: false -%}
 
-{%- comment -%} Metafeld-Quelle: Standard = wie im Screenshot {%- endcomment -%}
 {%- assign mf_ns = mf_ns | default: 'shopify--discovery' -%}
 {%- assign mf_key = mf_key | default: 'product_recommendation.complementary_products' -%}
-{%- assign comp_src = product.metafields[mf_ns][mf_key].value -%}
 
-{%- comment -%} comp: einzelnes Produkt (oder falls Liste, nimm first) {%- endcomment -%}
+{%- assign mf = product.metafields[mf_ns][mf_key] -%}
 {%- assign comp = nil -%}
-{%- if comp_src and comp_src.id -%}
-  {%- assign comp = comp_src -%}
-{%- elsif comp_src != blank and comp_src.size > 0 -%}
-  {%- assign comp = comp_src | first -%}
+{%- if mf and mf.type == 'product_reference' and mf.value -%}
+  {%- assign comp = mf.value -%}
+{%- elsif mf and mf.type == 'list.product_reference' and mf.value != blank -%}
+  {%- assign comp = mf.value | first -%}
 {%- endif -%}
 
 <section class="cg-bundle"
@@ -36,7 +34,7 @@ CG Bundle Inline – self-contained
     .cg-bundle{--bg:#f7f7f7;--border:#e9e9e9;--accent:#F19222;--text:#111;--muted:#666;
       max-width:1320px;margin:24px auto;padding:20px;border:1px solid var(--border);
       border-radius:16px;background:#fff}
-    .cg-bundle__heading{font-size:1.05rem;font-weight:800;margin:0 0 12px;color:var(--text);letter-spacing:.02em}
+    .cg-bundle__heading{font-size:1.05rem;font-weight:800;margin:0 0 12px;color:var(--text)}
     .cg-bundle__row{display:grid;grid-template-columns:1fr 40px 1fr;gap:24px;align-items:center}
     .cg-bundle__card{display:flex;gap:16px;align-items:center;padding:12px;border:1px solid var(--border);border-radius:12px;background:#fff}
     .cg-bundle__media{flex:0 0 auto}
@@ -74,15 +72,9 @@ CG Bundle Inline – self-contained
       <div class="cg-bundle__media">
         {%- assign main_img = product.featured_image | default: product.images.first -%}
         {%- if main_img -%}
-          {{ main_img
-            | image_url: width: 720
-            | image_tag:
-                alt: product.title,
-                loading: 'lazy',
-                class: 'cg-bundle__img',
-                sizes: '(min-width:980px) 96px, 33vw',
-                widths: '96,144,192,288,384,576'
-          }}
+          {{ main_img | image_url: width: 720 | image_tag:
+              alt: product.title, loading: 'lazy', class: 'cg-bundle__img',
+              sizes: '(min-width:980px) 96px, 33vw', widths: '96,144,192,288,384,576' }}
         {%- endif -%}
       </div>
       <div class="cg-bundle__body">
@@ -101,22 +93,16 @@ CG Bundle Inline – self-contained
 
     <div class="cg-bundle__plus" aria-hidden="true">+</div>
 
-    <!-- Ergänzendes Produkt -->
+    <!-- Zusatzprodukt -->
     <article class="cg-bundle__card cg-bundle__card--comp" data-role="comp">
       {%- if comp -%}
         {%- assign comp_variant = comp.selected_or_first_available_variant -%}
         <div class="cg-bundle__media">
           {%- assign comp_img = comp.featured_image | default: comp.images.first -%}
           {%- if comp_img -%}
-            {{ comp_img
-              | image_url: width: 720
-              | image_tag:
-                  alt: comp.title,
-                  loading: 'lazy',
-                  class: 'cg-bundle__img',
-                  sizes: '(min-width:980px) 96px, 33vw',
-                  widths: '96,144,192,288,384,576'
-            }}
+            {{ comp_img | image_url: width: 720 | image_tag:
+                alt: comp.title, loading: 'lazy', class: 'cg-bundle__img',
+                sizes: '(min-width:980px) 96px, 33vw', widths: '96,144,192,288,384,576' }}
           {%- endif -%}
         </div>
         <div class="cg-bundle__body"
@@ -184,25 +170,22 @@ CG Bundle Inline – self-contained
   const moneyFormat = JSON.parse(root.getAttribute('data-money-format') || '"€{{amount}}"');
   const currency = JSON.parse(root.getAttribute('data-currency') || '"EUR"');
 
-  function log(...a){ if (DEBUG) console.log('[CG-BUNDLE]', ...a); }
-  function fmt(c){
-    if (window.Shopify?.formatMoney) return Shopify.formatMoney(c, moneyFormat);
-    try { return new Intl.NumberFormat(undefined,{style:'currency',currency}).format(c/100); }
-    catch { return (c/100).toFixed(2)+' '+currency; }
-  }
+  const log = (...a) => { if (DEBUG) console.log('[CG-BUNDLE]', ...a); };
 
-  // Preise/Totals
   const mainPrice = parseInt(root.querySelector('[data-main-price]').getAttribute('data-main-price')||'0',10);
-  function compPrice(){
+  const compPrice = () => {
     const el = root.querySelector('[data-role="comp-variant"]');
     const p = el?.selectedOptions?.[0]?.dataset.price || el?.dataset?.price || '0';
     return parseInt(p,10);
-  }
-  function updateTotal(){
-    root.querySelector('[data-role="bundle-total"]').textContent = fmt(mainPrice + compPrice());
-  }
+  };
+  const fmt = (cents) => {
+    if (window.Shopify?.formatMoney) return Shopify.formatMoney(cents, moneyFormat);
+    try { return new Intl.NumberFormat(undefined,{style:'currency',currency}).format(cents/100); }
+    catch { return (cents/100).toFixed(2)+' '+currency; }
+  };
+  const updateTotal = () => root.querySelector('[data-role="bundle-total"]').textContent = fmt(mainPrice+compPrice());
 
-  // Fallback: Recommendations, falls Metafeld leer
+  // ---- Fallback (nur falls Metafeld leer) ----
   async function fetchComplementary(){
     const pid = root.getAttribute('data-product-id');
     const res = await fetch(`/recommendations/products.json?product_id=${pid}&intent=complementary&limit=4`, {credentials:'same-origin'});
@@ -242,7 +225,7 @@ CG Bundle Inline – self-contained
   }
   async function ensureComp(){
     if (!root.querySelector('[data-role="comp-empty"]')) { updateTotal(); return; }
-    try{
+    try {
       const arr = await fetchComplementary();
       const first = Array.isArray(arr) ? arr[0] : (arr.products && arr.products[0]);
       if (first){ renderCompFromAPI(first); updateTotal(); }
@@ -262,27 +245,36 @@ CG Bundle Inline – self-contained
     }
   }
 
-  // Warenkorb UI sicher aktualisieren (ohne Reload)
+  // ---- Cart UI ohne Reload aktualisieren ----
+  function detectCartSectionHandles(){
+    const nodes = Array.from(document.querySelectorAll('[id^="shopify-section-"]'));
+    const handles = nodes.map(el => el.id.replace('shopify-section-',''))
+      .filter(h => /(cart|drawer|mini|icon|notification)/i.test(h));
+    // Duplikate entfernen
+    return [...new Set(handles)];
+  }
+
   async function refreshCartUI(){
     try{
-      // 1) cart.js -> Badge/Zähler
-      const res = await fetch('/cart.js', { credentials: 'same-origin' });
+      // 1) cart.js → Badge/Zähler + Events
+      const res = await fetch('/cart.js', { credentials:'same-origin' });
       if (!res.ok) throw new Error('cart.js failed');
       const cart = await res.json();
+
       const cnt = document.querySelector('[data-cart-count], .cart-count-bubble .text, .site-header__cart-count');
       if (cnt){ cnt.textContent = cart.item_count; cnt.style.display = cart.item_count ? '' : 'none'; }
 
-      // Events, die viele Themes hören
-      ['cart:refresh','cart:updated','ajaxProduct:added','theme:cart:change','cart:change'].forEach(n => {
-        document.dispatchEvent(new CustomEvent(n,{detail:{source:'cg-bundle',cart}}));
-        window.dispatchEvent(new CustomEvent(n,{detail:{source:'cg-bundle',cart}}));
-      });
+      ['cart:refresh','cart:updated','ajaxProduct:added','theme:cart:change','cart:change']
+        .forEach(n => {
+          document.dispatchEvent(new CustomEvent(n,{detail:{source:'cg-bundle',cart}}));
+          window.dispatchEvent(new CustomEvent(n,{detail:{source:'cg-bundle',cart}}));
+        });
 
-      // 2) Sections serverseitig neu laden und ersetzen
-      const handles = ['cart-drawer','cart-icon-bubble','mini-cart','header-cart','cart-notification'];
-      const url = `${(window.Shopify?.routes?.root)||'/'}?sections=${handles.join(',')}`;
-      try{
-        const sec = await fetch(url, { credentials: 'same-origin' });
+      // 2) Sections dynamisch ermitteln und ersetzen
+      const handles = detectCartSectionHandles();
+      if (handles.length){
+        const url = `${(window.Shopify?.routes?.root)||'/'}?sections=${handles.join(',')}`;
+        const sec = await fetch(url, { credentials:'same-origin' });
         if (sec.ok){
           const htmls = await sec.json();
           Object.keys(htmls||{}).forEach(key => {
@@ -291,10 +283,10 @@ CG Bundle Inline – self-contained
             if (target) target.innerHTML = htmls[key];
           });
         }
-      }catch(e){/* not fatal */ }
+      }
 
-      // 3) Drawer öffnen (Best-Effort)
-      if (OPEN_DRAWER){
+      // 3) Drawer öffnen (Best-Effort, mehrere Varianten)
+      if (root.getAttribute('data-open-drawer')==='true'){
         const drawer = document.querySelector('cart-drawer');
         if (drawer && typeof drawer.open === 'function') drawer.open();
         const toggle = document.querySelector(
@@ -302,7 +294,7 @@ CG Bundle Inline – self-contained
         );
         if (toggle) { try { toggle.click(); } catch(e){} }
       }
-    }catch(e){}
+    }catch(e){ /* nicht fatal */ }
   }
 
   async function addBoth(){
@@ -319,19 +311,20 @@ CG Bundle Inline – self-contained
     if (!compId){ msg.textContent='Bitte Variante wählen.'; return; }
 
     btn.disabled = true; btn.classList.add('is-loading'); msg.textContent='Wird hinzugefügt …';
+
     try{
       const res = await fetch('/cart/add.js',{
         method:'POST',
         headers:{'Content-Type':'application/json','Accept':'application/json'},
         body: JSON.stringify({ items:[ {id:mainId,quantity:1}, {id:compId,quantity:1} ] }),
-        credentials: 'same-origin'
+        credentials:'same-origin'
       });
       if (!res.ok) throw new Error('add failed');
 
       btn.textContent='Im Warenkorb';
       btn.classList.remove('is-loading');
       msg.textContent='';
-      await refreshCartUI(); // kein Reload
+      await refreshCartUI(); // ohne Seitenreload
     }catch(e){
       btn.disabled=false;
       btn.classList.remove('is-loading');
@@ -341,7 +334,7 @@ CG Bundle Inline – self-contained
 
   // Init
   updateTotal();
-  ensureComp();
+  if (root.querySelector('[data-role="comp-empty"]')) ensureComp();
 
   const sel = root.querySelector('[data-role="comp-variant"]');
   sel && sel.addEventListener('change', updateTotal);
