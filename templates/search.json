@@ -1,1 +1,83 @@
-{"sections":{"main":{"type":"main-search","disabled":true,"settings":{"show_search_title":false,"show_search_input":true,"heading_align":"text-center","products_per_page":16,"card_size":"medium","show_layout_toggle":true,"enable_filtering":false,"filters_open_lg":true,"stick_on_scroll":true,"show_filter_counts":true,"expand_filters":true,"max_filter_options":7,"enable_sorting":true,"sort_first":true,"show_article_featured_image":false,"show_article_tags":false,"show_article_excerpt":true,"show_article_author":false,"show_article_date":true,"show_page_date":true,"show_page_excerpt":true}},"1742463261ea4e5d1a":{"type":"apps","blocks":{"sledge_product_filter_TCrQzN":{"type":"shopify:\/\/apps\/sledge\/blocks\/product-filter\/213c3487-6448-44c0-baa7-868f58d5291d","settings":{"collection":"","max_width":1180,"custom_product_card_name":""}}},"block_order":["sledge_product_filter_TCrQzN"],"settings":{"full_width":false}}},"order":["main","1742463261ea4e5d1a"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-search",
+      "disabled": true,
+      "settings": {
+        "show_search_title": false,
+        "show_search_input": true,
+        "heading_align": "text-center",
+        "products_per_page": 16,
+        "card_size": "medium",
+        "show_layout_toggle": true,
+        "enable_filtering": false,
+        "filters_open_lg": true,
+        "stick_on_scroll": true,
+        "show_filter_counts": true,
+        "expand_filters": true,
+        "max_filter_options": 7,
+        "enable_sorting": true,
+        "sort_first": true,
+        "show_article_featured_image": false,
+        "show_article_tags": false,
+        "show_article_excerpt": true,
+        "show_article_author": false,
+        "show_article_date": true,
+        "show_page_date": true,
+        "show_page_excerpt": true
+      }
+    },
+    "custom_slideshow_CgYwqE": {
+      "type": "custom-slideshow",
+      "name": "Custom Navigation Panel",
+      "settings": {
+        "quick_nav_menu": "modellauswahl",
+        "quick_nav_title": "MODELLAUSWAHL.",
+        "quick_nav_image_ratio": "1",
+        "quick_nav_image_fit": "contain",
+        "quick_nav_use_product_image": false,
+        "quick_nav_color_scheme": "none",
+        "quick_nav_show_price": false,
+        "menu_1_text": "1. Hersteller auswählen",
+        "menu_1_display": "small_text",
+        "menu_2_text": "2. Serie auswählen",
+        "menu_2_display": "small_text",
+        "menu_3_text": "3. Modell auswählen",
+        "menu_3_display": "small_text"
+      }
+    },
+    "1742463261ea4e5d1a": {
+      "type": "apps",
+      "blocks": {
+        "sledge_product_filter_TCrQzN": {
+          "type": "shopify://apps/sledge/blocks/product-filter/213c3487-6448-44c0-baa7-868f58d5291d",
+          "settings": {
+            "collection": "",
+            "max_width": 1180,
+            "custom_product_card_name": ""
+          }
+        }
+      },
+      "block_order": [
+        "sledge_product_filter_TCrQzN"
+      ],
+      "settings": {
+        "full_width": false
+      }
+    }
+  },
+  "order": [
+    "main",
+    "custom_slideshow_CgYwqE",
+    "1742463261ea4e5d1a"
+  ]
+}
