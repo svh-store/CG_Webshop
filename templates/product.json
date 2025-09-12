@@ -134,6 +134,15 @@
         "media_grouping_option": "Color,Colour,Couleur,Farbe,Apple Watch, Fitbit Modell,Armbandgröße"
       }
     },
+    "cg_complementary_bundle_yzcVbx": {
+      "type": "cg-complementary-bundle",
+      "custom_css": [],
+      "name": "CG Ergänzend dazu",
+      "settings": {
+        "heading": "Passend dazu – im Bundle",
+        "allow_variant_select": true
+      }
+    },
     "custom_liquid_RypKET": {
       "type": "custom-liquid",
       "custom_css": [],
@@ -177,6 +186,7 @@
   },
   "order": [
     "main",
+    "cg_complementary_bundle_yzcVbx",
     "custom_liquid_RypKET",
     "recommendations",
     "1743585275ab058f49"
