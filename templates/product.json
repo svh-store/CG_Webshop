@@ -178,7 +178,7 @@
       "type": "custom-liquid",
       "name": "Custom HTML/Liquid",
       "settings": {
-        "custom_liquid": "{% render 'cg-bundle-inline', heading: 'Passend dazu – im Bundle', allow_variant_select: true, open_drawer: true, debug: false %}",
+        "custom_liquid": "{% render 'cg-bundle-inline',\n   heading: 'Passend dazu – im Bundle',\n   allow_variant_select: true,\n   open_drawer: true,\n   debug: false,\n   mf_ns: 'shopify--discovery',\n   mf_key: 'product_recommendation.complementary_products'\n%}",
         "section_height": "default",
         "full_width": false,
         "dividers": "none",
