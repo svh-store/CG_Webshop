@@ -1,5 +1,5 @@
 {%- comment -%}
-CG Bundle Inline – FINAL (kleinere Bilder)
+CG Bundle Inline – FINAL (größere Bilder, kein Overlay, engere Abstände)
 {%- endcomment -%}
 
 {%- assign heading = heading | default: 'PASSEND DAZU – IM BUNDLE' -%}
@@ -36,90 +36,81 @@ CG Bundle Inline – FINAL (kleinere Bilder)
   data-currency='{{ shop.currency | json }}'>
 
   <style>
-    /* Basis / Theme-Variablen */
     .cg-bundle{
-      --bg:#f7f7f7; --line:#e9ecef; --accent:#F19222; --text:#111; --muted:#666;
-      /* >>> Bildkachel-Größen <<< */
-      --tile-desktop: 140px;  /* Desktop-Kachelbreite */
-      --tile-mobile: 110px;   /* Mobile-Kachelbreite */
+      --line:#e9ecef; --accent:#F19222; --text:#111; --muted:#666;
+      /* Bildkacheln */
+      --tile-desktop: 180px;
+      --tile-mobile: 140px;
 
-      max-width:1320px; margin:28px auto; padding:28px 20px;
-      background:transparent; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+      max-width:1320px; margin:26px auto; padding:24px 16px;
+      border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+      background:transparent;
     }
+
+    /* Überschrift an Produkttitel angelehnt */
     .cg-bundle__heading{
-      text-transform: uppercase;
-      font-weight: 900;
-      letter-spacing: .06em;
-      font-family:
-        var(--font-heading-family,
-        var(--heading-font-family,
-        var(--sledge-font-heading,
-        inherit)));
+      text-transform:uppercase; font-weight:900; letter-spacing:.06em;
+      font-family: var(--font-heading-family, var(--heading-font-family, inherit));
       font-style: var(--font-heading-style, normal);
-      font-size: var(--font-size-heading-1,
-                  var(--size-heading-1,
-                  clamp(2.0rem, 2.0vw, 2.6rem)));
-      color: var(--color-foreground, var(--text, #111));
-      text-align: center;
-      margin: 0 0 22px;
+      font-size: clamp(2.0rem, 2.0vw, 2.6rem);
+      color: var(--color-foreground, var(--text,#111));
+      text-align:center; margin:0 0 18px;
     }
 
-    .cg-bundle__row{display:grid;grid-template-columns:1fr 40px 1fr;gap:24px;align-items:center}
-    .cg-bundle__card{display:flex;gap:16px;align-items:center;padding:0;border:0;background:transparent;box-shadow:none}
-    .cg-bundle__body{display:flex;flex-direction:column}
-    .cg-bundle__title{font-weight:700;color:var(--text);margin:10px 0 4px;font-size:.95rem;line-height:1.25;text-align:center}
-    .cg-bundle__price{color:var(--text);font-size:.9rem;text-align:center}
+    /* Layout enger wie beim Vorbild */
+    .cg-bundle__row{
+      display:grid;
+      grid-template-columns:minmax(220px,1fr) 26px minmax(220px,1fr) 20px 260px;
+      gap:18px; align-items:center;
+    }
+    .cg-bundle__card{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;background:transparent;border:0;box-shadow:none}
+
+    /* KEIN Overlay: neutrale Kachel, Bild zentriert */
+    .cg-bundle__media{
+      width:var(--tile-desktop); aspect-ratio:1/1; border-radius:14px;
+      display:flex; align-items:center; justify-content:center;
+      background:transparent;
+    }
+    .cg-bundle__media::before{ content:none !important; } /* Overlay sicher aus */
+    .cg-bundle__img{
+      max-width:100% !important; max-height:100% !important; height:auto !important; width:auto !important;
+      object-fit:contain; border-radius:10px;
+    }
+
+    .cg-bundle__title{font-weight:700;color:var(--text);font-size:.95rem;line-height:1.25;margin-top:2px}
+    .cg-bundle__price{color:var(--text);font-size:.9rem}
     .cg-bundle__price--compare{color:var(--muted);margin-left:6px}
-    .cg-bundle__select{display:flex;gap:8px;align-items:center;margin-top:8px;font-size:.9rem;color:var(--muted);justify-content:center}
-    .cg-bundle__select select{padding:6px 8px;border:1px solid #e5e7eb;border-radius:8px;min-width:180px;background:#fff}
 
-    /* Aukey-Layout */
-    .cg-bundle--auk .cg-bundle__row{
-      grid-template-columns:minmax(220px,1fr) 40px minmax(220px,1fr) 40px 320px;
-      gap:28px; align-items:center;
+    /* Plus/Equals etwas größer & schwarz */
+    .cg-bundle__plus, .cg-bundle__equals{ color:#111; font-size:2rem; line-height:1; text-align:center; }
+
+    /* Rechte Spalte – kompakter Stack (Preis + Button) */
+    .cg-bundle__aside{ display:flex; flex-direction:column; gap:10px; align-items:flex-start; }
+    .cg-bundle__total--stack{ display:flex; flex-direction:column; gap:4px; align-items:flex-start; }
+    .cg-bundle__total-label{ font-size:.82rem; color:#6b7280; font-weight:600; }
+    .cg-bundle__total-amount{ font-size:2.1rem; font-weight:800; line-height:1; }
+
+    .cg-bundle__btn{
+      align-self:flex-start;
+      appearance:none; border:none; cursor:pointer;
+      padding:12px 18px; border-radius:10px;
+      background:var(--accent); color:#fff; font-weight:800;
     }
-    .cg-bundle--auk .cg-bundle__card{flex-direction:column;align-items:center;text-align:center}
+    .cg-bundle__btn.is-loading{ opacity:.7; cursor:wait; }
+    .cg-bundle__btn:disabled{ opacity:.6; cursor:default; }
 
-    /* Bild-Kachel als Overlay (grau hinter dem Bild) */
-    .cg-bundle--auk .cg-bundle__media{
-      position:relative !important; width:var(--tile-desktop) !important;
-      aspect-ratio:1/1 !important; border-radius:16px !important; overflow:hidden !important;
-    }
-    .cg-bundle--auk .cg-bundle__media::before{
-      content:"" !important; position:absolute !important; inset:0 !important;
-      background:#f2f4f7 !important; border-radius:inherit !important;
-    }
-    .cg-bundle--auk .cg-bundle__img{
-      position:absolute !important; top:50% !important; left:50% !important;
-      transform:translate(-50%,-50%) !important;
-      max-width:84% !important; max-height:84% !important;
-      width:auto !important; height:auto !important;
-      background:transparent !important; border-radius:12px !important; image-rendering:auto !important;
-    }
+    .cg-bundle__msg{font-size:.9rem;color:var(--muted)}
 
-    /* Plus & Gleich: schwarz und größer */
-    .cg-bundle--auk .cg-bundle__plus,
-    .cg-bundle--auk .cg-bundle__equals{ color:#111 !important; font-size:2.1rem !important; line-height:1 !important; }
+    /* Footer (fallback), im Aukey-Layout nicht nötig */
+    .cg-bundle__footer{ display:none; }
 
-    /* Rechte Spalte */
-    .cg-bundle--auk .cg-bundle__equals{text-align:center}
-    .cg-bundle--auk .cg-bundle__aside{display:flex;flex-direction:column;gap:16px;align-items:stretch;justify-self:stretch}
-
-    /* Gesamtpreis: Label klein, Preis groß */
-    .cg-bundle__total--stack{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
-    .cg-bundle__total-label{font-size:.82rem;color:#6b7280;font-weight:600;letter-spacing:.01em}
-    .cg-bundle__total-amount{font-size:2.2rem;line-height:1;font-weight:800}
-
-    /* Fallback-Footer (im Aukey-Layout nicht nötig) */
-    .cg-bundle--auk .cg-bundle__footer{display:none}
-
-    /* Responsive */
     @media (max-width:980px){
-      .cg-bundle{ padding:22px 16px; }
-      .cg-bundle__heading{ font-size: clamp(1.6rem, 2.8vw, 2.2rem); }
-      .cg-bundle--auk .cg-bundle__row{grid-template-columns:1fr;gap:16px}
-      .cg-bundle--auk .cg-bundle__plus,.cg-bundle--auk .cg-bundle__equals{display:none}
-      .cg-bundle--auk .cg-bundle__media{ width:var(--tile-mobile) !important; }
+      .cg-bundle{ padding:20px 12px; }
+      .cg-bundle__row{ grid-template-columns:1fr; gap:14px; }
+      .cg-bundle__plus, .cg-bundle__equals{ display:none; }
+      .cg-bundle__media{ width:var(--tile-mobile); }
+      .cg-bundle__aside{ align-items:stretch; }
+      .cg-bundle__btn{ align-self:stretch; text-align:center; }
     }
   </style>
 
@@ -141,21 +132,19 @@ CG Bundle Inline – FINAL (kleinere Bilder)
                 loading: 'lazy',
                 decoding: 'async',
                 class: 'cg-bundle__img',
-                sizes: '(min-width:980px) 160px, 130px',
-                widths: '110, 140, 220, 280' }}
+                sizes: '(min-width:980px) 180px, 140px',
+                widths: '140, 180, 280, 360' }}
         {%- endif -%}
       </div>
-      <div class="cg-bundle__body">
-        <div class="cg-bundle__title">{{ product.title }}</div>
-        {%- assign v = product.selected_or_first_available_variant -%}
-        <div class="cg-bundle__price">
-          {%- if v.compare_at_price > v.price -%}
-            <span class="cg-bundle__price--sale">{{ v.price | money }}</span>
-            <s class="cg-bundle__price--compare">{{ v.compare_at_price | money }}</s>
-          {%- else -%}
-            <span>{{ v.price | money }}</span>
-          {%- endif -%}
-        </div>
+      <div class="cg-bundle__title">{{ product.title }}</div>
+      {%- assign v = product.selected_or_first_available_variant -%}
+      <div class="cg-bundle__price">
+        {%- if v.compare_at_price > v.price -%}
+          <span class="cg-bundle__price--sale">{{ v.price | money }}</span>
+          <s class="cg-bundle__price--compare">{{ v.compare_at_price | money }}</s>
+        {%- else -%}
+          <span>{{ v.price | money }}</span>
+        {%- endif -%}
       </div>
     </article>
 
@@ -176,51 +165,43 @@ CG Bundle Inline – FINAL (kleinere Bilder)
                   loading: 'lazy',
                   decoding: 'async',
                   class: 'cg-bundle__img',
-                  sizes: '(min-width:980px) 140px, 110px',
-                  widths: '110, 140, 220, 280' }}
+                  sizes: '(min-width:980px) 180px, 140px',
+                  widths: '140, 180, 280, 360' }}
           {%- endif -%}
         </div>
-        <div class="cg-bundle__body"
-          data-comp-product-id="{{ comp.id }}"
-          data-comp-variant-id="{{ comp_variant.id }}"
-          data-comp-price="{{ comp_variant.price }}"
-          data-comp-compare="{{ comp_variant.compare_at_price | default: 0 }}">
-          <div class="cg-bundle__title">{{ comp.title }}</div>
+        <div class="cg-bundle__title">{{ comp.title }}</div>
 
-          {%- if comp.variants.size > 1 and allow_variant_select -%}
-            <label class="cg-bundle__select">
-              <span>Variante</span>
-              <select data-role="comp-variant">
-                {%- for vv in comp.variants -%}
-                  <option value="{{ vv.id }}" data-price="{{ vv.price }}"
-                    data-compare="{{ vv.compare_at_price | default: 0 }}"
-                    {% if vv.available %}{% else %}disabled{% endif %}
-                    {% if vv.id == comp_variant.id %}selected{% endif %}>
-                    {{ vv.title }}{% unless vv.available %} – ausverkauft{% endunless %}
-                  </option>
-                {%- endfor -%}
-              </select>
-            </label>
+        {%- if comp.variants.size > 1 and allow_variant_select -%}
+          <label class="cg-bundle__select">
+            <span>Variante</span>
+            <select data-role="comp-variant">
+              {%- for vv in comp.variants -%}
+                <option value="{{ vv.id }}" data-price="{{ vv.price }}"
+                  data-compare="{{ vv.compare_at_price | default: 0 }}"
+                  {% if vv.available %}{% else %}disabled{% endif %}
+                  {% if vv.id == comp_variant.id %}selected{% endif %}>
+                  {{ vv.title }}{% unless vv.available %} – ausverkauft{% endunless %}
+                </option>
+              {%- endfor -%}
+            </select>
+          </label>
+        {%- else -%}
+          <input type="hidden" data-role="comp-variant"
+            value="{{ comp_variant.id }}"
+            data-price="{{ comp_variant.price }}"
+            data-compare="{{ comp_variant.compare_at_price | default: 0 }}">
+        {%- endif -%}
+
+        <div class="cg-bundle__price">
+          {%- if comp_variant.compare_at_price > comp_variant.price -%}
+            <span class="cg-bundle__price--sale">{{ comp_variant.price | money }}</span>
+            <s class="cg-bundle__price--compare">{{ comp_variant.compare_at_price | money }}</s>
           {%- else -%}
-            <input type="hidden" data-role="comp-variant"
-              value="{{ comp_variant.id }}"
-              data-price="{{ comp_variant.price }}"
-              data-compare="{{ comp_variant.compare_at_price | default: 0 }}">
+            <span>{{ comp_variant.price | money }}</span>
           {%- endif -%}
-
-          <div class="cg-bundle__price">
-            {%- if comp_variant.compare_at_price > comp_variant.price -%}
-              <span class="cg-bundle__price--sale">{{ comp_variant.price | money }}</span>
-              <s class="cg-bundle__price--compare">{{ comp_variant.compare_at_price | money }}</s>
-            {%- else -%}
-              <span>{{ comp_variant.price | money }}</span>
-            {%- endif -%}
-          </div>
         </div>
       {%- else -%}
-        <div class="cg-bundle__body" data-role="comp-empty">
-          <div class="cg-bundle__title">Kein Ergänzungsprodukt gefunden.</div>
-        </div>
+        <div class="cg-bundle__title">Kein Ergänzungsprodukt gefunden.</div>
       {%- endif -%}
     </article>
 
@@ -231,20 +212,9 @@ CG Bundle Inline – FINAL (kleinere Bilder)
         <div class="cg-bundle__total-label">Gesamtpreis</div>
         <div class="cg-bundle__total-amount" data-role="bundle-total">–</div>
       </div>
-      <button type="button" class="cg-bundle__btn" data-role="bundle-add">
-        Beide in den Warenkorb
-      </button>
+      <button type="button" class="cg-bundle__btn" data-role="bundle-add">Beide in den Warenkorb</button>
       <div class="cg-bundle__msg" aria-live="polite"></div>
     </div>
-  </div>
-
-  <!-- Fallback-Footer (im Aukey-Layout ausgeblendet) -->
-  <div class="cg-bundle__footer">
-    <div class="cg-bundle__total">
-      <span>Gesamt:</span> <strong data-role="bundle-total">–</strong>
-    </div>
-    <button type="button" class="cg-bundle__btn" data-role="bundle-add">Beide in den Warenkorb</button>
-    <div class="cg-bundle__msg" aria-live="polite"></div>
   </div>
 </section>
 
@@ -272,7 +242,7 @@ CG Bundle Inline – FINAL (kleinere Bilder)
   const updateTotal = () => root.querySelectorAll('[data-role="bundle-total"]').forEach(n => n.textContent = fmt(mainPrice+compPrice()));
   updateTotal();
 
-  /* Cart UI aktualisieren */
+  /* Cart-UI auffrischen */
   function detectCartSectionHandles(){
     const nodes = Array.from(document.querySelectorAll('[id^="shopify-section-"]'));
     const handles = nodes.map(el => el.id.replace('shopify-section-',''))
@@ -281,7 +251,6 @@ CG Bundle Inline – FINAL (kleinere Bilder)
   }
   async function refreshCartUI(){
     try{
-      // Badge & Events
       const res = await fetch('/cart.js',{credentials:'same-origin'});
       if (!res.ok) throw new Error('cart.js');
       const cart = await res.json();
@@ -293,7 +262,6 @@ CG Bundle Inline – FINAL (kleinere Bilder)
           window.dispatchEvent(new CustomEvent(n,{detail:{source:'cg-bundle',cart}}));
         });
 
-      // Sections nachladen
       const handles = detectCartSectionHandles();
       if (handles.length){
         const url = `${(window.Shopify?.routes?.root)||'/'}?sections=${handles.join(',')}`;
@@ -307,20 +275,15 @@ CG Bundle Inline – FINAL (kleinere Bilder)
           });
         }
       }
-
-      // Drawer öffnen
       if (OPEN_DRAWER){
         const drawer = document.querySelector('cart-drawer');
         if (drawer && typeof drawer.open === 'function') drawer.open();
-        const toggle = document.querySelector(
-          '[data-drawer-trigger="cart"], [data-cart-toggle], [data-open-cart], button[aria-controls*="Cart"], a[href="/cart"]'
-        );
+        const toggle = document.querySelector('[data-drawer-trigger="cart"], [data-cart-toggle], [data-open-cart], button[aria-controls*="Cart"], a[href="/cart"]');
         if (toggle) { try{ toggle.click(); }catch(e){} }
       }
     }catch(e){ log('refreshCartUI error', e); }
   }
 
-  /* Add beide */
   async function addBoth(){
     const btn = root.querySelector('[data-role="bundle-add"]');
     const msg = root.querySelector('.cg-bundle__msg');
@@ -351,11 +314,10 @@ CG Bundle Inline – FINAL (kleinere Bilder)
     }catch(e){
       btn.disabled=false; btn.classList.remove('is-loading');
       msg.textContent='Konnte nicht hinzugefügt werden. Bitte erneut versuchen.';
-      log('addBoth error', e);
+      if (DEBUG) console.error(e);
     }
   }
 
-  /* Events */
   const sel = root.querySelector('[data-role="comp-variant"]');
   sel && sel.addEventListener('change', updateTotal);
   root.querySelectorAll('[data-role="bundle-add"]').forEach(b => b.addEventListener('click', addBoth));
