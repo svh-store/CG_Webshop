@@ -139,8 +139,8 @@
       "settings": {
         "custom_liquid": "{% render 'cg-bundle-inline',\n   heading: 'Passend dazu – im Bundle',\n   allow_variant_select: true,\n   open_drawer: true,\n   mf_ns: 'shopify--discovery--product_recommendation',\n   mf_key: 'complementary_products',\n   auk_style: true\n%}",
         "section_height": "small",
-        "full_width": true,
-        "dividers": "border-top",
+        "full_width": false,
+        "dividers": "none",
         "prevent_animation": true
       }
     },
