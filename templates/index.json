@@ -66,7 +66,7 @@
     "custom_slideshow_xDi3aR": {
       "type": "custom-slideshow",
       "custom_css": [
-        ".quick-nav {margin-top: 72px; margin: calc(var(--section-gap) * var(--fluid-1-5)) auto;}"
+        ".quick-nav {margin: calc(var(--section-gap) * var(--fluid-1-5)) auto;}"
       ],
       "name": "Custom Navigation Panel",
       "settings": {
