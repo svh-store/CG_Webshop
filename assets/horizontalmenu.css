@@ -109,7 +109,7 @@
     min-width:0;
     white-space:normal;
     justify-content:center;
-    text-align:center !important; /* überschreibt .text-start etc. */
+    text-align:left !important; /* überschreibt .text-start etc. */
     margin-right:0; /* Desktop-Gap ignorieren */
   }
 }
