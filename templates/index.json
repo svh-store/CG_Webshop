@@ -44,7 +44,7 @@
         "button_bRbdzz"
       ],
       "custom_css": [
-        ".bg-video-section {margin-left: clamp(20px, 5vw, 64px); margin-right: clamp(20px, 5vw, 64px); border-radius: 4px;}"
+        ".bg-video-section {margin-left: clamp(20px, 5vw, 64px); margin-right: clamp(20px, 5vw, 64px); border-radius: 4px; margin-top: calc(var(--section-gap) * var(--fluid-1-5)) auto;}"
       ],
       "name": "Background video",
       "settings": {
