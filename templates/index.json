@@ -31,6 +31,7 @@
         },
         "button_bRbdzz": {
           "type": "button",
+          "disabled": true,
           "settings": {
             "button_label": "Jetzt zugreifen!",
             "button_link": "shopify://collections/zoya-tpu",
