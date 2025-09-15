@@ -134,7 +134,7 @@
 .cc-custom-navigation-panel .quick-nav__heading,
 .cc-custom-navigation-panel h2.quick-nav__heading{
   height: var(--quick-nav-height);
-  display:flex; align-items:center;
+  display:flex; align-items:left;
   line-height:1; margin:0;
   transform: translateY(var(--align-nudge));
 }
