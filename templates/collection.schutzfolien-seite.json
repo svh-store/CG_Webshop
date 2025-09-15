@@ -60,6 +60,7 @@
         },
         "logo_BR7ceV": {
           "type": "logo",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/TabletschutzfolieIcon.png",
             "url": "shopify://collections/tablet-schutzfolie-101",
