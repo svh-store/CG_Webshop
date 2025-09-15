@@ -1,1 +1,263 @@
-{"type":"header","name":"Header Group","sections":{"announcement":{"type":"announcement","blocks":{"announcement_BkxWJb":{"type":"announcement","settings":{"text":"<p>⭐️⭐️⭐️⭐️⭐️ Über 3,5 Millionen zufriedene Kunden<\/p>"}},"announcement_rPhafd":{"type":"announcement","disabled":true,"settings":{"text":"<p>Sei anderen einen Schritt voraus – entdecke neue Hüllen, Kabel & Must-Haves vor allen anderen<\/p>"}},"announcement_jQipVN":{"type":"announcement","settings":{"text":"<p>🧠💡No-brainer: Melde dich in unserem Newsletter an<\/p>"}}},"block_order":["announcement_BkxWJb","announcement_rPhafd","announcement_jQipVN"],"custom_css":["{font-size: 12px !important;}"],"name":"Slider - Pre Header","settings":{"link1":"","link1_label":"","link2":"","link2_label":"","enable_country_selector":false,"enable_language_selector":false,"bg_color":"#f19222","text_color":"#ffffff","text_type_scale":"medium","read_time":6}},"header":{"type":"header","blocks":{"sidebar_ckg3zE":{"type":"sidebar","settings":{"title":"Smartphone Zubehör","collection_images":"none","collection_use_product_image":false,"collection_circle_image":false,"show_underline":false,"show_collection_images":true,"sidebar_link_use_product_image":false,"show_product_images":false,"aspect_ratio":"1","badge1_color":"#007e12","badge1_link":"","badge1_text":"","badge2_color":"#000000","badge2_link":"","badge2_text":"","badge3_color":"#000000","badge3_link":"","badge3_text":""}},"sidebar_CiDr8w":{"type":"sidebar","settings":{"title":"Tablet Zubehör","collection_images":"none","collection_use_product_image":false,"collection_circle_image":false,"show_underline":false,"show_collection_images":true,"sidebar_link_use_product_image":false,"show_product_images":true,"aspect_ratio":"1","badge1_color":"#007e12","badge1_link":"","badge1_text":"","badge2_color":"#000000","badge2_link":"","badge2_text":"","badge3_color":"#000000","badge3_link":"","badge3_text":""}},"sidebar_U6ThgU":{"type":"sidebar","settings":{"title":"Smartwatch Zubehör","collection_images":"none","collection_use_product_image":false,"collection_circle_image":false,"show_underline":false,"show_collection_images":true,"sidebar_link_use_product_image":false,"show_product_images":true,"aspect_ratio":"1","badge1_color":"#007e12","badge1_link":"","badge1_text":"","badge2_color":"#e222f1","badge2_link":"","badge2_text":"","badge3_color":"#000000","badge3_link":"","badge3_text":"Unsere Empfehlung!"}},"sidebar_HdRBAX":{"type":"sidebar","settings":{"title":"Smartwatch Zubehör","collection_images":"none","collection_use_product_image":false,"collection_circle_image":false,"show_underline":true,"show_collection_images":true,"sidebar_link_use_product_image":false,"show_product_images":true,"aspect_ratio":"1","badge1_color":"#000000","badge1_link":"","badge1_text":"","badge2_color":"#000000","badge2_link":"","badge2_text":"","badge3_color":"#000000","badge3_link":"","badge3_text":""}},"columns_kkhxK7":{"type":"columns","settings":{"title":"Elektronik & Zubehör","collection_images":"standard","collection_use_product_image":false,"collection_circle_image":false,"show_underline":true,"promo_position":"right","promo_min_height":200,"promo_text_color":"#ffffff","promo_tint_color":"#000000","promo_tint_opacity":20,"promo1_content":"","promo1_link_url":"","promo1_text_size":16,"promo1_text_width":100,"promo1_text_alignment":"justify-center items-center text-center","promo2_content":"","promo2_link_url":"","promo2_text_size":16,"promo2_text_width":100,"promo2_text_alignment":"justify-center items-center text-center","promo3_content":"","promo3_link_url":"","promo3_text_size":16,"promo3_text_width":100,"promo3_text_alignment":"justify-center items-center text-center","badge1_color":"#f19222","badge1_link":"","badge1_text":"","badge2_color":"#000000","badge2_link":"","badge2_text":"","badge3_color":"#000000","badge3_link":"","badge3_text":""}}},"block_order":["sidebar_ckg3zE","sidebar_CiDr8w","sidebar_U6ThgU","sidebar_HdRBAX","columns_kkhxK7"],"custom_css":[".media {background-color: #ffffff !important;}"],"settings":{"enable_sticky":true,"mobile_menu_position":"burger-left","logo_text":"Coolgadget - Dein Spezialist für Handy- und Tabletzubehör","logo_type_scale":"2","logo":"{{ shop.brand.logo }}","logo_width":150,"logo_h1":true,"logo_center":false,"enable_search":true,"minimise_search_mobile":false,"minimise_search_desktop":true,"menu":"main-menu","menu_center":true,"repeat_links":true,"menu_featured_link":"Sale","quicklinks_menu":"","cta_show":false,"cta_icon":"eye","cta_label":"04461 967910","cta_link":"","cta_border_color":"#000000","cta_bg_color":"#000000","cta_text_color":"#ffffff","bg_color":"#ffffff","text_color":"#2a2b2a","accent_color":"#f19222"}},"175618485850053571":{"type":"apps","blocks":{"sledge_wishlist_badge_7LC6BD":{"type":"shopify:\/\/apps\/sledge\/blocks\/wishlist-badge\/213c3487-6448-44c0-baa7-868f58d5291d","settings":{"icon_color":"","url_wishlist_widget":"shopify:\/\/pages\/wishlist","use_wishlist_flyout":false,"target_selector":"#cart-icon","target_position":"beforebegin","wrapper_class":"header__icon text-current","custom_product_card_name":"","preload_element":""}}},"block_order":["sledge_wishlist_badge_7LC6BD"],"settings":{"full_width":false}}},"order":["announcement","header","175618485850053571"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "Header Group",
+  "sections": {
+    "announcement": {
+      "type": "announcement",
+      "blocks": {
+        "announcement_BkxWJb": {
+          "type": "announcement",
+          "settings": {
+            "text": "<p>⭐️⭐️⭐️⭐️⭐️ Über 3,5 Millionen zufriedene Kunden</p>"
+          }
+        },
+        "announcement_rPhafd": {
+          "type": "announcement",
+          "disabled": true,
+          "settings": {
+            "text": "<p>Sei anderen einen Schritt voraus – entdecke neue Hüllen, Kabel & Must-Haves vor allen anderen</p>"
+          }
+        },
+        "announcement_jQipVN": {
+          "type": "announcement",
+          "settings": {
+            "text": "<p>🧠💡No-brainer: Melde dich in unserem Newsletter an</p>"
+          }
+        }
+      },
+      "block_order": [
+        "announcement_BkxWJb",
+        "announcement_rPhafd",
+        "announcement_jQipVN"
+      ],
+      "custom_css": [
+        "{font-size: 12px !important;}"
+      ],
+      "name": "Slider - Pre Header",
+      "settings": {
+        "link1": "",
+        "link1_label": "",
+        "link2": "",
+        "link2_label": "",
+        "enable_country_selector": false,
+        "enable_language_selector": false,
+        "bg_color": "#f19222",
+        "text_color": "#ffffff",
+        "text_type_scale": "medium",
+        "read_time": 6
+      }
+    },
+    "header": {
+      "type": "header",
+      "blocks": {
+        "sidebar_ckg3zE": {
+          "type": "sidebar",
+          "settings": {
+            "title": "Smartphone Zubehör",
+            "collection_images": "none",
+            "collection_use_product_image": false,
+            "collection_circle_image": false,
+            "show_underline": false,
+            "show_collection_images": true,
+            "sidebar_link_use_product_image": false,
+            "show_product_images": false,
+            "aspect_ratio": "1",
+            "badge1_color": "#007e12",
+            "badge1_link": "",
+            "badge1_text": "",
+            "badge2_color": "#000000",
+            "badge2_link": "",
+            "badge2_text": "",
+            "badge3_color": "#000000",
+            "badge3_link": "",
+            "badge3_text": ""
+          }
+        },
+        "sidebar_CiDr8w": {
+          "type": "sidebar",
+          "settings": {
+            "title": "Tablet Zubehör",
+            "collection_images": "none",
+            "collection_use_product_image": false,
+            "collection_circle_image": false,
+            "show_underline": false,
+            "show_collection_images": true,
+            "sidebar_link_use_product_image": false,
+            "show_product_images": true,
+            "aspect_ratio": "1",
+            "badge1_color": "#007e12",
+            "badge1_link": "",
+            "badge1_text": "",
+            "badge2_color": "#000000",
+            "badge2_link": "",
+            "badge2_text": "",
+            "badge3_color": "#000000",
+            "badge3_link": "",
+            "badge3_text": ""
+          }
+        },
+        "sidebar_U6ThgU": {
+          "type": "sidebar",
+          "settings": {
+            "title": "Smartwatch Zubehör",
+            "collection_images": "none",
+            "collection_use_product_image": false,
+            "collection_circle_image": false,
+            "show_underline": false,
+            "show_collection_images": true,
+            "sidebar_link_use_product_image": false,
+            "show_product_images": true,
+            "aspect_ratio": "1",
+            "badge1_color": "#007e12",
+            "badge1_link": "",
+            "badge1_text": "",
+            "badge2_color": "#e222f1",
+            "badge2_link": "",
+            "badge2_text": "",
+            "badge3_color": "#000000",
+            "badge3_link": "",
+            "badge3_text": "Unsere Empfehlung!"
+          }
+        },
+        "sidebar_HdRBAX": {
+          "type": "sidebar",
+          "settings": {
+            "title": "Smartwatch Zubehör",
+            "collection_images": "none",
+            "collection_use_product_image": false,
+            "collection_circle_image": false,
+            "show_underline": true,
+            "show_collection_images": true,
+            "sidebar_link_use_product_image": false,
+            "show_product_images": true,
+            "aspect_ratio": "1",
+            "badge1_color": "#000000",
+            "badge1_link": "",
+            "badge1_text": "",
+            "badge2_color": "#000000",
+            "badge2_link": "",
+            "badge2_text": "",
+            "badge3_color": "#000000",
+            "badge3_link": "",
+            "badge3_text": ""
+          }
+        },
+        "columns_kkhxK7": {
+          "type": "columns",
+          "settings": {
+            "title": "Elektronik & Zubehör",
+            "collection_images": "standard",
+            "collection_use_product_image": false,
+            "collection_circle_image": false,
+            "show_underline": true,
+            "promo_position": "right",
+            "promo_min_height": 200,
+            "promo_text_color": "#ffffff",
+            "promo_tint_color": "#000000",
+            "promo_tint_opacity": 20,
+            "promo1_content": "",
+            "promo1_link_url": "",
+            "promo1_text_size": 16,
+            "promo1_text_width": 100,
+            "promo1_text_alignment": "justify-center items-center text-center",
+            "promo2_content": "",
+            "promo2_link_url": "",
+            "promo2_text_size": 16,
+            "promo2_text_width": 100,
+            "promo2_text_alignment": "justify-center items-center text-center",
+            "promo3_content": "",
+            "promo3_link_url": "",
+            "promo3_text_size": 16,
+            "promo3_text_width": 100,
+            "promo3_text_alignment": "justify-center items-center text-center",
+            "badge1_color": "#f19222",
+            "badge1_link": "",
+            "badge1_text": "",
+            "badge2_color": "#000000",
+            "badge2_link": "",
+            "badge2_text": "",
+            "badge3_color": "#000000",
+            "badge3_link": "",
+            "badge3_text": ""
+          }
+        }
+      },
+      "block_order": [
+        "sidebar_ckg3zE",
+        "sidebar_CiDr8w",
+        "sidebar_U6ThgU",
+        "sidebar_HdRBAX",
+        "columns_kkhxK7"
+      ],
+      "custom_css": [
+        ".media {background-color: #ffffff !important;}"
+      ],
+      "settings": {
+        "enable_sticky": true,
+        "mobile_menu_position": "burger-left",
+        "logo_text": "Coolgadget - Dein Spezialist für Handy- und Tabletzubehör",
+        "logo_type_scale": "2",
+        "logo": "{{ shop.brand.logo }}",
+        "logo_width": 150,
+        "logo_h1": true,
+        "logo_center": false,
+        "enable_search": true,
+        "minimise_search_mobile": false,
+        "minimise_search_desktop": true,
+        "menu": "main-menu",
+        "menu_center": true,
+        "repeat_links": true,
+        "menu_featured_link": "Sale",
+        "quicklinks_menu": "",
+        "cta_show": false,
+        "cta_icon": "eye",
+        "cta_label": "04461 967910",
+        "cta_link": "",
+        "cta_border_color": "#000000",
+        "cta_bg_color": "#000000",
+        "cta_text_color": "#ffffff",
+        "bg_color": "#ffffff",
+        "text_color": "#2a2b2a",
+        "accent_color": "#f19222"
+      }
+    },
+    "175618485850053571": {
+      "type": "apps",
+      "blocks": {
+        "sledge_wishlist_badge_7LC6BD": {
+          "type": "shopify://apps/sledge/blocks/wishlist-badge/213c3487-6448-44c0-baa7-868f58d5291d",
+          "settings": {
+            "icon_color": "",
+            "url_wishlist_widget": "shopify://pages/wishlist",
+            "use_wishlist_flyout": true,
+            "target_selector": "#cart-icon",
+            "target_position": "beforebegin",
+            "wrapper_class": "header__icon text-current",
+            "custom_product_card_name": "",
+            "preload_element": ""
+          }
+        }
+      },
+      "block_order": [
+        "sledge_wishlist_badge_7LC6BD"
+      ],
+      "settings": {
+        "full_width": false
+      }
+    }
+  },
+  "order": [
+    "announcement",
+    "header",
+    "175618485850053571"
+  ]
+}
