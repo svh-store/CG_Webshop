@@ -70,7 +70,7 @@
             "menu": "footer"
           }
         },
-        "link-list-2": {
+        "link_list_wmdLPq": {
           "type": "link_list",
           "settings": {
             "heading": "SERVICE",
@@ -89,7 +89,7 @@
       "block_order": [
         "text_YmHdfR",
         "link_list_AgBQAM",
-        "link-list-2",
+        "link_list_wmdLPq",
         "newsletter"
       ],
       "custom_css": [
