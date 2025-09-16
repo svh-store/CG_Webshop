@@ -25,7 +25,7 @@
           "type": "logo",
           "settings": {
             "image": "shopify://shop_images/SmartBookCoverIcon.png",
-            "url": "shopify://collections/smart-book-cover",
+            "url": "shopify://collections/tablet-smart-cover",
             "logo_width": 155,
             "text": "Smart Cover"
           }
