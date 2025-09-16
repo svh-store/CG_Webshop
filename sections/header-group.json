@@ -62,7 +62,7 @@
         "sidebar_ckg3zE": {
           "type": "sidebar",
           "settings": {
-            "title": "Smartphone Zubehör",
+            "title": "Handy Zubehör",
             "collection_images": "none",
             "collection_use_product_image": false,
             "collection_circle_image": false,
@@ -128,29 +128,6 @@
             "badge3_text": "Unsere Empfehlung!"
           }
         },
-        "sidebar_HdRBAX": {
-          "type": "sidebar",
-          "settings": {
-            "title": "Smartwatch Zubehör",
-            "collection_images": "none",
-            "collection_use_product_image": false,
-            "collection_circle_image": false,
-            "show_underline": true,
-            "show_collection_images": true,
-            "sidebar_link_use_product_image": false,
-            "show_product_images": true,
-            "aspect_ratio": "1",
-            "badge1_color": "#000000",
-            "badge1_link": "",
-            "badge1_text": "",
-            "badge2_color": "#000000",
-            "badge2_link": "",
-            "badge2_text": "",
-            "badge3_color": "#000000",
-            "badge3_link": "",
-            "badge3_text": ""
-          }
-        },
         "columns_kkhxK7": {
           "type": "columns",
           "settings": {
@@ -195,7 +172,6 @@
         "sidebar_ckg3zE",
         "sidebar_CiDr8w",
         "sidebar_U6ThgU",
-        "sidebar_HdRBAX",
         "columns_kkhxK7"
       ],
       "custom_css": [
