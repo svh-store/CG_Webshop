@@ -1,1 +1,31 @@
-{"parent":"footer-group.json","context":{"market":"de"},"sections":{"footer":{"settings":{"show_powered_by":false,"enable_country_selector":false,"enable_language_selector":false},"blocks":{"link-list-2":{"settings":{"heading":"Service","menu":"service"}},"newsletter":{"settings":{"text":"\u003cp\u003eMelde dich jetzt in unserem Newsletter an und verpasse keine Aktionen \u0026 Coupons mehr!\u003c\/p\u003e"}}}}}}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "parent": "footer-group.json",
+  "context": {
+    "market": "de"
+  },
+  "sections": {
+    "footer": {
+      "settings": {
+        "show_powered_by": false,
+        "enable_country_selector": false,
+        "enable_language_selector": false
+      },
+      "blocks": {
+        "newsletter": {
+          "settings": {
+            "text": "<p>Melde dich jetzt in unserem Newsletter an und verpasse keine Aktionen & Coupons mehr!</p>"
+          }
+        }
+      }
+    }
+  }
+}
