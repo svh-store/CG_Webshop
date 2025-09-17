@@ -158,6 +158,39 @@
     "slideshow_RAPgmK": {
       "type": "slideshow",
       "blocks": {
+        "slide_Mtpb4a": {
+          "type": "slide",
+          "settings": {
+            "image_desktop": "shopify://shop_images/Magsafebanner.png",
+            "url": "",
+            "overlay_position": "justify-start items-center",
+            "overlay_text_align": "text-start",
+            "mob_center_text": false,
+            "subheading": "MagSafe Hüllen",
+            "heading": "Mehr Halt als dein letzter Vorsatz.",
+            "heading_size": "h3",
+            "heading_h1": false,
+            "text": "<p>MagSafe Hüllen bieten dir die perfekte Kombination aus sicherem Halt und kabelloser Ladefunktion. Mit integriertem Magnetring docken sie passgenau an und ermöglichen schnelles Laden und Zubehör-Kombinationen. In unserem Sortiment findest du MagSafe Hüllen für alle aktuellen iPhone Modelle sowie passendes Zubehör für Geräte von Samsung und Xiaomi.</p>",
+            "enlarge_text": false,
+            "button_1_label": "Funktional & Farbig",
+            "button_1_link": "shopify://collections/skin-magsafe",
+            "button_1_style": "btn btn--primary",
+            "button_2_label": "Clean & Smart",
+            "button_2_link": "shopify://collections/zoya-tpu",
+            "button_2_style": "btn btn--secondary",
+            "transparent_content_color": "#ffffff",
+            "countdown_show": false,
+            "countdown_end_date": "",
+            "countdown_end_time": "",
+            "countdown_end_text": "",
+            "enlarge_end_text": false,
+            "countdown_hide_on_end": false,
+            "use_custom_colors": false,
+            "count_color": "#ffffff",
+            "bg_color": "#070707",
+            "bg_grad": ""
+          }
+        },
         "slide_WB7xpf": {
           "type": "slide",
           "settings": {
@@ -177,39 +210,6 @@
             "button_1_style": "btn btn--primary",
             "button_2_label": "Zu den robusten Hüllen",
             "button_2_link": "shopify://collections/rugged-tpu",
-            "button_2_style": "btn btn--secondary",
-            "transparent_content_color": "#ffffff",
-            "countdown_show": false,
-            "countdown_end_date": "",
-            "countdown_end_time": "",
-            "countdown_end_text": "",
-            "enlarge_end_text": false,
-            "countdown_hide_on_end": false,
-            "use_custom_colors": false,
-            "count_color": "#ffffff",
-            "bg_color": "#070707",
-            "bg_grad": ""
-          }
-        },
-        "slide_Mtpb4a": {
-          "type": "slide",
-          "settings": {
-            "image_desktop": "shopify://shop_images/Klapphulle_Smartphone_iPhone_Samsung.webp",
-            "url": "",
-            "overlay_position": "justify-start items-center",
-            "overlay_text_align": "text-start",
-            "mob_center_text": false,
-            "subheading": "MagSafe Hüllen",
-            "heading": "Mehr Halt als dein letzter Vorsatz.",
-            "heading_size": "h3",
-            "heading_h1": false,
-            "text": "<p>MagSafe Hüllen bieten dir die perfekte Kombination aus sicherem Halt und kabelloser Ladefunktion. Mit integriertem Magnetring docken sie passgenau an und ermöglichen schnelles Laden und Zubehör-Kombinationen. In unserem Sortiment findest du MagSafe Hüllen für alle aktuellen iPhone Modelle sowie passendes Zubehör für Geräte von Samsung und Xiaomi.</p>",
-            "enlarge_text": false,
-            "button_1_label": "Funktional & Farbig",
-            "button_1_link": "shopify://collections/skin-magsafe",
-            "button_1_style": "btn btn--primary",
-            "button_2_label": "Clean & Smart",
-            "button_2_link": "shopify://collections/zoya-tpu",
             "button_2_style": "btn btn--secondary",
             "transparent_content_color": "#ffffff",
             "countdown_show": false,
@@ -259,8 +259,8 @@
         }
       },
       "block_order": [
-        "slide_WB7xpf",
         "slide_Mtpb4a",
+        "slide_WB7xpf",
         "slide_Mra8G8"
       ],
       "custom_css": [
