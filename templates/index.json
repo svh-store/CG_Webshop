@@ -455,7 +455,7 @@
         "slide_LRjDfb": {
           "type": "slide",
           "settings": {
-            "image_desktop": "shopify://shop_images/handyfolie.webp",
+            "image_desktop": "shopify://shop_images/charger.webp",
             "url": "",
             "overlay_position": "justify-start items-center",
             "overlay_text_align": "text-start",
