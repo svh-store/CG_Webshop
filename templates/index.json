@@ -161,7 +161,7 @@
         "slide_Mtpb4a": {
           "type": "slide",
           "settings": {
-            "image_desktop": "shopify://shop_images/Magsafebanner.png",
+            "image_desktop": "shopify://shop_images/Magsafebanner.webp",
             "url": "",
             "overlay_position": "justify-start items-center",
             "overlay_text_align": "text-start",
