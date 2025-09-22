@@ -846,7 +846,8 @@
         "collection_QTFQXW": {
           "type": "collection",
           "settings": {
-            "collection": "smartwatch-zubehoer"
+            "collection": "smartwatch-zubehor",
+            "image": "shopify://shop_images/SmartwatchZubehoerIcon.png"
           }
         }
       },
