@@ -113,7 +113,8 @@
         "collection_XQ6xbG": {
           "type": "collection",
           "settings": {
-            "collection": "zum-umhangen"
+            "collection": "klappbare-hullen",
+            "image": "shopify://shop_images/WalletStyleIcon.png"
           }
         },
         "collection_3YYMGW": {
@@ -126,8 +127,8 @@
         "collection_UX7TQT": {
           "type": "collection",
           "settings": {
-            "collection": "wallet-hullen",
-            "image": "shopify://shop_images/WalletStyleIcon.png"
+            "collection": "umhange-hullen",
+            "image": "shopify://shop_images/zumUmhaengenIcon_699f0a9b-6643-4ee8-80a8-15947dac7f2d.png"
           }
         }
       },
