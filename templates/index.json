@@ -812,7 +812,8 @@
         "collection_h9z6WX": {
           "type": "collection",
           "settings": {
-            "collection": "kabel"
+            "collection": "kabel",
+            "image": "shopify://shop_images/KabelIcon2.png"
           }
         },
         "collection_fTHnQ6": {
