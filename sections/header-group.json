@@ -17,7 +17,7 @@
         "announcement_BkxWJb": {
           "type": "announcement",
           "settings": {
-            "text": "<p>⭐️⭐️⭐️⭐️⭐️ Über 3,5 Millionen zufriedene Kunden</p>"
+            "text": "<p>Über 3,5 Millionen zufriedene Kunden</p>"
           }
         },
         "announcement_rPhafd": {
@@ -30,7 +30,7 @@
         "announcement_jQipVN": {
           "type": "announcement",
           "settings": {
-            "text": "<p>🧠💡No-brainer: Melde dich in unserem Newsletter an</p>"
+            "text": "<p>No-brainer: Melde dich in unserem Newsletter an</p>"
           }
         }
       },
@@ -280,6 +280,7 @@
     },
     "custom_slideshow_wrRLze": {
       "type": "custom-slideshow",
+      "custom_css": [],
       "name": "Custom Navigation Panel",
       "settings": {
         "quick_nav_menu": "modellauswahl-smartphone",
