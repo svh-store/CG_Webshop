@@ -254,6 +254,28 @@
         "accent_color": "#f19222"
       }
     },
+    "custom_slideshow_wrRLze": {
+      "type": "custom-slideshow",
+      "custom_css": [
+        ".quick-nav {margin: calc(var(--section-gap) * var(--fluid-1-5)) auto;}"
+      ],
+      "name": "Custom Navigation Panel",
+      "settings": {
+        "quick_nav_menu": "modellauswahl-smartphone",
+        "quick_nav_title": "MODELLAUSWAHL.",
+        "quick_nav_image_ratio": "1",
+        "quick_nav_image_fit": "contain",
+        "quick_nav_use_product_image": false,
+        "quick_nav_color_scheme": "none",
+        "quick_nav_show_price": false,
+        "menu_1_text": "1. Hersteller",
+        "menu_1_display": "small_text",
+        "menu_2_text": "2. Serie",
+        "menu_2_display": "small_text",
+        "menu_3_text": "3. Modell",
+        "menu_3_display": "small_text"
+      }
+    },
     "175618485850053571": {
       "type": "apps",
       "blocks": {
@@ -277,32 +299,12 @@
       "settings": {
         "full_width": false
       }
-    },
-    "custom_slideshow_wrRLze": {
-      "type": "custom-slideshow",
-      "custom_css": [],
-      "name": "Custom Navigation Panel",
-      "settings": {
-        "quick_nav_menu": "modellauswahl-smartphone",
-        "quick_nav_title": "MODELLAUSWAHL.",
-        "quick_nav_image_ratio": "1",
-        "quick_nav_image_fit": "contain",
-        "quick_nav_use_product_image": false,
-        "quick_nav_color_scheme": "none",
-        "quick_nav_show_price": false,
-        "menu_1_text": "1. Hersteller",
-        "menu_1_display": "small_text",
-        "menu_2_text": "2. Serie",
-        "menu_2_display": "small_text",
-        "menu_3_text": "3. Modell",
-        "menu_3_display": "small_text"
-      }
     }
   },
   "order": [
     "announcement",
     "header",
-    "175618485850053571",
-    "custom_slideshow_wrRLze"
+    "custom_slideshow_wrRLze",
+    "175618485850053571"
   ]
 }
