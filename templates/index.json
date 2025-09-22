@@ -71,7 +71,7 @@
       ],
       "name": "Custom Navigation Panel",
       "settings": {
-        "quick_nav_menu": "modellauswahl-neu",
+        "quick_nav_menu": "",
         "quick_nav_title": "Modellauswahl.",
         "quick_nav_image_ratio": "1",
         "quick_nav_image_fit": "contain",
@@ -92,7 +92,7 @@
         "collection_mVqApW": {
           "type": "collection",
           "settings": {
-            "collection": "transparente-hullen-1"
+            "collection": "transparente-hullen"
           }
         },
         "collection_acxTW3": {
