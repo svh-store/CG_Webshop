@@ -92,19 +92,22 @@
         "collection_mVqApW": {
           "type": "collection",
           "settings": {
-            "collection": "transparente-hullen"
+            "collection": "transparente-hullen",
+            "image": "shopify://shop_images/TransparentIcon.png"
           }
         },
         "collection_acxTW3": {
           "type": "collection",
           "settings": {
-            "collection": "magsafe-hullen"
+            "collection": "magsafe-hullen",
+            "image": "shopify://shop_images/MagSafeIcon.png"
           }
         },
         "collection_fTV9T9": {
           "type": "collection",
           "settings": {
-            "collection": "bunte-hullen"
+            "collection": "bunte-hullen",
+            "image": "shopify://shop_images/FarbigIcon.png"
           }
         },
         "collection_XQ6xbG": {
