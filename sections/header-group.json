@@ -232,6 +232,7 @@
     },
     "custom_slideshow_wrRLze": {
       "type": "custom-slideshow",
+      "disabled": true,
       "name": "Custom Navigation Panel",
       "settings": {
         "quick_nav_menu": "main-menu",
