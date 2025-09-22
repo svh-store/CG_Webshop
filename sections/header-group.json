@@ -280,22 +280,21 @@
     },
     "custom_slideshow_wrRLze": {
       "type": "custom-slideshow",
-      "disabled": true,
       "name": "Custom Navigation Panel",
       "settings": {
-        "quick_nav_menu": "main-menu",
-        "quick_nav_title": "Navigation options",
+        "quick_nav_menu": "modellauswahl-smartphone",
+        "quick_nav_title": "MODELLAUSWAHL.",
         "quick_nav_image_ratio": "1",
         "quick_nav_image_fit": "contain",
         "quick_nav_use_product_image": false,
         "quick_nav_color_scheme": "none",
         "quick_nav_show_price": false,
-        "menu_1_text": "Level 1 Navigation",
-        "menu_1_display": "large_text",
-        "menu_2_text": "Navigation options",
-        "menu_2_display": "large_text",
-        "menu_3_text": "Choose an option",
-        "menu_3_display": "large_text"
+        "menu_1_text": "1. Hersteller",
+        "menu_1_display": "small_text",
+        "menu_2_text": "2. Serie",
+        "menu_2_display": "small_text",
+        "menu_3_text": "3. Modell",
+        "menu_3_display": "small_text"
       }
     }
   },
