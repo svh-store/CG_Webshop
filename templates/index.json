@@ -472,7 +472,7 @@
             "text": "<p>Unsere Ladegeräte bringen dein Smartphone blitzschnell wieder auf 100 %. Ob kompakter Speedcharger mit USB-C Power Delivery oder multifunktionales Reise-Ladegerät mit wechselbaren Aufsätzen für EU, UK und USA – wir liefern dir die passende Lösung für iPhone, Samsung und Xiaomi.</p>",
             "enlarge_text": false,
             "button_1_label": "Powercharger",
-            "button_1_link": "https://df6282-d9.myshopify.com/collections/netzteile?filter.p.m.custom.ladeleistung=30W&filter.p.m.custom.ladeleistung=35W&filter.p.m.custom.ladeleistung=45W",
+            "button_1_link": "shopify://products/netz-ladegerat-hoco-n42-gan-typ-c-set",
             "button_1_style": "btn btn--primary",
             "button_2_label": "Multi-Charger",
             "button_2_link": "shopify://products/verbatim-netz-ladegerat-gnc-35-gan-charger-35w",
