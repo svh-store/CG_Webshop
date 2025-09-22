@@ -119,7 +119,8 @@
         "collection_3YYMGW": {
           "type": "collection",
           "settings": {
-            "collection": "outdoor"
+            "collection": "outdoor-hullen",
+            "image": "shopify://shop_images/OutdoorIcon4.png"
           }
         },
         "collection_UX7TQT": {
