@@ -985,83 +985,91 @@
         "collection_iwPxPw": {
           "type": "collection",
           "settings": {
-            "collection": "iphone-16-pro",
+            "collection": "apple-iphone-17-serie",
+            "image": "shopify://shop_images/iPhone17.webp"
+          }
+        },
+        "collection_gNJ7cV": {
+          "type": "collection",
+          "settings": {
+            "collection": "apple-iphone-16-serie",
             "image": "shopify://shop_images/iPhone_16_Pro_88d80e9e-6825-4517-a84a-a932278809e6.webp"
           }
         },
         "collection_rzAeQf": {
           "type": "collection",
           "settings": {
-            "collection": "iphone-15-serie",
+            "collection": "apple-iphone-15-serie",
             "image": "shopify://shop_images/iPhone_15_Pro_Max.webp"
           }
         },
         "collection_ETTGgw": {
           "type": "collection",
           "settings": {
-            "collection": "iphone-14-serie",
+            "collection": "apple-iphone-14-serie",
             "image": "shopify://shop_images/iPhone_13.webp"
           }
         },
         "collection_pYUY3N": {
           "type": "collection",
           "settings": {
-            "collection": "galaxy-s25-serie",
+            "collection": "samsung-galaxy-s25-serie",
             "image": "shopify://shop_images/S25.webp"
           }
         },
         "collection_qfhXan": {
           "type": "collection",
           "settings": {
-            "collection": "galaxy-s24-serie",
+            "collection": "samsung-galaxy-s24-serie",
             "image": "shopify://shop_images/samsung_galaxy_S24.webp"
           }
         },
         "collection_xJNRX9": {
           "type": "collection",
           "settings": {
-            "collection": "galaxy-s23-serie",
+            "collection": "samsung-galaxy-s23-serie",
             "image": "shopify://shop_images/samsung-galaxy-s23.webp"
           }
         },
         "collection_Jw6QWY": {
           "type": "collection",
           "settings": {
-            "collection": "iphone-13-serie",
+            "collection": "apple-iphone-13-serie",
             "image": "shopify://shop_images/iPhone_13.webp"
           }
         },
         "collection_aCrpDG": {
           "type": "collection",
           "settings": {
-            "collection": "iphone-12-serie",
+            "collection": "apple-iphone-12-serie",
             "image": "shopify://shop_images/iPhone_13.webp"
           }
         },
         "collection_8ECppJ": {
           "type": "collection",
           "settings": {
-            "collection": "galaxy-s22-serie",
+            "collection": "samsung-galaxy-s22-serie",
             "image": "shopify://shop_images/s22.webp"
           }
         },
         "collection_6qTXGE": {
           "type": "collection",
           "settings": {
-            "collection": "galaxy-s21-serie",
+            "collection": "samsung-galaxy-s21-serie",
             "image": "shopify://shop_images/samsung-galaxy-s21.webp"
           }
         },
         "collection_zpNmLT": {
           "type": "collection",
           "settings": {
-            "collection": "galaxy-s20-serie",
+            "collection": "samsung-galaxy-s20-serie",
             "image": "shopify://shop_images/samsung-galaxy-s20.webp"
           }
         }
       },
       "block_order": [
         "collection_iwPxPw",
+        "collection_gNJ7cV",
         "collection_rzAeQf",
         "collection_ETTGgw",
         "collection_pYUY3N",
