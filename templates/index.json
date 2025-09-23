@@ -11,6 +11,9 @@
   "sections": {
     "custom_slideshow_LFiGMb": {
       "type": "custom-slideshow",
+      "custom_css": [
+        ".cc-custom-navigation-panel .quick-nav {padding-bottom: 22px !important;}"
+      ],
       "name": "Custom Navigation Panel",
       "settings": {
         "quick_nav_menu": "modellauswahl-smartphone",
