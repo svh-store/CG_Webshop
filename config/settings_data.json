@@ -506,6 +506,7 @@
     "superscript_decimals": false,
     "cart_icon": "bag",
     "cart_type": "drawer",
+    "cart_empty_shop_link": "/search",
     "show_recommendations": true,
     "recommendations_heading": "Das könnte dir auch gefallen!",
     "recommendations_to_show": 4,
