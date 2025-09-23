@@ -256,6 +256,7 @@
     },
     "custom_slideshow_wrRLze": {
       "type": "custom-slideshow",
+      "disabled": true,
       "custom_css": [
         ".quick-nav {margin: calc(var(--section-gap) * var(--fluid-1-5)) auto;}"
       ],
@@ -296,6 +297,7 @@
       "block_order": [
         "sledge_wishlist_badge_7LC6BD"
       ],
+      "disabled": true,
       "settings": {
         "full_width": false
       }
