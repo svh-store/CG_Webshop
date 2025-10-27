@@ -546,6 +546,11 @@
         "type": "shopify://apps/sledge/blocks/embed-script/213c3487-6448-44c0-baa7-868f58d5291d",
         "disabled": false,
         "settings": {}
+      },
+      "14060646107696862457": {
+        "type": "shopify://apps/judge-me-reviews/blocks/judgeme_core/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+        "disabled": false,
+        "settings": {}
       }
     }
   },
